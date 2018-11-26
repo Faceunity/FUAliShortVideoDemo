@@ -1,0 +1,9 @@
+//之前老的短视频的代码模块 因为代码量太庞大了，暂时没有时间去整理它的MVC目录
+//导入编辑模块的代码一部分放在导入裁剪模块（第一个控制器），一部分放在拍摄模块里。
+//短视频分为基础版 专业版 标准版
+//各文件目录对应如下
+//AlivcShortVideoCommonFile - 三个版本都要有的文件
+//AlivcShortVideoBasicFile - 只存在于基础版的文件
+//AlivcShortVideoFaceUnity - 只存在于专业版的文件
+//AlivcShortVideoFile - 标准版和专业版都要有的文件
+//AlivcShortVideoResource - 三个版本都要有的文件
