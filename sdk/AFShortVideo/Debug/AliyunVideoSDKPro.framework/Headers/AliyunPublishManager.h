@@ -8,10 +8,67 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
+#import "AliyunVodPublishManager.h"
 #import "AliyunEditor.h"
 
-@protocol AliyunIUploadCallback <NSObject>
+
+/**
+ 上传视频信息设置类
+ */
+__attribute__((deprecated)) @interface AliyunUploadSVideoInfo : NSObject
+
+/**
+ 视频点播参数，标题
+ */
+@property (nonatomic, copy) NSString* title;
+
+/**
+ 视频点播参数，标签
+ */
+@property (nonatomic, copy) NSString* tags;
+
+/**
+ 视频点播参数，描述
+ */
+@property (nonatomic, copy) NSString* desc;
+
+/**
+ 视频点播参数，分类
+ */
+@property (nonatomic, strong) NSNumber* cateId;
+
+/**
+ 视频点播参数，isProcess
+ */
+@property (nonatomic, assign) BOOL isProcess;
+
+/**
+ 视频点播参数，是否现显示水印
+ */
+@property (nonatomic, assign) BOOL isShowWaterMark;
+
+/**
+ 视频点播参数，优先级
+ */
+@property (nonatomic, strong) NSNumber* priority;
+
+/**
+ 视频点播参数，存储位置
+ */
+@property (nonatomic, copy) NSString* storageLocation;
+
+/**
+ 视频点播参数，转码模版组id
+ */
+@property (nonatomic, copy) NSString* templateGroupId;
+
+@end
+
+
+/**
+ 上传回调协议
+ */
+__attribute__((deprecated)) @protocol AliyunIUploadCallback <NSObject>
 
 /**
  上传成功
@@ -54,19 +111,12 @@
 
 @end
 
-@interface AliyunUploadSVideoInfo : NSObject
-@property (nonatomic, copy) NSString* title;                // 标题
-@property (nonatomic, copy) NSString* tags;                 // 标签
-@property (nonatomic, copy) NSString* desc;                 // 描述
-@property (nonatomic, strong) NSNumber* cateId;             // 分类
-@property (nonatomic, assign) BOOL isProcess;               //
-@property (nonatomic, assign) BOOL isShowWaterMark;         // 显示水印
-@property (nonatomic, strong) NSNumber* priority;           // 优先级
-@property (nonatomic, copy) NSString* storageLocation;      // 存储位置
-@property (nonatomic, copy) NSString* templateGroupId;      // 转码模板组id
-@end
+/**
+ 导出合成与上传管理器
 
-@interface AliyunPublishManager : NSObject
+ deprecated 已废弃，请使用AliyunVodPublishManager代替
+ */
+__attribute__((deprecated)) @interface AliyunPublishManager : NSObject
 
 /**
  导出回调
@@ -124,6 +174,13 @@
  */
 - (void)setTailWaterMark:(UIImage *)image frame:(CGRect)frame duration:(CGFloat)duration __deprecated_msg("use setTailWaterMark:(AliyunEffectImage *)waterMark");
 
+/**
+ 设置退后台是否取消导出合成
+ 
+ 默认值NO:退后台暂停合成，回到前台继续合成,YES:退后台取消合成
+ @param flag flag
+ */
+- (void)setCancelExportInResignActive:(BOOL)flag;
 /**
  合成视频
 

@@ -1,0 +1,6 @@
+framework module AliHAProtocol {
+  umbrella header "AliHAProtocol.h"
+
+  export *
+  module * { export * }
+}

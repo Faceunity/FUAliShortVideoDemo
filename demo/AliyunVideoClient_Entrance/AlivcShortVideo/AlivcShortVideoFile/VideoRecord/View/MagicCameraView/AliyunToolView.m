@@ -15,10 +15,6 @@
 @property(nonatomic , weak) UIButton *selectButton;
 
 /**
- 按钮滑动栏
- */
-@property(nonatomic,strong)UIScrollView *titleScrollView;
-/**
  分割线
  */
 @property(nonatomic , weak) UIView *bottomLine;
@@ -49,13 +45,6 @@
  @param frame frame值
  */
 - (void)setup:(NSArray *)items imageArray:(NSArray *)imageArray frame:(CGRect)frame{
-     CGFloat titleButtonW = 70;
-    self.titleScrollView = [[UIScrollView alloc]init];
-    self.titleScrollView.frame = CGRectMake(0, 0, frame.size.width,frame.size.height);
-    [self insertSubview:self.titleScrollView atIndex:0];
-    self.titleScrollView.contentSize = CGSizeMake(items.count * titleButtonW, 0);
-    self.titleScrollView.showsHorizontalScrollIndicator = NO;
-    
     self.buttonArray = [[NSMutableArray alloc]init];
     for (int i=0; i<items.count; i++) {
         UIButton *button = [[UIButton alloc] init];
@@ -63,10 +52,10 @@
         if (i==0) {
             self.selectButton = button;
             button.selected = YES;
-            UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake((titleButtonW-32)/2, self.bounds.size.height-3, 30, 2)];
+            UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake((frame.size.width/items.count-32)/2, self.bounds.size.height-3, 30, 2)];
             bottomLine.backgroundColor = AlivcOxRGB(0x00c1de);
             self.bottomLine = bottomLine;
-            [self.titleScrollView addSubview:bottomLine];
+            [self addSubview:bottomLine];
         }
         
         button.tag = i;
@@ -75,12 +64,12 @@
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:items[i] forState:UIControlStateNormal];
-        CGFloat buttonW = titleButtonW;
+        CGFloat buttonW = frame.size.width/items.count;
         CGFloat buttonH = frame.size.height;
         CGFloat buttonX = i*buttonW;
         CGFloat buttonY = 0;
         button.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
-        [self.titleScrollView addSubview:button];
+        [self addSubview:button];
         [self.buttonArray addObject:button];
         if ((items.count == 2)&&(i==1)) {
             NSNotification *notification =[NSNotification notificationWithName:@"AliyunNotificationMVButton" object:button];

@@ -23,7 +23,6 @@
 #import "AlivcPushBeautyDataManager.h"
 #import "AlivcLiveBeautifySettingsViewController.h"
 #import "MBProgressHUD+AlivcHelper.h"
-#import "AlivcShortVideoFaceUnityManager.h"
 
 typedef enum : NSUInteger {
     AliyunEditSouceClickTypeNone = 0,
@@ -65,21 +64,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UICollectionView *mvCollectionView;
 
 /**
-itme view
- */
-@property (nonatomic, strong) UICollectionView *itmeCollectionView;
-
-///**
-// 动漫 view
-// */
-//@property (nonatomic, strong) UICollectionView *comicCollectionView;
-//
-///**
-// haha镜 view
-// */
-//@property (nonatomic, strong) UICollectionView *hahaCollectionView;
-
-/**
  文字数组
  */
 @property (nonatomic, strong) NSArray *titleArray;
@@ -103,16 +87,6 @@ itme view
  人脸动图选中的序号
  */
 @property (nonatomic, assign) NSInteger selectGifIndex;
-
-/**
- 贴纸选中的序号
- */
-@property (nonatomic, assign) NSInteger itemSelIndex;
-
-/**
- 选中道具所在tag
- */
-@property (nonatomic, assign) NSInteger selItemBtnTag;
 
 /**
  对FMDB包装类的对象
@@ -147,8 +121,6 @@ itme view
 
 @property (nonatomic, copy) NSArray *effectItems; //动图
 @property (nonatomic, strong) NSMutableArray *mvItems; //mv
-@property (nonatomic, copy) NSArray <NSString *>*itemsArray;
-@property (nonatomic, copy) NSArray <NSArray *>*itemsTotalArray; //贴纸
 
 @end
 
@@ -165,15 +137,6 @@ itme view
         [self setup:titleArray imageArray:imageArray];
         self.titleArray = titleArray;
         self.mvItems = [[NSMutableArray alloc] init];
-        
-        NSArray *array0 = @[@"mask_hat",@"yazui",@"yuguan",@"bling",@"fengya_ztt_fu",@"hudie_lm_fu",@"juanhuzi_lm_fu",@"touhua_ztt_fu"];
-        NSArray *array1 = @[@"fuzzytoonfilter"];
-        NSArray *array2 = @[@"facewarp2",@"facewarp3",@"facewarp4",@"facewarp5",@"facewarp6"];
-        NSArray *array3 = @[@"baimao_Animoji",@"douniuquan_Animoji",@"frog_Animoji",@"hashiqi_Animoji",@"hetun_Animoji",@"huangya_Animoji",@"kuloutou_Animoji"];
-        NSArray *array4 = @[@"gufeng_zh_fu",@"hez_ztt_fu",@"ice_lm_fu",@"men_ztt_fu",@"sea_lm_fu",@"xiandai_ztt_fu"];
-        NSArray *array5 = @[@"fu_lm_koreaheart",@"fu_ztt_live520",@"ssd_thread_cute",@"ssd_thread_six",@"ssd_thread_thumb",@"ctrl_rain",@"ctrl_snow",@"ctrl_flower"];
-        _itemsTotalArray = @[array0,array3,array2,array4,array1,array5];
-        
     }
     return self;
 }
@@ -264,19 +227,9 @@ itme view
         }else if(buttonTag == 1){
             [self addSubview:self.mvCollectionView];
             self.frontView = self.mvCollectionView;
-        }else{
-            if (buttonTag == 3) {
-                [[AlivcShortVideoFaceUnityManager shareManager] loadAnimojiFaxxBundle];
-            }
-            _itemsArray = _itemsTotalArray[buttonTag - 2];
-            [self addSubview:self.itmeCollectionView];
-            self.frontView = self.itmeCollectionView;
-            [_itmeCollectionView reloadData];
         }
     }
     self.buttonTag = buttonTag;
-
-    
     
 }
 
@@ -406,27 +359,6 @@ itme view
     return _mvCollectionView;
 }
 
--(UICollectionView *)itmeCollectionView{
-    if (!_itmeCollectionView) {
-        
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.sectionInset = UIEdgeInsetsMake(15, 22, 20, 22);
-        layout.minimumInteritemSpacing = 20;
-        layout.minimumLineSpacing = 20;
-        //        layout.itemSize = CGSizeMake(50, 70);
-        
-        _itmeCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 45, ScreenWidth, 165) collectionViewLayout:layout];
-        _itmeCollectionView.backgroundColor = [UIColor clearColor];
-        _itmeCollectionView.showsHorizontalScrollIndicator = NO;
-        [_itmeCollectionView registerClass:[AliyunMagicCameraEffectCell class] forCellWithReuseIdentifier:@"AliyunMagicCameraEffectCell2"];
-        _itmeCollectionView.dataSource = (id<UICollectionViewDataSource>)self;
-        _itmeCollectionView.delegate = (id<UICollectionViewDelegate>)self;
-    }
-    return _itmeCollectionView;
-}
-
-
-
 #pragma mark - AliyunEffectFilter2ViewDelegate
 - (void)didSelectEffectFilter:(AliyunEffectFilterInfo *)filter {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectEffectFilter:)]) {
@@ -441,10 +373,8 @@ itme view
 {
     if(self.buttonTag == 0){
         return self.effectItems.count;
-    }else if(self.buttonTag == 1){
-        return self.mvItems.count;
     }else{
-        return _itemsArray.count + 1;
+        return self.mvItems.count;
     }
     
 }
@@ -513,7 +443,7 @@ itme view
              NSLog(@"动图下载测试选择效果设置为NO");
         }
         return effectCell;
-    }else if (self.buttonTag == 1) {
+    }else{
         
         AliyunEffectFilterCell *cell;
         
@@ -537,70 +467,21 @@ itme view
             cell.imageView.backgroundColor = [UIColor clearColor];
         }
         return cell;
-    }else{
-        AliyunMagicCameraEffectCell *effectCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AliyunMagicCameraEffectCell2" forIndexPath:indexPath];
-        [effectCell shouldDownload:NO];
-        
-        if (indexPath.row == 0) {
-            effectCell.imageView.contentMode = UIViewContentModeCenter;
-            effectCell.imageView.backgroundColor = rgba(255, 255, 255, 0.2);
-            effectCell.imageView.layer.cornerRadius = effectCell.imageView.frame.size.width/2;
-            effectCell.imageView.layer.masksToBounds = YES;
-            effectCell.imageView.image = [AlivcImage imageNamed:@"shortVideo_clear"];
-            
-        }else{
-            effectCell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            effectCell.imageView.backgroundColor = [UIColor clearColor];
-            effectCell.imageView.layer.cornerRadius = 50/2;
-            effectCell.imageView.layer.masksToBounds = YES;
-            
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:_itemsArray[indexPath.row -1] ofType:@"png"];
-            UIImage *iconImage = [UIImage imageWithContentsOfFile:filePath];
-            [effectCell.imageView setImage:iconImage];
-            
-        }
-        if (_selItemBtnTag == _buttonTag) {
-            if (indexPath.row == _itemSelIndex) {
-                [effectCell setApplyed:YES];
-                
-                NSLog(@"动图下载测试选择效果设置为YES");
-            }else{
-                [effectCell setApplyed:NO];
-                NSLog(@"动图下载测试选择效果设置为NO");
-            }
-        }else{
-            if (indexPath.row == 0
-                ) {
-                [effectCell setApplyed:YES];
-                
-                NSLog(@"动图下载测试选择效果设置为YES");
-            }else{
-                [effectCell setApplyed:NO];
-                NSLog(@"动图下载测试选择效果设置为NO");
-            }
-        }
-       
-        return effectCell;
     }
-        
-        
     
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.buttonTag == 0) {
-        
         AliyunMagicCameraEffectCell *cell = (AliyunMagicCameraEffectCell *)[self.gifCollectionView cellForItemAtIndexPath:indexPath];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.delegate && [self.delegate respondsToSelector:@selector(focusItemIndex:cell:)]) {
                 [self.delegate focusItemIndex:indexPath.row cell:cell];
-            
-                [[AlivcShortVideoFaceUnityManager shareManager] loadItem:nil];
             }
         });
-    }else if (self.buttonTag == 1){
+    }else{
         
         AliyunEffectFilterCell *lastSelectCell = (AliyunEffectFilterCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:_selectIndex inSection:0]];
         [lastSelectCell setSelected:NO];
@@ -641,7 +522,9 @@ itme view
                        
                    } else {
                        NSLog(@"mv测试下载完成%@（%ld）:%ld",newModel.name,(long)newModel.eid,(long)indexPath.row);
- 
+                       
+                       
+                       
                        dispatch_async(dispatch_get_main_queue(), ^{
                            //ui更新
                            [cell shouldDownload:YES]; //隐藏下载按钮
@@ -667,26 +550,6 @@ itme view
            }
            
         
-    }else{
-        self.selItemBtnTag = self.buttonTag;
-        _itemSelIndex = indexPath.row;
-        [self.itmeCollectionView reloadData];
-        if (indexPath.row == 0) {
-            [[AlivcShortVideoFaceUnityManager shareManager] loadItem:nil];
-            
-            return;
-        }else{
-            [[AlivcShortVideoFaceUnityManager shareManager] loadItem:_itemsArray[indexPath.row - 1]];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.delegate && [self.delegate respondsToSelector:@selector(focusItemIndex:cell:)]) {
-                [self.delegate focusItemIndex:0 cell:nil];
-            }
-        });
-    
-      
-
     }
     
 }

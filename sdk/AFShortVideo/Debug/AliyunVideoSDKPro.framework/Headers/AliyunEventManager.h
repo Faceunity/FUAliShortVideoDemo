@@ -6,11 +6,11 @@
 //  Copyright © 2017年 Alibaba Group Holding Limited. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "AVAsset+AliyunSDKInfo.h"
+#import <Foundation/Foundation.h>
 #define DefaultEventManager [AliyunEventManager sharedManager]
 
-typedef NS_ENUM(NSInteger, AliyunEvent) {
+__deprecated_msg("已废弃") typedef NS_ENUM(NSInteger, AliyunEvent) {
     AliyunEventRecordInit = 2001,
     AliyunEventRecordStart,
     AliyunEventRecordSuccess,
@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, AliyunEvent) {
     AliyunEventRecordBeauty,
     AliyunEventRecordPosition,
     AliyunEventRecordStop,
+    AliyunEventRecordMV = 2014,
     AliyunEventEditInit = 3001,
     AliyunEventEditFilter = 3005,
     AliyunEventEditMV,
@@ -40,15 +41,9 @@ typedef NS_ENUM(NSInteger, AliyunEvent) {
     AliyunEventImporterFinish = 9003,
 };
 
-typedef NS_ENUM(NSInteger, AliyunSubmoduleType) {
-    AliyunSubmoduleTypeNull,
-    AliyunSubmoduleTypeRecord,
-    AliyunSubmoduleTypeCut,
-    AliyunSubmoduleTypeEdit,
-    AliyunSubmoduleTypeImport
-};
+__deprecated_msg("已废弃") typedef NS_ENUM(NSInteger, AliyunSubmoduleType) { AliyunSubmoduleTypeNull, AliyunSubmoduleTypeRecord, AliyunSubmoduleTypeCut, AliyunSubmoduleTypeEdit, AliyunSubmoduleTypeImport };
 
-typedef struct AliyunVideoEventInfo {
+__deprecated_msg("已废弃") typedef struct AliyunVideoEventInfo {
     int bitrate;
     int fps;
     int vduration;
@@ -56,11 +51,10 @@ typedef struct AliyunVideoEventInfo {
     uint64_t crc;
 } AliyunVideoEventInfo;
 
+__deprecated_msg("已废弃") @interface AliyunEventManager : NSObject
 
-@interface AliyunEventManager : NSObject
-
-@property (nonatomic, copy) NSString *requestID;
-@property (nonatomic, assign) BOOL enabled;
+@property(nonatomic, copy) NSString *requestID;
+@property(nonatomic, assign) BOOL enabled;
 
 + (instancetype)sharedManager;
 
@@ -68,7 +62,7 @@ typedef struct AliyunVideoEventInfo {
 
 - (void)sendEvent:(AliyunEvent)event params:(NSDictionary *)params type:(AliyunSubmoduleType)type;
 
-- (AliyunVideoEventInfo)videoInfoWithPath:(NSString *)path;
++ (AliyunVideoEventInfo)videoInfoWithPath:(NSString *)path;
 
 - (uint64_t)crc64WithPath:(NSString *)path;
 

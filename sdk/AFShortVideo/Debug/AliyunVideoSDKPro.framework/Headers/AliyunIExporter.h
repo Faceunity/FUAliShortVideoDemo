@@ -43,6 +43,7 @@
 
 /**
  设置编码模式
+ 
  iOS强制硬编
  @param encodeMode 编码模式 参见AliyunVideoParam中codecType的定义
  */
@@ -54,6 +55,14 @@
  @param videoParam 视频输出参数
  */
 - (void)setVideoParam:(AliyunVideoParam *)videoParam;
+
+/**
+ 设置退后台是否取消导出合成
+ 
+ 默认值NO:退后台暂停合成，回到前台继续合成,YES:退后台取消合成
+ @param flag flag
+ */
+- (void)setCancelExportInResignActive:(BOOL)flag;
 
 /**
  开始导出视频
@@ -70,7 +79,24 @@
 - (int)startExport:(NSString *)outputPath;
 
 /**
+ 暂停导出视频
+ 
+ 正常返回 ALIVC_COMMON_RETURN_SUCCESS
+ 状态不正确 ALIVC_COMMON_INVALID_STATE
+ */
+- (int)pauseExport;
+
+/**
+ 继续导出视频
+ 
+ 正常返回 ALIVC_COMMON_RETURN_SUCCESS
+ 状态不正确 ALIVC_COMMON_INVALID_STATE
+ */
+- (int)resumeExport;
+
+/**
  取消导出视频
+ 
  正常返回 ALIVC_COMMON_RETURN_SUCCESS
  状态不正确 ALIVC_COMMON_INVALID_STATE
  */

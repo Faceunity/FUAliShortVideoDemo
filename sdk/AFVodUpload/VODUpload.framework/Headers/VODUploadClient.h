@@ -34,6 +34,11 @@
 @property (nonatomic, copy) NSString * recordDirectoryPath;
 
 /**
+ record upload progress, default value if YES
+ */
+@property (nonatomic, assign) BOOL recordUploadProgress;
+
+/**
  size of upload part, default value is 1024 * 1024
 */
 @property (nonatomic, assign) NSInteger uploadPartSize;
@@ -44,24 +49,32 @@
 @property (nonatomic, assign) NSString *requestId;
 
 /**
- 无配置上传
+ vod region, defalut value is "cn-shanghai"
  */
-- (BOOL)        init:(VODUploadListener *) listener __attribute__((deprecated("", "use STS init method instead")));
-/**
- AK方式配置上传
- */
-- (BOOL)        init:(NSString *)accessKeyId
-     accessKeySecret:(NSString *)accessKeySecret
-            listener:(VODUploadListener *) listener __attribute__((deprecated("", "use STS init method instead")));
+@property (nonatomic, copy) NSString *region;
 
 /**
- STS授权方式配置上传
+ 上传地址和凭证方式初始化
+ 
+ */
+- (BOOL)        init:(VODUploadListener *) listener;
+
+/**
+ STS授权方式初始化
  */
 - (BOOL)        init:(NSString *)accessKeyId
      accessKeySecret:(NSString *)accessKeySecret
          secretToken:(NSString *)secretToken
           expireTime:(NSString *)expireTime
             listener:(VODUploadListener *) listener;
+
+/**
+ AK方式初始化
+ 端上使用AK方式不安全，不建议使用
+ */
+- (BOOL)        init:(NSString *)accessKeyId
+     accessKeySecret:(NSString *)accessKeySecret
+            listener:(VODUploadListener *) listener __attribute__((deprecated("", "Not recommended.")));
 
 /**
  添加视频上传
@@ -133,12 +146,12 @@
 - (BOOL)resume;
 
 /**
- 使用Token恢复上传
+ 使用上传凭证恢复上传
  */
-- (BOOL)resumeWithAuth:(NSString *)uploadAuth __attribute__((deprecated("", "use resumeWithToken:accessKeySecret:secretToken:expireTime: to replace")));
+- (BOOL)resumeWithAuth:(NSString *)uploadAuth;
 
 /**
- 使用Token恢复上传
+ 使用STS恢复上传
  */
 - (BOOL)resumeWithToken:(NSString *)accessKeyId
         accessKeySecret:(NSString *)accessKeySecret
@@ -146,11 +159,11 @@
              expireTime:(NSString *)expireTime;
 
 /**
- 设置上传凭证
+ 设置上传地址和凭证
  */
 - (BOOL)setUploadAuthAndAddress:(UploadFileInfo *)uploadFileInfo
            uploadAuth:(NSString *)uploadAuth
-        uploadAddress:(NSString *)uploadAddress __attribute__((deprecated("", "not recommanded")));
+        uploadAddress:(NSString *)uploadAddress;
 
 @end
 

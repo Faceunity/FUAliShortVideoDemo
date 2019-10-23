@@ -1,0 +1,6 @@
+framework module AliHASecurity {
+  umbrella header "AliHASecurity.h"
+
+  export *
+  module * { export * }
+}

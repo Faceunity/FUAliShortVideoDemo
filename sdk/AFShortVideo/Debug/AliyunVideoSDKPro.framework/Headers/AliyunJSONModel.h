@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-
-@interface AliyunJSONModel : NSObject
+/**
+已废弃，请勿使用
+ */
+__attribute__((deprecated)) @interface AliyunJSONModel : NSObject
 
 /**
  *  创建JSONModel
@@ -40,5 +42,13 @@
  *  @param path 路径
  */
 - (void)jsonToFile:(NSString *)path;
+
+/**
+ 重写 防止无属性时候setKeyValue crash
+
+ @param value value
+ @param key  key
+ */
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key;
 
 @end
