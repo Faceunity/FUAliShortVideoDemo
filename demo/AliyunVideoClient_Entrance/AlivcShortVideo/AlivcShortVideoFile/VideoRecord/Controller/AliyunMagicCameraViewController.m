@@ -44,7 +44,14 @@
 #import "MBProgressHUD+AlivcHelper.h"
 #import "AlivcPushBeautyDataManager.h"
 #import "AliyunEffectFilterInfo.h"
-@interface AliyunMagicCameraViewController () <AliyunMusicPickViewControllerDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate>
+
+
+
+#import <FUAPIDemoBar/FUAPIDemoBar.h>
+#import "FUManager.h"
+
+
+@interface AliyunMagicCameraViewController () <AliyunMusicPickViewControllerDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate, AliyunIRecorderDelegate, FUAPIDemoBarDelegate>
 
 /**
  SDK录制类
@@ -176,11 +183,100 @@
  */
 @property (nonatomic, assign) BOOL suspend;
 
+@property (nonatomic, strong) FUAPIDemoBar *demoBar ;
 @end
 
 @implementation AliyunMagicCameraViewController
 
+/**             ---------- FaceUnity ----------             **/
 
+- (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CVPixelBufferRef buffer = CMSampleBufferGetImageBuffer(sampleBuffer) ;
+    [[FUManager shareManager] renderItemsToPixelBuffer:buffer];
+    return buffer ;
+}
+
+-(FUAPIDemoBar *)demoBar {
+    if (!_demoBar) {
+        _demoBar = [[FUAPIDemoBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 164 - 126, self.view.frame.size.width, 164)];
+        
+        _demoBar.itemsDataSource = [FUManager shareManager].itemsDataSource;
+        _demoBar.selectedItem = [FUManager shareManager].selectedItem;
+        _demoBar.skinDetectEnable = [FUManager shareManager].skinDetectEnable;
+        _demoBar.blurShape = [FUManager shareManager].blurShape ;
+        _demoBar.blurLevel = [FUManager shareManager].blurLevel ;
+        _demoBar.whiteLevel = [FUManager shareManager].whiteLevel ;
+        _demoBar.redLevel = [FUManager shareManager].redLevel;
+        _demoBar.eyelightingLevel = [FUManager shareManager].eyelightingLevel ;
+        _demoBar.beautyToothLevel = [FUManager shareManager].beautyToothLevel ;
+        _demoBar.faceShape = [FUManager shareManager].faceShape ;
+        
+        _demoBar.enlargingLevel = [FUManager shareManager].enlargingLevel ;
+        _demoBar.thinningLevel = [FUManager shareManager].thinningLevel ;
+        _demoBar.enlargingLevel_new = [FUManager shareManager].enlargingLevel_new ;
+        _demoBar.thinningLevel_new = [FUManager shareManager].thinningLevel_new ;
+        _demoBar.jewLevel = [FUManager shareManager].jewLevel ;
+        _demoBar.foreheadLevel = [FUManager shareManager].foreheadLevel ;
+        _demoBar.noseLevel = [FUManager shareManager].noseLevel ;
+        _demoBar.mouthLevel = [FUManager shareManager].mouthLevel ;
+        
+        _demoBar.filtersDataSource = [FUManager shareManager].filtersDataSource ;
+        _demoBar.beautyFiltersDataSource = [FUManager shareManager].beautyFiltersDataSource ;
+        _demoBar.filtersCHName = [FUManager shareManager].filtersCHName ;
+        _demoBar.selectedFilter = [FUManager shareManager].selectedFilter ;
+        [_demoBar setFilterLevel:[FUManager shareManager].selectedFilterLevel forFilter:[FUManager shareManager].selectedFilter] ;
+        
+        _demoBar.delegate = self;
+    }
+    return _demoBar ;
+}
+
+
+- (void)demoBarDidSelectedItem:(NSString *)itemName {
+    
+    [[FUManager shareManager] loadItem:itemName];
+}
+
+- (void)demoBarBeautyParamChanged {
+    
+    [FUManager shareManager].skinDetectEnable = _demoBar.skinDetectEnable;
+    [FUManager shareManager].blurShape = _demoBar.blurShape;
+    [FUManager shareManager].blurLevel = _demoBar.blurLevel ;
+    [FUManager shareManager].whiteLevel = _demoBar.whiteLevel;
+    [FUManager shareManager].redLevel = _demoBar.redLevel;
+    [FUManager shareManager].eyelightingLevel = _demoBar.eyelightingLevel;
+    [FUManager shareManager].beautyToothLevel = _demoBar.beautyToothLevel;
+    [FUManager shareManager].faceShape = _demoBar.faceShape;
+    [FUManager shareManager].enlargingLevel = _demoBar.enlargingLevel;
+    [FUManager shareManager].thinningLevel = _demoBar.thinningLevel;
+    [FUManager shareManager].enlargingLevel_new = _demoBar.enlargingLevel_new;
+    [FUManager shareManager].thinningLevel_new = _demoBar.thinningLevel_new;
+    [FUManager shareManager].jewLevel = _demoBar.jewLevel;
+    [FUManager shareManager].foreheadLevel = _demoBar.foreheadLevel;
+    [FUManager shareManager].noseLevel = _demoBar.noseLevel;
+    [FUManager shareManager].mouthLevel = _demoBar.mouthLevel;
+    
+    [FUManager shareManager].selectedFilter = _demoBar.selectedFilter ;
+    [FUManager shareManager].selectedFilterLevel = _demoBar.selectedFilterLevel;
+}
+
+-(void)dealloc {
+    
+    NSLog(@"~~~~~~%s delloc", __PRETTY_FUNCTION__);
+    [_recorder destroyRecorder];
+    _recorder = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.timer invalidate];
+    self.timer = nil;
+    [_recorder stopPreview];
+    
+#if SDK_VERSION == SDK_VERSION_CUSTOM
+    [[AlivcShortVideoFaceUnityManager shareManager] destoryItems];
+#endif
+    
+    [[FUManager shareManager] destoryItems];
+}
+/**             ---------- FaceUnity ----------             **/
 
 - (instancetype)init
 {
@@ -250,6 +346,7 @@
     _recorder.beautifyStatus = self.beauty;
     _recorder.beautifyValue = 50;
     _recorder.bitrate = _quVideo.bitrate;
+    _recorder.delegate = self ;
     
     
     //录制片段设置
@@ -276,6 +373,15 @@
                                                object:nil];
     
     [self.dbHelper openResourceDBSuccess:nil failure:nil];
+    
+    
+    NSLog(@"---- aliyun SDK version: %@", [AliyunIRecorder version]);
+    
+    /**             FaceUnity             **/
+    
+    [[FUManager shareManager] loadItems];
+    [self.view addSubview:self.demoBar ];
+    /**             FaceUnity             **/
 }
 
 
@@ -767,23 +873,6 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
-- (void)dealloc
-{
-    NSLog(@"~~~~~~%s delloc", __PRETTY_FUNCTION__);
-    [_recorder destroyRecorder];
-    _recorder = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.timer invalidate];
-    self.timer = nil;
-    [_recorder stopPreview];
-    
-    #if SDK_VERSION == SDK_VERSION_CUSTOM
-        [[AlivcShortVideoFaceUnityManager shareManager] destoryItems];
-    #endif
-    
-}
-
-
 /**
  点按手势的触发方法
 
@@ -1038,10 +1127,6 @@
 - (void)cameraIdButtonClicked
 {
     [_recorder switchCameraPosition];
-    
-    /* faceU 水平镜像切换*/
-    [[AlivcShortVideoFaceUnityManager shareManager] switchFlipx];
-    
     _lastCameraPosition = _recorder.cameraPosition;
     _magicCameraView.flashButton.enabled = (_recorder.cameraPosition != 0);
     
@@ -1372,17 +1457,17 @@
 // 集成faceunity
 #if SDK_VERSION == SDK_VERSION_CUSTOM
     
-- (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    
-    if((self.beautyWhiteValue == 0)&&(self.blurValue == 0)&&(self.bigEyeValue == 0)&&(self.slimFaceValue == 0)&&(self.buddyValue == 0) ){
-        return CMSampleBufferGetImageBuffer(sampleBuffer);
-    }
-    CVPixelBufferRef buf = [[AlivcShortVideoFaceUnityManager shareManager] RenderedPixelBufferWithRawSampleBuffer:sampleBuffer beautyWhiteValue:self.beautyWhiteValue blurValue:self.blurValue bigEyeValue:self.bigEyeValue slimFaceValue:self.slimFaceValue buddyValue:self.buddyValue];
-    
-    return buf;
-    
-}
-    
+//- (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+//
+//    if((self.beautyWhiteValue == 0)&&(self.blurValue == 0)&&(self.bigEyeValue == 0)&&(self.slimFaceValue == 0)&&(self.buddyValue == 0) ){
+//        return CMSampleBufferGetImageBuffer(sampleBuffer);
+//    }
+//    CVPixelBufferRef buf = [[AlivcShortVideoFaceUnityManager shareManager] RenderedPixelBufferWithRawSampleBuffer:sampleBuffer beautyWhiteValue:self.beautyWhiteValue blurValue:self.blurValue bigEyeValue:self.bigEyeValue slimFaceValue:self.slimFaceValue buddyValue:self.buddyValue];
+//
+//    return buf;
+//
+//}
+
 #endif
 - (void)recorderDidStopRecording {
     // 注释允许多段录制

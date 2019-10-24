@@ -11,16 +11,8 @@
 @interface AlivcShortVideoFaceUnityManager : NSObject
 
 + (AlivcShortVideoFaceUnityManager *)shareManager;
-
-
-
 /**销毁全部道具*/
 - (void)destoryItems;
 - (NSInteger)OutputVideoPixelBuffer:(CVPixelBufferRef)pixelBuffer textureName:(NSInteger)textureName beautyWhiteValue:(CGFloat)beautyWhiteValue blurValue:(CGFloat)blurValue bigEyeValue:(CGFloat)bigEyeValue slimFaceValue:(CGFloat)slimFaceValue buddyValue:(CGFloat)buddyValue;
 - (CVPixelBufferRef)RenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer beautyWhiteValue:(CGFloat)beautyWhiteValue blurValue:(CGFloat)blurValue bigEyeValue:(CGFloat)bigEyeValue slimFaceValue:(CGFloat)slimFaceValue buddyValue:(CGFloat)buddyValue;
-- (void)loadAnimojiFaxxBundle;
-- (void)loadItem:(NSString *)itemName;
-
-- (BOOL)switchFlipx;
-
 @end

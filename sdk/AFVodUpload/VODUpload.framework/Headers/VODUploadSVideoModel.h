@@ -9,10 +9,15 @@
 #import <Foundation/Foundation.h>
 
 @interface VodSVideoInfo : NSObject
+//标题
 @property (nonatomic, copy) NSString* title;
+//标签
 @property (nonatomic, copy) NSString* tags;
+//描述
 @property (nonatomic, copy) NSString* desc;
+//分类id
 @property (nonatomic, strong) NSNumber* cateId;
+
 @property (nonatomic, assign) BOOL isProcess;
 @property (nonatomic, assign) BOOL isShowWaterMark;
 @property (nonatomic, strong) NSNumber* priority;

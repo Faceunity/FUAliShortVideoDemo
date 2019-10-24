@@ -8,23 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol AliyunIPlayerCallback <NSObject>
-
 /**
- 开始播放
+ 播放器回调协议
  */
-- (void)playerDidStart;
+@protocol AliyunIPlayerCallback <NSObject>
 
 /**
  播放结束
  */
 - (void)playerDidEnd;
-
-
-/**
- seek结束
- */
-- (void)seekDidEnd;
 
 /**
  播放进度
@@ -52,6 +44,21 @@
  */
 - (void)playError:(int)errorCode;
 
+
+#pragma mark - 不建议使用的API
+
+/**
+ seek结束
+ */
+
+- (void)seekDidEnd __deprecated_msg("已废弃不再维护");
+
+/**
+ 开始播放
+ 已废弃
+ */
+- (void)playerDidStart __deprecated_msg("已废弃不再维护");
+
 @optional
 /**
  播放进度
@@ -63,6 +70,9 @@
 
 @end
 
+/**
+ 渲染回调协议
+ */
 @protocol AliyunIRenderCallback <NSObject>
 
 @optional

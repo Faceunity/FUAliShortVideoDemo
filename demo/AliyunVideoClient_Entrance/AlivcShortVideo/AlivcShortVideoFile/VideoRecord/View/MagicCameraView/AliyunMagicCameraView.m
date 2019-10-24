@@ -310,10 +310,10 @@
         self.isFirst = YES;
     }
 }
-//2d/3d贴纸 animoji 哈哈镜 背景分割，动漫滤镜和手势识别
+
 - (AliyunRecordBeautyView *)rightView{
     if (!_rightView) {
-       _rightView = [[AliyunRecordBeautyView alloc] initWithFrame:CGRectMake(0, ScreenHeight-200, ScreenWidth, 200)  titleArray:@[@"动图",@"MV",@"贴纸",@"animoji",@"哈哈镜",@"背景分割",@"动漫滤镜",@"手势识别"] imageArray:@[@"shortVideo_gifPicture",@"shortVideo_MV",@"",@"",@"",@"",@"",@""]];
+       _rightView = [[AliyunRecordBeautyView alloc] initWithFrame:CGRectMake(0, ScreenHeight-200, ScreenWidth, 200)  titleArray:@[@"动图",@"MV"] imageArray:@[@"shortVideo_gifPicture",@"shortVideo_MV"]];
         _rightView.delegate = self;
         
     }

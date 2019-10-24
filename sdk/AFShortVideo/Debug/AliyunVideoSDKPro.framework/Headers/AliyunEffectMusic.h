@@ -17,37 +17,48 @@
 #import "AliyunEffect.h"
 #include <CoreGraphics/CoreGraphics.h>
 
+/**
+ 音乐model类
+ */
 @interface AliyunEffectMusic : AliyunEffect
-
 
 /**
  音乐在播放轴上的开始播放时间
  */
-@property (nonatomic, assign) CGFloat startTime;
+@property(nonatomic, assign) CGFloat startTime;
 
 /**
  音乐在播放轴上的播放持续时间
  */
-@property (nonatomic, assign) CGFloat duration;
+@property(nonatomic, assign) CGFloat duration;
 
 /**
  音乐在自身轴上的用来播放的开始时间
  */
-@property (nonatomic, assign) CGFloat streamStartTime;
+@property(nonatomic, assign) CGFloat streamStartTime;
 
 /**
  音乐在自身轴上的用来播放的持续时长
  */
-@property (nonatomic, assign) CGFloat streamDuration;
+@property(nonatomic, assign) CGFloat streamDuration;
 
 /**
- 仅对mv和音乐有效，0-100 音量大小 （0 - 100）
+ 音量大小
+ 
+ 0-100
  */
-@property (nonatomic, assign) int audioMixWeight;
+@property(nonatomic, assign) int audioMixWeight;
 
 /**
  是否去噪
+ 
+ 已废弃，请使用音效列表AliyunAudioEffect代替
  */
-@property (nonatomic, assign) BOOL denoise;
+@property(nonatomic, assign) BOOL denoise __deprecated_msg("已废弃");
+
+/**
+ 音效列表
+ */
+@property(nonatomic, strong) NSMutableArray<AliyunAudioEffect *> *audioEffects;
 
 @end

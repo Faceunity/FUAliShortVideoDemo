@@ -54,10 +54,31 @@
 @property (nonatomic, copy) NSString * recordDirectoryPath;
 
 /**
+ record upload progress, default value is YES
+ */
+@property (nonatomic, assign) BOOL recordUploadProgress;
+
+/**
  size of upload part, default value is 1024 * 1024
  */
 @property (nonatomic, assign) NSInteger uploadPartSize;
 
+/**
+ vod region, defalut value is "cn-shanghai"
+ */
+@property (nonatomic, copy) NSString *region;
+
+/**
+ 开始上传
+
+ @param videoPath 视频文件路径
+ @param imagePath 图片文件路径
+ @param svideoInfo 短视频上传信息
+ @param accessKeyId STS accessKeyId
+ @param accessKeySecret  STS accessKeySecret
+ @param accessToken STS accessToken
+ @return 调用接口是否成功
+ */
 - (BOOL)uploadWithVideoPath:(NSString *)videoPath
                   imagePath:(NSString *)imagePath
                  svideoInfo:(VodSVideoInfo *)svideoInfo
@@ -65,15 +86,32 @@
             accessKeySecret:(NSString *)accessKeySecret
                 accessToken:(NSString *)accessToken;
 
+/**
+ 暂停上传
+ */
 - (void)pause;
 
+/**
+ 恢复上传
+ */
 - (void)resume;
 
+/**
+ 刷新STS凭证，并继续上传
+
+ @param accessKeyId STS accessKeyId
+ @param accessKeySecret  STS accessKeySecret
+ @param accessToken STS accessToken
+ @param expireTime STS expireTime
+ */
 - (void)refreshWithAccessKeyId:(NSString *)accessKeyId
                accessKeySecret:(NSString *)accessKeySecret
                    accessToken:(NSString *)accessToken
                     expireTime:(NSString *)expireTime;
 
+/**
+ 取消上传
+ */
 - (void)cancel;
 
 @end

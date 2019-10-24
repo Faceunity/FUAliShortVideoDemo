@@ -1,0 +1,6 @@
+framework module AliHAMethodTrace {
+  umbrella header "AliHAMethodTrace.h"
+
+  export *
+  module * { export * }
+}
