@@ -1130,6 +1130,7 @@
     _lastCameraPosition = _recorder.cameraPosition;
     _magicCameraView.flashButton.enabled = (_recorder.cameraPosition != 0);
     
+    [FUManager shareManager].flipx = (_recorder.cameraPosition != 0);
     AliyunIRecorderTorchMode mode = _recorder.torchMode;
     if (mode == AliyunIRecorderTorchModeOn) {
         [_magicCameraView.flashButton setImage:_uiConfig.ligheImageOpen forState:0];

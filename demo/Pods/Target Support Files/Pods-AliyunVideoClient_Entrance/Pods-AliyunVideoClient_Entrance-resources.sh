@@ -98,66 +98,30 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcLive" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcLivePush" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcShortVideo_Basic" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcShortVideo_Professional" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcShortVideo_Standard" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcVideoPlay" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 if [[ "$CONFIGURATION" == "AlivcVideoUpload" ]]; then
   install_resource "${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle"
-  install_resource "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

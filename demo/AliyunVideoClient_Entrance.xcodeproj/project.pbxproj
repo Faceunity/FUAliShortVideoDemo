@@ -8,17 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0BC4ADBA21C118AF00A0014C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA3AE9620F377F000CD7AB3 /* Accelerate.framework */; };
-		0BC4ADDD21C1190B00A0014C /* FUAPIDemoBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC4ADCB21C1190B00A0014C /* FUAPIDemoBar.framework */; };
-		0BC4ADDE21C1190B00A0014C /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC4ADCD21C1190B00A0014C /* FUManager.m */; };
-		0BC4ADDF21C1190B00A0014C /* fengya_ztt_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADCF21C1190B00A0014C /* fengya_ztt_fu.bundle */; };
-		0BC4ADE021C1190B00A0014C /* hudie_lm_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD021C1190B00A0014C /* hudie_lm_fu.bundle */; };
-		0BC4ADE121C1190B00A0014C /* juanhuzi_lm_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD121C1190B00A0014C /* juanhuzi_lm_fu.bundle */; };
-		0BC4ADE221C1190B00A0014C /* mask_hat.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD221C1190B00A0014C /* mask_hat.bundle */; };
-		0BC4ADE321C1190B00A0014C /* touhua_ztt_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD321C1190B00A0014C /* touhua_ztt_fu.bundle */; };
-		0BC4ADE421C1190B00A0014C /* yazui.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD421C1190B00A0014C /* yazui.bundle */; };
-		0BC4ADE521C1190B00A0014C /* yuguan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0BC4ADD521C1190B00A0014C /* yuguan.bundle */; };
-		0BC4ADE621C1191E00A0014C /* FUAPIDemoBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC4ADCB21C1190B00A0014C /* FUAPIDemoBar.framework */; };
-		0BC4ADE721C1191E00A0014C /* FUAPIDemoBar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC4ADCB21C1190B00A0014C /* FUAPIDemoBar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6EBC0C12213E3DF4003A1713 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA3AE9820F3780900CD7AB3 /* libstdc++.tbd */; };
 		6EBC0C13213E3E00003A1713 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA3AE9220F377C700CD7AB3 /* CoreMedia.framework */; };
 		6EBC0C15213E3E0A003A1713 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EBC0C14213E3E0A003A1713 /* libz.tbd */; };
@@ -150,6 +139,22 @@
 		D29BF35B215BAE0600B9E373 /* AliyunVideoSDKPro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D29BF359215BABC200B9E373 /* AliyunVideoSDKPro.framework */; };
 		D29BF35C215BAE0600B9E373 /* AliyunVideoSDKPro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D29BF359215BABC200B9E373 /* AliyunVideoSDKPro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2BE92F7217EFBBF00641D2A /* AlivcShortVideoRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BE92F6217EFBBF00641D2A /* AlivcShortVideoRoute.m */; };
+		E3B3E8B2241610EF0021F7E6 /* FUAPIDemoBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3B3E89C241610EF0021F7E6 /* FUAPIDemoBar.framework */; };
+		E3B3E8B3241610F00021F7E6 /* touhua_ztt_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E89E241610EF0021F7E6 /* touhua_ztt_fu.bundle */; };
+		E3B3E8B4241610F00021F7E6 /* yazui.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E89F241610EF0021F7E6 /* yazui.bundle */; };
+		E3B3E8B5241610F00021F7E6 /* yuguan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A0241610EF0021F7E6 /* yuguan.bundle */; };
+		E3B3E8B6241610F00021F7E6 /* hudie_lm_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A1241610EF0021F7E6 /* hudie_lm_fu.bundle */; };
+		E3B3E8B7241610F00021F7E6 /* mask_hat.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A2241610EF0021F7E6 /* mask_hat.bundle */; };
+		E3B3E8B8241610F00021F7E6 /* juanhuzi_lm_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A3241610EF0021F7E6 /* juanhuzi_lm_fu.bundle */; };
+		E3B3E8B9241610F00021F7E6 /* fengya_ztt_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A4241610EF0021F7E6 /* fengya_ztt_fu.bundle */; };
+		E3B3E8BA241610F00021F7E6 /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E3B3E8A5241610EF0021F7E6 /* FUManager.m */; };
+		E3B3E8BB241610F00021F7E6 /* release_note.txt in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8A7241610EF0021F7E6 /* release_note.txt */; };
+		E3B3E8BC241610F00021F7E6 /* libnama.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3B3E8A8241610EF0021F7E6 /* libnama.a */; };
+		E3B3E8BD241610F00021F7E6 /* v3.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8AA241610EF0021F7E6 /* v3.bundle */; };
+		E3B3E8BE241610F00021F7E6 /* ai_face_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8AC241610EF0021F7E6 /* ai_face_processor.bundle */; };
+		E3B3E8BF241610F00021F7E6 /* face_beautification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3B3E8AD241610EF0021F7E6 /* face_beautification.bundle */; };
+		E3B3E8C0241610F00021F7E6 /* libfuai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3B3E8B1241610EF0021F7E6 /* libfuai.a */; };
+		E3B3E8C1241611180021F7E6 /* FUAPIDemoBar.framework in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E3B3E89C241610EF0021F7E6 /* FUAPIDemoBar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F30B0C3D2109A48700B4C9AB /* AlivcBeautySettingUIDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = F30B0C3C2109A48700B4C9AB /* AlivcBeautySettingUIDefine.m */; };
 		F30CE678215491FF00537F8B /* AliyunMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = F30CE5AC215491FE00537F8B /* AliyunMediator.m */; };
 		F30CE86A215492A800537F8B /* AliyunMediaConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F30CE79D215492A800537F8B /* AliyunMediaConfig.m */; };
@@ -358,8 +363,9 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
 			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstSubfolderSpec = 10;
 			files = (
+				E3B3E8C1241611180021F7E6 /* FUAPIDemoBar.framework in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -383,7 +389,6 @@
 				8390998320DA3AC600608DFE /* (null) in Embed Frameworks */,
 				8390998420DA3AC600608DFE /* (null) in Embed Frameworks */,
 				7DB4C66A213EA5A80000AAAD /* alivcffmpeg.framework in Embed Frameworks */,
-				0BC4ADE721C1191E00A0014C /* FUAPIDemoBar.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,17 +398,6 @@
 /* Begin PBXFileReference section */
 		00D13C30286FA2DAC4826CE0 /* Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_basic.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_basic.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceUITests/Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_basic.xcconfig"; sourceTree = "<group>"; };
 		049C1E16DCD1F36AC62AAB0B /* libPods-AliyunVideoClient_EntranceTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AliyunVideoClient_EntranceTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0BC4ADBE21C1190B00A0014C /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
-		0BC4ADCB21C1190B00A0014C /* FUAPIDemoBar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FUAPIDemoBar.framework; sourceTree = "<group>"; };
-		0BC4ADCC21C1190B00A0014C /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
-		0BC4ADCD21C1190B00A0014C /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
-		0BC4ADCF21C1190B00A0014C /* fengya_ztt_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fengya_ztt_fu.bundle; sourceTree = "<group>"; };
-		0BC4ADD021C1190B00A0014C /* hudie_lm_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hudie_lm_fu.bundle; sourceTree = "<group>"; };
-		0BC4ADD121C1190B00A0014C /* juanhuzi_lm_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = juanhuzi_lm_fu.bundle; sourceTree = "<group>"; };
-		0BC4ADD221C1190B00A0014C /* mask_hat.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = mask_hat.bundle; sourceTree = "<group>"; };
-		0BC4ADD321C1190B00A0014C /* touhua_ztt_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = touhua_ztt_fu.bundle; sourceTree = "<group>"; };
-		0BC4ADD421C1190B00A0014C /* yazui.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yazui.bundle; sourceTree = "<group>"; };
-		0BC4ADD521C1190B00A0014C /* yuguan.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuguan.bundle; sourceTree = "<group>"; };
 		187D3731858C74834F5E7364 /* Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_professional.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_professional.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceUITests/Pods-AliyunVideoClient_EntranceUITests.alivcshortvideo_professional.xcconfig"; sourceTree = "<group>"; };
 		1CF35EA0321CB548B66AFBBD /* Pods-AliyunVideoClient_Entrance.alivcshortvideo_basic.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_Entrance.alivcshortvideo_basic.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance.alivcshortvideo_basic.xcconfig"; sourceTree = "<group>"; };
 		1E1BCA97E754A97ABC7C9126 /* Pods-AliyunVideoClient_EntranceTests.alivclivepush.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceTests.alivclivepush.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceTests/Pods-AliyunVideoClient_EntranceTests.alivclivepush.xcconfig"; sourceTree = "<group>"; };
@@ -633,6 +627,25 @@
 		D2BE92F6217EFBBF00641D2A /* AlivcShortVideoRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlivcShortVideoRoute.m; sourceTree = "<group>"; };
 		E06E858AFB096CD0C5035C39 /* Pods-AliyunVideoClient_EntranceUITests.alivcvideoplay.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceUITests.alivcvideoplay.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceUITests/Pods-AliyunVideoClient_EntranceUITests.alivcvideoplay.xcconfig"; sourceTree = "<group>"; };
 		E33550E690081CEE583BD1AF /* Pods-AliyunVideoClient_Entrance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_Entrance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance.debug.xcconfig"; sourceTree = "<group>"; };
+		E3B3E89A241610EF0021F7E6 /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
+		E3B3E89B241610EF0021F7E6 /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
+		E3B3E89C241610EF0021F7E6 /* FUAPIDemoBar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FUAPIDemoBar.framework; sourceTree = "<group>"; };
+		E3B3E89E241610EF0021F7E6 /* touhua_ztt_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = touhua_ztt_fu.bundle; sourceTree = "<group>"; };
+		E3B3E89F241610EF0021F7E6 /* yazui.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yazui.bundle; sourceTree = "<group>"; };
+		E3B3E8A0241610EF0021F7E6 /* yuguan.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yuguan.bundle; sourceTree = "<group>"; };
+		E3B3E8A1241610EF0021F7E6 /* hudie_lm_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hudie_lm_fu.bundle; sourceTree = "<group>"; };
+		E3B3E8A2241610EF0021F7E6 /* mask_hat.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = mask_hat.bundle; sourceTree = "<group>"; };
+		E3B3E8A3241610EF0021F7E6 /* juanhuzi_lm_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = juanhuzi_lm_fu.bundle; sourceTree = "<group>"; };
+		E3B3E8A4241610EF0021F7E6 /* fengya_ztt_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fengya_ztt_fu.bundle; sourceTree = "<group>"; };
+		E3B3E8A5241610EF0021F7E6 /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
+		E3B3E8A7241610EF0021F7E6 /* release_note.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_note.txt; sourceTree = "<group>"; };
+		E3B3E8A8241610EF0021F7E6 /* libnama.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnama.a; sourceTree = "<group>"; };
+		E3B3E8AA241610EF0021F7E6 /* v3.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = v3.bundle; sourceTree = "<group>"; };
+		E3B3E8AC241610EF0021F7E6 /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_face_processor.bundle; sourceTree = "<group>"; };
+		E3B3E8AD241610EF0021F7E6 /* face_beautification.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = face_beautification.bundle; sourceTree = "<group>"; };
+		E3B3E8AF241610EF0021F7E6 /* funama.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = funama.h; sourceTree = "<group>"; };
+		E3B3E8B0241610EF0021F7E6 /* FURenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FURenderer.h; sourceTree = "<group>"; };
+		E3B3E8B1241610EF0021F7E6 /* libfuai.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfuai.a; sourceTree = "<group>"; };
 		ED56EA3DE0699F59560B4441 /* Pods-AliyunVideoClient_Entrance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_Entrance.release.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance.release.xcconfig"; sourceTree = "<group>"; };
 		F0DC755A97F013480F88FBB1 /* Pods-AliyunVideoClient_EntranceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceTests/Pods-AliyunVideoClient_EntranceTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F13C475848FE9D815E0BFDB8 /* Pods-AliyunVideoClient_EntranceUITests.alivclivepush.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_EntranceUITests.alivclivepush.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_EntranceUITests/Pods-AliyunVideoClient_EntranceUITests.alivclivepush.xcconfig"; sourceTree = "<group>"; };
@@ -967,11 +980,11 @@
 				6EBC0C19213E3E24003A1713 /* CoreAudio.framework in Frameworks */,
 				F32B2BEF2064EB34009DC933 /* libresolv.tbd in Frameworks */,
 				6EBC0C15213E3E0A003A1713 /* libz.tbd in Frameworks */,
+				E3B3E8C0241610F00021F7E6 /* libfuai.a in Frameworks */,
 				6EBC0C13213E3E00003A1713 /* CoreMedia.framework in Frameworks */,
 				6EBC0C12213E3DF4003A1713 /* libstdc++.tbd in Frameworks */,
 				8390997220DA38FF00608DFE /* AliyunPlayerSDK.framework in Frameworks */,
-				0BC4ADDD21C1190B00A0014C /* FUAPIDemoBar.framework in Frameworks */,
-				0BC4ADE621C1191E00A0014C /* FUAPIDemoBar.framework in Frameworks */,
+				E3B3E8B2241610EF0021F7E6 /* FUAPIDemoBar.framework in Frameworks */,
 				8390995220DA302000608DFE /* AliyunVideoCore.framework in Frameworks */,
 				F32B2BF22064EC59009DC933 /* libresolv.9.tbd in Frameworks */,
 				7DB4C669213EA5A80000AAAD /* alivcffmpeg.framework in Frameworks */,
@@ -982,6 +995,7 @@
 				F32B2BED2064EAFD009DC933 /* MobileCoreServices.framework in Frameworks */,
 				F3EFBDEA211868D500687DFB /* AliThirdparty.framework in Frameworks */,
 				B060795A14FBCCDD63FD1EA8 /* libPods-AliyunVideoClient_Entrance.a in Frameworks */,
+				E3B3E8BC241610F00021F7E6 /* libnama.a in Frameworks */,
 				D29BF35A215BABC200B9E373 /* AliyunVideoSDKPro.framework in Frameworks */,
 				F3EFBDEB2118690F00687DFB /* AliThirdparty.framework in Frameworks */,
 				8390995320DA302000608DFE /* VODUpload.framework in Frameworks */,
@@ -1007,32 +1021,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0BC4ADBD21C1190B00A0014C /* FaceUnity */ = {
-			isa = PBXGroup;
-			children = (
-				0BC4ADBE21C1190B00A0014C /* authpack.h */,
-				0BC4ADCB21C1190B00A0014C /* FUAPIDemoBar.framework */,
-				0BC4ADCC21C1190B00A0014C /* FUManager.h */,
-				0BC4ADCD21C1190B00A0014C /* FUManager.m */,
-				0BC4ADCE21C1190B00A0014C /* items */,
-			);
-			path = FaceUnity;
-			sourceTree = "<group>";
-		};
-		0BC4ADCE21C1190B00A0014C /* items */ = {
-			isa = PBXGroup;
-			children = (
-				0BC4ADCF21C1190B00A0014C /* fengya_ztt_fu.bundle */,
-				0BC4ADD021C1190B00A0014C /* hudie_lm_fu.bundle */,
-				0BC4ADD121C1190B00A0014C /* juanhuzi_lm_fu.bundle */,
-				0BC4ADD221C1190B00A0014C /* mask_hat.bundle */,
-				0BC4ADD321C1190B00A0014C /* touhua_ztt_fu.bundle */,
-				0BC4ADD421C1190B00A0014C /* yazui.bundle */,
-				0BC4ADD521C1190B00A0014C /* yuguan.bundle */,
-			);
-			path = items;
-			sourceTree = "<group>";
-		};
 		7DA52B3C216CABA9007E585C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -1471,6 +1459,72 @@
 				F30CF58F2154E78400537F8B /* AliyunEffectPasterFrameItemCopy.m */,
 			);
 			path = AlivcCaptionCopy;
+			sourceTree = "<group>";
+		};
+		E3B3E899241610EF0021F7E6 /* FaceUnity */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E89A241610EF0021F7E6 /* authpack.h */,
+				E3B3E89B241610EF0021F7E6 /* FUManager.h */,
+				E3B3E8A5241610EF0021F7E6 /* FUManager.m */,
+				E3B3E89C241610EF0021F7E6 /* FUAPIDemoBar.framework */,
+				E3B3E89D241610EF0021F7E6 /* items */,
+				E3B3E8A6241610EF0021F7E6 /* FaceUnity-SDK-iOS */,
+			);
+			path = FaceUnity;
+			sourceTree = "<group>";
+		};
+		E3B3E89D241610EF0021F7E6 /* items */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E89E241610EF0021F7E6 /* touhua_ztt_fu.bundle */,
+				E3B3E89F241610EF0021F7E6 /* yazui.bundle */,
+				E3B3E8A0241610EF0021F7E6 /* yuguan.bundle */,
+				E3B3E8A1241610EF0021F7E6 /* hudie_lm_fu.bundle */,
+				E3B3E8A2241610EF0021F7E6 /* mask_hat.bundle */,
+				E3B3E8A3241610EF0021F7E6 /* juanhuzi_lm_fu.bundle */,
+				E3B3E8A4241610EF0021F7E6 /* fengya_ztt_fu.bundle */,
+			);
+			path = items;
+			sourceTree = "<group>";
+		};
+		E3B3E8A6241610EF0021F7E6 /* FaceUnity-SDK-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E8A7241610EF0021F7E6 /* release_note.txt */,
+				E3B3E8A9241610EF0021F7E6 /* Resources */,
+				E3B3E8AE241610EF0021F7E6 /* Headers */,
+				E3B3E8B1241610EF0021F7E6 /* libfuai.a */,
+				E3B3E8A8241610EF0021F7E6 /* libnama.a */,
+			);
+			path = "FaceUnity-SDK-iOS";
+			sourceTree = "<group>";
+		};
+		E3B3E8A9241610EF0021F7E6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E8AB241610EF0021F7E6 /* AI_model */,
+				E3B3E8AD241610EF0021F7E6 /* face_beautification.bundle */,
+				E3B3E8AA241610EF0021F7E6 /* v3.bundle */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E3B3E8AB241610EF0021F7E6 /* AI_model */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E8AC241610EF0021F7E6 /* ai_face_processor.bundle */,
+			);
+			path = AI_model;
+			sourceTree = "<group>";
+		};
+		E3B3E8AE241610EF0021F7E6 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				E3B3E8AF241610EF0021F7E6 /* funama.h */,
+				E3B3E8B0241610EF0021F7E6 /* FURenderer.h */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		F30CE5AB215491FE00537F8B /* Mediator */ = {
@@ -2195,7 +2249,7 @@
 		F3B56FC8206386AE0075DEAA = {
 			isa = PBXGroup;
 			children = (
-				0BC4ADBD21C1190B00A0014C /* FaceUnity */,
+				E3B3E899241610EF0021F7E6 /* FaceUnity */,
 				F3B56FD3206386AE0075DEAA /* AliyunVideoClient_Entrance */,
 				F3B56FEC206386AE0075DEAA /* AliyunVideoClient_EntranceTests */,
 				F3B56FF7206386AE0075DEAA /* AliyunVideoClient_EntranceUITests */,
@@ -2461,6 +2515,7 @@
 			buildConfigurationList = F3B56FFD206386AE0075DEAA /* Build configuration list for PBXNativeTarget "AliyunVideoClient_Entrance" */;
 			buildPhases = (
 				D9EB629B60C55BE959D7CD34 /* [CP] Check Pods Manifest.lock */,
+				E3B3E8C224161EFE0021F7E6 /* ShellScript */,
 				F3B56FCD206386AE0075DEAA /* Sources */,
 				F3B56FCE206386AE0075DEAA /* Frameworks */,
 				F3B56FCF206386AE0075DEAA /* Resources */,
@@ -2576,8 +2631,10 @@
 				F30CF51D2154E3DF00537F8B /* AliyunVideoSDK-opencore-amr in Resources */,
 				D269DC8C2178205100C55896 /* LocalFont.json in Resources */,
 				F3F6AA622068C8A000E4D5B4 /* Localizable.strings in Resources */,
+				E3B3E8B7241610F00021F7E6 /* mask_hat.bundle in Resources */,
 				D269DC852178205100C55896 /* LocalFilter.json in Resources */,
 				D269DC842178205100C55896 /* music in Resources */,
+				E3B3E8BB241610F00021F7E6 /* release_note.txt in Resources */,
 				F3B5701F2063878D0075DEAA /* readMe_Categories.txt in Resources */,
 				D269DC892178205100C55896 /* haixiu in Resources */,
 				F3B570222063878D0075DEAA /* readMe_Resources.txt in Resources */,
@@ -2586,16 +2643,16 @@
 				F342FBE6217F38850023102A /* AliyunConfigureViewController.xib in Resources */,
 				F39B484220FE155400F1DEC4 /* (null) in Resources */,
 				7DA52B35216C831D007E585C /* AliyunRecordParamViewController.xib in Resources */,
+				E3B3E8BE241610F00021F7E6 /* ai_face_processor.bundle in Resources */,
+				E3B3E8B3241610F00021F7E6 /* touhua_ztt_fu.bundle in Resources */,
 				8390997020DA38FF00608DFE /* AliyunLanguageSource.bundle in Resources */,
 				D269DC872178205100C55896 /* music.json in Resources */,
 				D269DC822178205100C55896 /* hanfumei-800 in Resources */,
 				7D33980021806316006D1645 /* 103-beautiful life in Resources */,
-				0BC4ADE021C1190B00A0014C /* hudie_lm_fu.bundle in Resources */,
 				D269DC8D2178205100C55896 /* LocalFont_ios8.json in Resources */,
 				D269DC832178205100C55896 /* LocalPaster.json in Resources */,
-				0BC4ADE121C1190B00A0014C /* juanhuzi_lm_fu.bundle in Resources */,
+				E3B3E8B8241610F00021F7E6 /* juanhuzi_lm_fu.bundle in Resources */,
 				D269DC8B2178205100C55896 /* 166-zimu in Resources */,
-				0BC4ADE221C1190B00A0014C /* mask_hat.bundle in Resources */,
 				F38570EA206E208900D9258A /* FilterResource.bundle in Resources */,
 				F37B17DF213D1CBA0086C9DC /* AliyunEmasServices-Info.plist in Resources */,
 				D269DC7E2178205100C55896 /* filter in Resources */,
@@ -2603,15 +2660,15 @@
 				D269DC9121782BAB00C55896 /* QPSDK.bundle in Resources */,
 				F3B570262063878D0075DEAA /* readMe_Frameworks.txt in Resources */,
 				D269DC7F2178205100C55896 /* 150-xingzuo in Resources */,
+				E3B3E8B6241610F00021F7E6 /* hudie_lm_fu.bundle in Resources */,
 				7D3F8CE120CE6BA60053BB9D /* InfoPlist.strings in Resources */,
-				0BC4ADE421C1190B00A0014C /* yazui.bundle in Resources */,
-				0BC4ADE521C1190B00A0014C /* yuguan.bundle in Resources */,
 				F3B56FDE206386AE0075DEAA /* Assets.xcassets in Resources */,
 				F38B498C20A5350800CD6C94 /* AlivcUserInfoViewController.xib in Resources */,
-				0BC4ADE321C1190B00A0014C /* touhua_ztt_fu.bundle in Resources */,
 				D269DC812178205100C55896 /* LocalMV.json in Resources */,
+				E3B3E8BF241610F00021F7E6 /* face_beautification.bundle in Resources */,
 				F30CF2F72154C16300537F8B /* tail.png in Resources */,
 				D269DC862178205100C55896 /* animation_filter in Resources */,
+				E3B3E8B5241610F00021F7E6 /* yuguan.bundle in Resources */,
 				F3B5701E2063878D0075DEAA /* readMe_AppSupportFiles.txt in Resources */,
 				F3B570252063878D0075DEAA /* readMe_Helpers.txt in Resources */,
 				D269DC8E2178205100C55896 /* test.mp4 in Resources */,
@@ -2621,10 +2678,12 @@
 				D269DC802178205100C55896 /* LocalCaption.json in Resources */,
 				F30CF2F82154C16300537F8B /* watermark.png in Resources */,
 				F30CF2F92154C16300537F8B /* yuanhao8.png in Resources */,
+				E3B3E8B4241610F00021F7E6 /* yazui.bundle in Resources */,
 				F3B570232063878D0075DEAA /* readMe_Utilites.txt in Resources */,
+				E3B3E8BD241610F00021F7E6 /* v3.bundle in Resources */,
 				F3AFB1BA216DEB2700F5683A /* AlivcShortVideoImage.bundle in Resources */,
 				F3857246206E208A00D9258A /* AlivcShortVideo.txt in Resources */,
-				0BC4ADDF21C1190B00A0014C /* fengya_ztt_fu.bundle in Resources */,
+				E3B3E8B9241610F00021F7E6 /* fengya_ztt_fu.bundle in Resources */,
 				F352265A2074C44A000A07D5 /* AVC_ET_ModuleItemCCell.xib in Resources */,
 				D269DC882178205100C55896 /* 150-music in Resources */,
 			);
@@ -2655,18 +2714,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance-resources.sh",
 				"${PODS_ROOT}/LBXScan/LBXScan/UI/CodeScan.bundle",
-				"${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/face_beautification.bundle",
-				"${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/fxaa.bundle",
-				"${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/tongue.bundle",
-				"${PODS_ROOT}/Nama/FaceUnity-SDK-iOS/Resources/v3.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CodeScan.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/face_beautification.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fxaa.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tongue.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/v3.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2726,6 +2777,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		E3B3E8C224161EFE0021F7E6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/sh/\ncd FaceUnity/FaceUnity-SDK-iOS\nfilename=libnama.a\nzipname=libnama.zip\n\nfilename2=libfuai.a\nzipname2=libfuai.zip\nmdcode=$(md5 $filename)\n\nif [ -f \"$zipname\" ];\nthen\nrm -f $filename\nunzip $zipname\nrm -f $zipname\n\nrm -f $filename2\nunzip $zipname2\nrm -f $zipname2\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2871,7 +2939,7 @@
 				F3A1D56E20DA5D5F00FEF3C4 /* AlivcDefine.m in Sources */,
 				D269BBD62175830E00C55896 /* AliyunTimelineItemCell.m in Sources */,
 				F3823667216C826A004BBFD9 /* AlivcRecordUIConfig.m in Sources */,
-				0BC4ADDE21C1190B00A0014C /* FUManager.m in Sources */,
+				E3B3E8BA241610F00021F7E6 /* FUManager.m in Sources */,
 				F32092CC2099C38500A9ECAA /* AlivcLiveUser.m in Sources */,
 				D269BBE32175830E00C55896 /* AliyunEffectInfo.m in Sources */,
 				D269B08B216F2E9400C55896 /* AliyunFontPickerViewCell.m in Sources */,
