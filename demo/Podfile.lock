@@ -70,7 +70,6 @@ PODS:
     - LBXScan/Types (~> 2.2)
   - LXReorderableCollectionViewFlowLayout (0.2.1)
   - MBProgressHUD (1.1.0)
-  - Nama (6.1.0)
   - Reachability (3.1.1)
   - RemoteDebugChannel (10.0.4.4-no-accs):
     - AliHAProtocol (>= 10.0.0.3)
@@ -113,7 +112,6 @@ DEPENDENCIES:
   - LBXScan/UI (~> 2.3)
   - LXReorderableCollectionViewFlowLayout
   - MBProgressHUD (~> 1.1.0)
-  - Nama (= 6.1.0)
   - Reachability (= 3.1.1)
   - SDWebImage (~> 4.0)
   - TTRangeSlider
@@ -139,7 +137,7 @@ SPEC REPOS:
     - TBRest
     - TRemoteDebugger
     - UserTrack
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - AliyunOSSiOS
     - FBAllocationTracker
@@ -150,7 +148,6 @@ SPEC REPOS:
     - LBXScan
     - LXReorderableCollectionViewFlowLayout
     - MBProgressHUD
-    - Nama
     - Reachability
     - SDWebImage
     - TTRangeSlider
@@ -162,7 +159,7 @@ SPEC CHECKSUMS:
   AlicloudUTDID: 7640837a1f6dd3529be33f8c77b7818cd88129f9
   AliHACore: a8b0b01f92977cbee1d57b5b7dac0f51dca59cfd
   AliHADeviceEvaluation: 3758cb4ff523aa5ca316f7b39ca5bb36a2c6d208
-  AliHALogEngine: fea0f3b1fa86e1fb563fd7b10d9337e1f2fb3a97
+  AliHALogEngine: 22b83d8cfb4fbc2c22a2238574bc295b2dbba48d
   AliHAMemoryMonitor: c3a3d2eaa7a54c292622c0ea6ef5ba81f9c349e8
   AliHAMethodTrace: 31ebea278dfc3dfead7c47a75fc995c79d14ac36
   AliHAPerformanceMonitor: bf73d2e412329c1bdff1e279ff8f540865fbb5f3
@@ -180,7 +177,6 @@ SPEC CHECKSUMS:
   LBXScan: e51449f0832d1fe17da632af0d22adeb3cfa3543
   LXReorderableCollectionViewFlowLayout: acd6fe9fd0800efc656266a345130a2f634abf85
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
-  Nama: a027345faa9652ead0ff402b0b95cbc1b6735910
   Reachability: dd9aa4fb6667b9f787690a74f53cb7634ce99893
   RemoteDebugChannel: b9e4b17a97808a025fb592d59f3c3f2d86fb9390
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
@@ -192,6 +188,6 @@ SPEC CHECKSUMS:
   UserTrack: 6375ac3b543e7e778af050628026f0029532eafe
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: 489e32f0d8d7123307729b539b3498c8ccd303ac
+PODFILE CHECKSUM: de5d80118a0eb9babd77b574c671162f4420ebf8
 
-COCOAPODS: 1.7.4
+COCOAPODS: 1.8.3

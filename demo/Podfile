@@ -20,7 +20,7 @@ target 'AliyunVideoClient_Entrance' do
   pod 'JSONModel'
   pod 'LXReorderableCollectionViewFlowLayout'
   pod 'TTRangeSlider'
-  pod 'Nama', '6.1.0'
+#  pod 'Nama', '6.1.0'
   
   #crash
 #  pod 'AliHAAdapter4poc', '10.0.5.1'
