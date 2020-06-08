@@ -169,11 +169,16 @@
 "For mobile networks, click play" =  "For mobile networks, click play";
 
 /*livePush-直播推流*/
+
+"screen_record_notice_text" = "Use Screen Record：\nPlease start the screen record fron control center->select AlivcLiveBroadcast->adjust the param at this menu then press start push button";
+
 "live_scene_list" = "Scene list of live";
 
-"live_basic_function" = "PusherSDKV3.3.5";
+"live_basic_function" = "PusherSDKV3.3.7";
 
 "live_basic_function_old" = "PusherSDKV1.3";
+
+"screen_record_live" = "screen record live";
 
 "license_declaration" = "License Declaration";
 
@@ -575,7 +580,7 @@
 "host_leave_room" = "The anchor left the room";
 "change_new_user" = "You have replaced a new user";
 "nick_all_empty" = "nickname can't empty";
-"nick_no_more_than_8" = "nicknames cannot exceed 8 Chinese alphanumeric characters or symbols";
+"nick_no_more_than_12" = "nicknames cannot exceed 12 Chinese alphanumeric characters or symbols";
 "nick_contain_emotion" = "nicknames cannot contain emotions";
 "tips" = "tips";
 "it_is_ok" = "OK";
@@ -608,7 +613,7 @@
 "host_leave_room" = "The anchor left the room";
 "change_new_user" = "You have replaced a new user";
 "nick_all_empty" = "nickname can't empty";
-"nick_no_more_than_8" = "nicknames cannot exceed 8 Chinese alphanumeric characters or symbols";
+"nick_no_more_than_12" = "nicknames cannot exceed 12 Chinese alphanumeric characters or symbols";
 "nick_contain_emotion" = "nicknames cannot contain emotions";
 "tips" = "tips";
 "it_is_ok" = "OK";
@@ -654,3 +659,7 @@
 "push_open_ears_back" = "Open Ears";
 "push_close_audio_denoise" = "Close Denoise";
 "push_open_audio_denoise" = "Open Denoise";
+"Provided by Taihe Music DMH  How to get" = "Provided by Taihe Music DMH  How to get";
+"Advanced Beauty is provided by faceunity  How to get" = "Advanced Beauty is provided by faceunity  How to get";
+"How to get" = "How to get";
+"Third-party capability acquisition instructions" = "Third-party capability acquisition instructions";

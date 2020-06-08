@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "BB292857-86A5-4E6B-8268-4AB3062DD9D0"
+   uuid = "F3E12911-A8D9-4417-AF2B-D3D48898C9A5"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "92AF2083-66E6-4913-B631-AE66A0442589"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlivcRecord/AlivcRecord/Classes/Recording/Utilities/FaceUnityManager/AlivcShortVideoFaceUnityManager.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "-OutputVideoPixelBuffer:textureName:beautyWhiteValue:blurValue:bigEyeValue:slimFaceValue:buddyValue:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E55C15A9-C9CF-48A8-92BD-616BD61D40FE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AlivcRecord/AlivcRecord/Classes/Recording/Utilities/FaceUnityManager/AlivcShortVideoFaceUnityManager.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "-OutputVideoPixelBuffer:textureName:beautyWhiteValue:blurValue:bigEyeValue:slimFaceValue:buddyValue:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

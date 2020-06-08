@@ -1,6 +1,0 @@
-framework module AliHADeviceEvaluation {
-  umbrella header "AliHADeviceEvaluation.h"
-
-  export *
-  module * { export * }
-}

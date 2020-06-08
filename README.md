@@ -28,11 +28,25 @@ FUAliShortVideoProDemo 是集成了 [Faceunity](https://github.com/Faceunity/FUL
 遵循 `AliyunIRecorderDelegate` 代理，并在其代理方法 `customRenderedPixelBufferWithRawSampleBuffer:` 中进行图像处理：
 
 ```c
-/**             ---------- FaceUnity ----------             **/
 - (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    CVPixelBufferRef buffer = CMSampleBufferGetImageBuffer(sampleBuffer) ;
-    [[FUManager shareManager] renderItemsToPixelBuffer:buffer];
-    return buffer ;
+    if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
+        return CMSampleBufferGetImageBuffer(sampleBuffer);
+    }
+    if (self.beautyView.currentBeautyType == AlivcBeautySettingViewStyle_ShortVideo_BeautyFace_Base) {
+        return CMSampleBufferGetImageBuffer(sampleBuffer);
+    }
+    
+    //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
+    //美颜参数设置(这里用的是beautyParams)
+    CGFloat beautyWhite = self.beautyView.beautyParams.beautyWhite;
+    CGFloat beautyBuffing = self.beautyView.beautyParams.beautyBuffing;
+    CGFloat beautyRuddy = self.beautyView.beautyParams.beautyRuddy;
+    //美型参数设置(这里用的是beautySkinParams)
+    CGFloat beautyBigEye = self.beautyView.beautySkinParams.beautyBigEye;
+    CGFloat beautySlimFace = self.beautyView.beautySkinParams.beautySlimFace;
+    
+    CVPixelBufferRef buf = [[AlivcShortVideoFaceUnityManager shareManager] RenderedPixelBufferWithRawSampleBuffer:sampleBuffer beautyWhiteValue:beautyWhite/100.0 blurValue:beautyBuffing/100.0 bigEyeValue:beautyBigEye/100.0 slimFaceValue:beautySlimFace/100.0 buddyValue:beautyRuddy/100.0];
+    return buf;
 }
 ```
 

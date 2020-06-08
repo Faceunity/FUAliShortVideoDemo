@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  - AVC_ET_ModuleType_LiveAnswer: 直播答题
  - AVC_ET_ModuleType_MagicCamera:魔法相机
  - AVC_ET_ModuleType_VideoClip:视频裁剪
+ - AVC_ET_ModuleType_SmartVideo:趣视频
  AVC_ET_ModuleType_Temp_ShortVideo_Demo:原先短视频的demo
  */
 typedef NS_ENUM(NSInteger,AVC_ET_ModuleType){
@@ -29,16 +31,29 @@ typedef NS_ENUM(NSInteger,AVC_ET_ModuleType){
     AVC_ET_ModuleType_VideoShooting = 1 << 0,//短视频 - 视频拍摄
     AVC_ET_ModuleType_VideoEdit = 1 << 1,//短视频 - 视频编辑
     AVC_ET_ModuleType_VideoClip = 1 << 2,//短视频 - 视频裁剪
-    AVC_ET_ModuleType_ShortVideo = 1 << 3, //短视频社区方案 - 趣视频
+    AVC_ET_ModuleType_SmartVideo = 1 << 3, //短视频解决方案 - 趣视频
     AVC_ET_ModuleType_VideoLive = 1 << 4,//互动直播
     AVC_ET_ModuleType_PushFlow = 1 << 5,//推流的demo（直播推流）
-    
     AVC_ET_ModuleType_VideoUpload = 1 << 6, //上传
     AVC_ET_ModuleType_VideoPaly = 1 << 7, //播放器
     AVC_ET_ModuleType_VideoShooting_Basic = 1 << 8,//短视频 - 视频拍摄 - 基础版
     AVC_ET_ModuleType_VideoClip_Basic = 1 << 9,//短视频 - 视频裁剪 - 基础版
     
     AVC_ET_ModuleType_RTC = 1 << 10,
+    AVC_ET_ModuleType_RTC_Audio = 1 << 11,
+    
+    AVC_ET_ModuleType_Smartboard = 1 << 12,//互动白板
+    
+    AVC_ET_ModuleType_RaceBeauty = 1 << 13,//race美颜美型
+    AVC_ET_ModuleType_FaceDetect = 1 << 14,//race人脸识别
+
+    AVC_ET_ModuleType_MetalPreview = 1 << 15,//Metal 预览
+
+    AVC_ET_ModuleType_VideoPlayConfig = 1 << 16, //播放配置
+    AVC_ET_ModuleType_VideoPlayList = 1 << 17, //播放列表
+    AVC_ET_ModuleType_VideoPlayShift = 1 << 18, //直播时移
+    
+    
 };
 
 

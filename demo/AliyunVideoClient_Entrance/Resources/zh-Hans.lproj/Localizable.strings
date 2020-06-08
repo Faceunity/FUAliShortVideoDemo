@@ -206,11 +206,13 @@
 
 
 //push flow
-"live_scene_list" = "直播场景列表";
+"live_scene_list" = "直播推流";
 
 "live_basic_function" = "推流SDKv3.3.2";
 
 "live_basic_function_old" = "推流SDKv1.3";
+
+"screen_record_live" = "录屏直播";
 
 "license_declaration" = "版权信息";
 
@@ -591,6 +593,15 @@
 "VOD_4K" = "4K";
 "VOD_OD" = "原画";
 
+"FD" = "流畅";
+"LD" = "标清";
+"SD" = "高清";
+"HD" = "超清";
+"2K" = "2K";
+"4K" = "4K";
+"OD" = "原画";
+"SQ" = "低音质";
+"HQ" = "高音质";
 
 "Watch again, please click replay" = "再次观看，请点击重新播放";
 "The current network is not good. Please click replay later" = "当前网络不佳，请稍后点击重新播放";
@@ -751,9 +762,10 @@
 "aliyun_svideo_time_effect_not_support" = "时间特效不支持多段视频";
 "aliyun_svideo_editor_init_failed" = "编辑器初始化失败";
 /*livePush-直播推流*/
-"live_scene_list" = "直播场景列表";
+"screen_record_notice_text" = "使用系统录屏：\n请先到控制中心长按启动系统录屏录制->选择AlivcLiveBroadcast->在此界面调节相关参数，点击开始推流按钮。\n(注意以上设置在开始推流前有效，推流后改变设置无效。)";
+"live_scene_list" = "直播推流";
 
-"live_basic_function" = "推流SDKv3.3.5";
+"live_basic_function" = "推流SDKv3.3.7";
 
 "live_basic_function_old" = "推流SDKv1.3";
 
@@ -1148,8 +1160,9 @@
 "Send" = "发送";
 "Start Streaming" = "开始直播";
 "Smooth" = "流畅";
-"SD" = "标清";
-"HD" = "高清";
+"SD" = "高清";
+"HD" = "超清";
+
 "Face Filter" = "美颜";
 "Makeup" = "微调";
 "Skin Polishing" = "磨皮";
@@ -1175,11 +1188,11 @@
 "Lift the ban" = "解除禁言";
 
 "live_room" = "互动直播";
-"alivc_yun_video" = "阿里云视频";
+"alivc_yun_video" = "阿里云视频云";
 "host_leave_room" = "主播退出房间";
 "change_new_user" = "已经成功更换为新用户";
 "nick_all_empty" = "昵称不能全为空格";
-"nick_no_more_than_8" = "昵称不能超过8个汉字字母数字或符号";
+"nick_no_more_than_12" = "昵称不能超过12个汉字字母数字或符号";
 "nick_contain_emotion" = "昵称不能包含表情";
 "tips" = "提示";
 "it_is_ok" = "确认";
@@ -1223,5 +1236,7 @@
 "The connection is ended." = "对方已结束连麦";
 "The connection with XXX has been ended." = "已结束与XXX的连麦";
 "Unable to connect. Please try again later." = "你已经被限制连麦, 请稍后再试";
-
-
+"Provided by Taihe Music DMH  How to get" = "由太合音乐DMH提供服务  如何获取";
+"Advanced Beauty is provided by faceunity  How to get" = "高级美颜美肌由faceunity提供  如何获取";
+"How to get" = "如何获取";
+"Third-party capability acquisition instructions" = "第三方能力获取说明";

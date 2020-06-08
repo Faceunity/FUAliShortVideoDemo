@@ -7,19 +7,20 @@
 //
 
 #import "AlivcHomeViewController.h"
-
+#import <AVFoundation/AVFoundation.h>
 #import "AVC_ET_ModuleItemCCell.h"
 #import "AVC_ET_ModuleDefine.h"
-#import "AlivcUserInfoViewController.h"
 #import "ELCVFlowLayout.h"
-#import "AlivcLiveEnvManager.h"
 
-//helper
-#import "UIImage+AlivcHelper.h"
-#import "MBProgressHUD+AlivcHelper.h"
+#import "AlivcMacro.h"
+#import "AlivcShortVideoRoute.h"
+
+#import "AlivcAppInfoViewController.h"
 
 
-
+#if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
+#import <AliyunVideoSDKPro/AliyunVideoSDKInfo.h>
+#endif 
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,7 +51,7 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
 /**
  用户设置按钮
  */
-@property (strong, nonatomic) UIButton *userSettingButton;
+@property (strong, nonatomic) UIButton *appInfoButton;
 
 /**
  展示列表
@@ -64,7 +65,7 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
 
 @property (assign, nonatomic) BOOL isClipConfig;
 
-
+@property (strong, nonatomic) UIImageView *bg;
 /**
  环境
  */
@@ -81,34 +82,41 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
  */
 //@property (nonatomic, strong) AlivcShortVideoRoute *alivcRoute;
 
-
+@property (nonatomic,copy)NSString *plistString;
 @end
 
 @implementation AlivcHomeViewController
 
 
-#pragma mark - System
+#pragma mark - System & Init
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+//    [self redirectNSlogToDocumentFolder];
 
     self.isChangedRow = NO;
     
     [self configBaseData];
     [self configBaseUI];
+    [self setDefaultEnv];
+    
+    
+    // 开启短视频log
+#if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
+    [AliyunVideoSDKInfo setLogLevel:kAlivcLogLevel];
+#endif
     
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //导航栏设置
-    self.navigationController.navigationBar.hidden = true;
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-//    self.navigationController.navigationBar.hidden = false;
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -121,9 +129,10 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     // Dispose of any resources that can be recreated.
 }
 
+
 #pragma mark - 旋转
 - (BOOL)shouldAutorotate{
-    return YES;
+    return NO;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
@@ -145,10 +154,10 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
         CGFloat heightAliLabel = CGRectGetHeight(_aliLabel.frame);
         CGFloat widthAlilabel = CGRectGetWidth(_aliLabel.frame);
         _aliLabel.center = CGPointMake(besise + widthAlilabel / 2,lableDevideToTop + heightAliLabel / 2);
+        _aliLabel.userInteractionEnabled =YES;
     }
     return _aliLabel;
 }
-
 - (UILabel *)welcomeLabel{
     if (!_welcomeLabel) {
         _welcomeLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
@@ -163,18 +172,15 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     return _welcomeLabel;
 }
 
-- (UIButton *)userSettingButton{
-    if (!_userSettingButton) {
-        UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(PortraitScreenWidth - 66, lableDevideToTop, 36, 46)];
-        [button setBackgroundImage:nil forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"avcUserIcon"] forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"avcUserIcon"] forState:UIControlStateSelected];
-        [button sizeToFit];
-        [button addTarget:self action:@selector(userSetting) forControlEvents:UIControlEventTouchUpInside];
-        button.center = CGPointMake(PortraitScreenWidth - besise - button.frame.size.width / 2, lableDevideToTop + button.frame.size.height / 2);
-        _userSettingButton = button;
+- (UIButton *)appInfoButton{
+    if (!_appInfoButton) {
+        _appInfoButton = [[UIButton alloc]initWithFrame:CGRectMake(PortraitScreenWidth - 66, lableDevideToTop, 26, 26)];
+        [_appInfoButton setBackgroundImage:[UIImage imageNamed:@"appInfo"] forState:UIControlStateNormal];
+        [_appInfoButton setBackgroundImage:[UIImage imageNamed:@"appInfo"] forState:UIControlStateSelected];
+        _appInfoButton.center = CGPointMake(PortraitScreenWidth - besise - _appInfoButton.frame.size.width / 2, lableDevideToTop + _appInfoButton.frame.size.height / 2);
+        [_appInfoButton addTarget:self action:@selector(showSdkInfo) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _userSettingButton;
+    return _appInfoButton;
 }
 
 - (UICollectionView *)collectionView{
@@ -224,15 +230,12 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
         UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(ScreenWidth - 50, lableDevideToTop+50, 60, 46)];
         button.titleLabel.font = [UIFont systemFontOfSize:10];
         [button setTitle:[@"note_city_PreRelease" localString] forState:UIControlStateNormal];
-//        [button setTitle:[@"note_city_Shanghai" localString] forState:UIControlStateSelected];
-//        button.selected = [AlivcDefine mode];
-        _envMode = 0;
         [button sizeToFit];
         button.titleLabel.adjustsFontSizeToFitWidth = YES;
         CGRect rect = button.frame;
         rect.size.width += 10;
         button.frame = rect;
-        [button addTarget:self action:@selector(env) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(envButtonTouched) forControlEvents:UIControlEventTouchUpInside];
         
         if (self.pageController.center.y > 0) {
             button.center = CGPointMake(ScreenWidth - besise - button.frame.size.width / 2,
@@ -241,33 +244,63 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
             button.center = CGPointMake(ScreenWidth - besise - button.frame.size.width / 2,
                                         ScreenHeight - button.bounds.size.height - 20);
         }
-        
         _envButton = button;
     }
+    _envButton.hidden = YES;
     return _envButton;
 }
 
+#pragma mark - EnvManager
+- (void)envButtonTouched{
+#ifdef DEBUG
+    [self debugEnvChanged];
+#else
+    [self releaseEnvChanged];
+#endif
+}
 
-- (void)env{
+- (void)debugEnvChanged{
     _envMode = _envMode+1;
     if (_envMode == 4) {
         _envMode = 0;
     }
-    if (_envMode == 0) {
-        [_envButton setTitle:[@"note_city_PreRelease" localString] forState:UIControlStateNormal];
-    }else if (_envMode == 1){
-        [_envButton setTitle:[@"note_city_Shanghai" localString] forState:UIControlStateNormal];
-    }else if (_envMode == 2){
-        [_envButton setTitle:[@"note_city_Daily" localString] forState:UIControlStateNormal];
-    }else if (_envMode == 3){
-        [_envButton setTitle:[@"note_city_Singapore" localString] forState:UIControlStateNormal];
+    switch (_envMode) {
+        case 0:
+            [_envButton setTitle:[@"note_city_Shanghai" localString] forState:UIControlStateNormal];
+            break;
+        case 1:
+             [_envButton setTitle:[@"note_city_Singapore" localString] forState:UIControlStateNormal];
+            break;
+        case 2:
+            [_envButton setTitle:[@"note_city_PreRelease" localString] forState:UIControlStateNormal];
+            break;
+        case 3:
+           [_envButton setTitle:[@"note_city_Daily" localString] forState:UIControlStateNormal];
+            break;
+        default:
+            break;
     }
-//    _envButton.selected = !_envButton.selected;
-//    if (_envButton.selected) {
-        [AlivcLiveEnvManager AlivcAppServerSetTestEnvMode:_envMode];
-//    }else{
-//        [AlivcDefine AlivcAppServerSetTestEnvMode:0];
-//    }
+    
+}
+
+- (void)releaseEnvChanged{
+    _envMode = _envMode+1;
+    if (_envMode == 2) {
+        _envMode = 0;
+    }
+    if (_envMode == 0) {
+        [_envButton setTitle:[@"note_city_Shanghai" localString] forState:UIControlStateNormal];
+        
+        
+    }else{
+        [_envButton setTitle:[@"note_city_Singapore" localString] forState:UIControlStateNormal];
+        
+    }
+}
+
+- (void)setDefaultEnv{
+    [_envButton setTitle:[@"note_city_Shanghai" localString] forState:UIControlStateNormal];
+    
 }
 
 
@@ -281,10 +314,11 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     NSMutableArray *mArray = [[NSMutableArray alloc]init];
     
     //功能配置
-    NSInteger shouldAddValue = 0b111;    for (int i = 0; i < 16; i ++) {
-        NSInteger typeValue = 1 << i;
-        BOOL shouldAdd = shouldAddValue & typeValue;
-        if (shouldAdd) {
+    NSInteger shouldAddValue = 0b0010000000000111;
+    
+    for (int i = 0; i < 19; i ++) {
+        int typeValue = 1 << i;
+        if (shouldAddValue & typeValue) {
             AVC_ET_ModuleType type = (AVC_ET_ModuleType)typeValue;
             AVC_ET_ModuleDefine *module = [[AVC_ET_ModuleDefine alloc]initWithModuleType:type];
             [mArray addObject:module];
@@ -299,12 +333,10 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
 - (void)configBaseUI{
     
     // 背景图
-    UIImageView *bg = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, ScreenWidth-60, (ScreenWidth-60)*378/644.0)];
-    bg.image = [UIImage imageNamed:@"bg_home"];
-    [self.view addSubview:bg];
-    
-    //导航栏设置
-    [self setBaseNavigationBar];
+    _bg = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, ScreenWidth-60, (ScreenWidth-60)*378/644.0)];
+    _bg.image = [UIImage imageNamed:@"bg_home"];
+    _bg.userInteractionEnabled =YES;
+    [self.view addSubview:_bg];
     
     //ali label
     [self.view addSubview:self.aliLabel];
@@ -313,7 +345,7 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     [self.view addSubview:self.welcomeLabel];
     
     //user setting
-    [self.view addSubview:self.userSettingButton];
+    [self.view addSubview:self.appInfoButton];
     
     //env
     [self.view addSubview:self.envButton];
@@ -327,25 +359,6 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     }
 }
 
-/**
- 导航栏设置，全局有效
- */
-- (void)setBaseNavigationBar{
-    //
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage avc_imageWithColor:[AlivcUIConfig shared].kAVCBackgroundColor] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-}
-
-#pragma mark - Response
-
-- (void)userSetting{
-    AlivcUserInfoViewController *targetVC = [[AlivcUserInfoViewController alloc]init];
-    [self.navigationController pushViewController:targetVC animated:true];
-}
 
 
 #pragma mark - Custom Method
@@ -353,11 +366,11 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     Class viewControllerClass = NSClassFromString(classString);
     if (viewControllerClass) {
         UIViewController *targetVC = [[viewControllerClass alloc]init];
+        
         if (targetVC) {
             [self.navigationController pushViewController:targetVC animated:true];
         }
     }
-    
 }
 
 - (void)pushTargetVCWithClassString:(NSString *)classString value:(id)value valueString:(NSString *)valueString{
@@ -371,7 +384,30 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
             [self.navigationController pushViewController:targetVC animated:true];
         }
     }
-    
+}
+
+-(void)showSdkInfo{
+    AlivcAppInfoViewController *appInfoVC =[[AlivcAppInfoViewController alloc]init];
+    self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController pushViewController:appInfoVC animated:YES];
+}
+
+
+- (void)redirectNSlogToDocumentFolder
+{
+#if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
+    [AliyunVideoSDKInfo setLogLevel:kAlivcLogLevel];
+#endif
+    NSArray *paths =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"app.log"];
+    NSString *logFilePath = [documentDirectory stringByAppendingPathComponent:fileName];
+    //先删除已经存在的文件
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    [defaultManager removeItemAtPath:logFilePath error:nil];
+    // 将log输入到文件
+    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding],"a+", stdout);
+    freopen([logFilePath cStringUsingEncoding:NSASCIIStringEncoding],"a+", stderr);
 }
 
 
@@ -420,36 +456,110 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
         
         if (indexPath.row < self.dataArray.count) {
             AVC_ET_ModuleDefine *module = self.dataArray[indexPath.row];
-            [self configImageBundleWithType:module.type];
+//            [self configImageBundleWithType:module.type];
             switch (module.type) {
                     // 视频拍摄
                 case AVC_ET_ModuleType_VideoShooting:
-                    [self pushTargetVCWithClassString:@"AliyunRecordParamViewController"];break;
+                {
+                    UIViewController *recordParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlRecordParam];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:recordParam animated:YES];
+                }
+                    break;
                     
                     // 视频编辑
                 case AVC_ET_ModuleType_VideoEdit:
-                     [self pushTargetVCWithClassString:@"AliyunConfigureViewController" value:@"NO" valueString:@"isClipConfig"];break;
+                {
+                         UIViewController *editParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlEditParam];
+                         [self.navigationController setNavigationBarHidden:YES];
+                         [self.navigationController pushViewController:editParam animated:YES];
+                }
+                    break;
                     
                     // 视频裁剪
                 case AVC_ET_ModuleType_VideoClip:
-                    [self pushTargetVCWithClassString:@"AliyunConfigureViewController" value:@"YES" valueString:@"isClipConfig"];break;
+                {
+                    UIViewController *cropParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlCropParam];
+                    
+                    
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:cropParam animated:YES];
+                }
+                    break;
                     
                     // 趣视频
-                case AVC_ET_ModuleType_ShortVideo:
-                    [self pushTargetVCWithClassString:@"AlivcShortVideoPlayViewControler"];break;
+                case AVC_ET_ModuleType_SmartVideo:
+                    [self pushTargetVCWithClassString:@"AlivcShortVideoQuHomeTabBarController"];break;
                     
                     // 视频拍摄 - 基础版
                 case AVC_ET_ModuleType_VideoShooting_Basic:
-                    [self pushTargetVCWithClassString:@"AlivcBase_RecordParamViewController"];break;
+                {
+                    UIViewController *recordBasicParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlRecordBasicParam];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:recordBasicParam animated:YES];
+                }
+                    break;
                     
                     // 视频裁剪 - 基础版
-                case AVC_ET_ModuleType_VideoClip_Basic:[self pushTargetVCWithClassString:@"AlivcBase_ConfigureViewController"];break;
+                case AVC_ET_ModuleType_VideoClip_Basic:
+                {
+                    UIViewController *cropBasicParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlCropBasicParam];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:cropBasicParam animated:YES];
+                }
+                    break;
+                case AVC_ET_ModuleType_RaceBeauty:
+                {
+                    UIViewController *cropBasicParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlRaceBeauty];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:cropBasicParam animated:YES];
+                }
+                    break;
+                case AVC_ET_ModuleType_FaceDetect:
+                {
+                    UIViewController *cropBasicParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlFaceDetect];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:cropBasicParam animated:YES];
+                }
+                    break;
                     
                     
+                case AVC_ET_ModuleType_MetalPreview:
+                {
+                    UIViewController *cropBasicParam = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlMetalPreview];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:cropBasicParam animated:YES];
+                }
+                    break;
                     
+                    // 互动直播
+                case AVC_ET_ModuleType_VideoLive:[self pushTargetVCWithClassString:@"AlivcCombinationListViewController"];break;
                     
+                    // 直播推流
+                case AVC_ET_ModuleType_PushFlow:[self pushTargetVCWithClassString:@"AlivcLivePushRootViewController"];break;
                     
+                    // 视频上传demo
+                case AVC_ET_ModuleType_VideoUpload:[self pushTargetVCWithClassString:@"AlivcUploadMainViewController"];break;
                     
+                    // 视频播放
+                case AVC_ET_ModuleType_VideoPaly:[self pushTargetVCWithClassString:@"AVC_VP_VideoPlayViewController"];break;
+                    
+                    // RTC
+                case AVC_ET_ModuleType_RTC:[self pushTargetVCWithClassString:@"AlivcRTCHomeViewController"];break;
+                    // RTC audio
+                case AVC_ET_ModuleType_RTC_Audio:[self pushTargetVCWithClassString:@"AlivcRTCAudioHomeViewController"];break;
+                    //互动白板
+                case AVC_ET_ModuleType_Smartboard:[self pushTargetVCWithClassString:@"AlivcSmartboardLoginViewController"];break;
+                case AVC_ET_ModuleType_VideoPlayConfig: {
+                    [self pushTargetVCWithClassString:@"AlivcVideoPlayConfigViewController"];
+                }
+                    break;
+                case AVC_ET_ModuleType_VideoPlayList:
+                    [self pushTargetVCWithClassString:@"SimplePlayerViewController"];
+                    break;
+                case AVC_ET_ModuleType_VideoPlayShift:
+                    [self pushTargetVCWithClassString:@"AlivcVideoPlayTimeShiftViewController"];
+                    break;
                 default:
                     break;
             }
@@ -478,26 +588,14 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     }
 }
 
-#pragma mark - ImageBundleConfig
-- (void)configImageBundleWithType:(AVC_ET_ModuleType)type{
-    switch (type) {
-        case AVC_ET_ModuleType_VideoShooting:
-            [AlivcImage setImageBundleName:@"AlivcShortVideoImage"];
-            break;
-        case AVC_ET_ModuleType_VideoEdit:
-            [AlivcImage setImageBundleName:@"AlivcShortVideoImage"];
-            break;
-        case AVC_ET_ModuleType_VideoClip:
-            [AlivcImage setImageBundleName:@"AlivcShortVideoImage"];
-            break;
-        case AVC_ET_ModuleType_ShortVideo:
-            [AlivcImage setImageBundleName:@"AlivcShortVideoImage"];
-            break;
-            
-        default:
-            break;
-    }
+-(void)settingQuietModePlaying{
+    //手机静音，播放有声音
+    AVAudioSession *avSession = [AVAudioSession sharedInstance];
+    [avSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [avSession setActive:YES error:nil];
 }
+
+
 
 @end
 

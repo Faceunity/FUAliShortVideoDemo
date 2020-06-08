@@ -1,6 +1,0 @@
-framework module RemoteDebugChannel {
-  umbrella header "RemoteDebugChannel.h"
-
-  export *
-  module * { export * }
-}
