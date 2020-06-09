@@ -1,0 +1,94 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - AlivcCommon (0.1.0):
+    - AFNetworking
+    - FMDB
+    - JSONModel
+    - MBProgressHUD
+    - SDWebImage
+    - ZipArchive
+  - AlivcConan (1.0.2.12451054)
+  - AlivcCore (0.1.0):
+    - AlivcCommon
+    - AlivcConan (= 1.0.2.12451054)
+    - AliyunVideoSDKPro (= 3.14.0.12452510)
+    - QuCore-ThirdParty (= 3.14.0.12445263)
+    - VODUpload
+  - AliyunOSSiOS (2.10.7)
+  - AliyunVideoSDKPro (3.14.0.12452510)
+  - FMDB (3.0.0.2):
+    - SQLCipher (~> 4.0)
+  - JSONModel (1.7.0)
+  - MBProgressHUD (1.1.0)
+  - QuCore-ThirdParty (3.14.0.12445263)
+  - SDWebImage (5.0.0.1):
+    - SDWebImage/Core (= 5.0.0.1)
+  - SDWebImage/Core (5.0.0.1)
+  - SQLCipher (4.0.1):
+    - SQLCipher/standard (= 4.0.1)
+  - SQLCipher/common (4.0.1)
+  - SQLCipher/standard (4.0.1):
+    - SQLCipher/common
+  - VODUpload (1.5.0):
+    - AliyunOSSiOS
+  - ZipArchive (1.4.0)
+
+DEPENDENCIES:
+  - AlivcCommon (from `../../AlivcCommon/`)
+  - AlivcCore (from `../`)
+
+SPEC REPOS:
+  "podspec@podspec.alibaba-inc.com:alibaba-specs-mirror/":
+    - AliyunOSSiOS
+    - JSONModel
+    - MBProgressHUD
+    - SQLCipher
+    - VODUpload
+    - ZipArchive
+  "podspec@podspec.alibaba-inc.com:alibaba-specs/":
+    - AFNetworking
+    - AlivcConan
+    - AliyunVideoSDKPro
+    - FMDB
+    - QuCore-ThirdParty
+    - SDWebImage
+
+EXTERNAL SOURCES:
+  AlivcCommon:
+    :path: "../../AlivcCommon/"
+  AlivcCore:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AFNetworking: 3d51df1f091efe351758df27491098d1a9d5ac11
+  AlivcCommon: 8a68273bd1df4cce2a1690e8f493a69fd1e732aa
+  AlivcConan: 8634698c01cbf7b24bcdd63ab6267227f1665861
+  AlivcCore: adeeeeb5311f68180ab8358e672b9fe3620c739a
+  AliyunOSSiOS: af12883c8f2834de4b5144c58e912b9df0693ad2
+  AliyunVideoSDKPro: b01880c4fa7041eec2b8a42a9890b15c904d52ee
+  FMDB: fcb01fd09b62ec1b9df6b2329abbc53d9d965eaa
+  JSONModel: a3b9097543a777e2a4041a0bb1b80252af9ed566
+  MBProgressHUD: e4bfee13f0d2b4c3bc6bdcd94769cb3ed2d23a5e
+  QuCore-ThirdParty: d6ea86e22ab8bdd77361fffe0c6147adcc126549
+  SDWebImage: 52cf9709d12ec18666b8923e49c8a6ce02a35e7d
+  SQLCipher: 075c1c63093bcf58107cfbceff6e9913af4f3f6e
+  VODUpload: 54bae2f0ba3705404588d66f2c2816f98ffaf3f3
+  ZipArchive: 94e007035ff8394ac7d87179129909795e7595b0
+
+PODFILE CHECKSUM: 308f5ca6e0312d2f11e08bab02105910553c09b9
+
+COCOAPODS: 1.5.0

@@ -1,6 +1,0 @@
-framework module AliHAMemoryMonitor {
-  umbrella header "AliHAMemoryMonitor.h"
-
-  export *
-  module * { export * }
-}

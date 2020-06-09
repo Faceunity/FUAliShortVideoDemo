@@ -1,0 +1,18 @@
+use_frameworks!
+
+ali_source 'alibaba-specs' #集团内部仓库
+
+ali_source 'alibaba-specs-mirror' #官方镜像仓库
+
+platform :ios, '9.0'
+
+target 'AlivcRecord_Example' do
+  pod 'AlivcRecord', :path => '../'
+  pod 'AlivcCommon', :path => '../../AlivcCommon/'
+  pod 'AlivcCore', :path => '../../AlivcCore/'
+  
+  
+  target 'AlivcRecord_Tests' do
+    inherit! :search_paths
+  end
+end

@@ -1,6 +1,0 @@
-framework module AliHAPerformanceMonitor {
-  umbrella header "AliHAPerformanceMonitor.h"
-
-  export *
-  module * { export * }
-}
