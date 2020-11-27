@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/MusicPick/View/AliyunMusicPickCoverView.h

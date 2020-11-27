@@ -43,7 +43,7 @@ TODO: Add long description of the pod here.
 
    s.static_framework = true
 
-   s.dependency 'AFNetworking' '3.2.1'
+   s.dependency 'AFNetworking'
 
    s.dependency 'FMDB'
 

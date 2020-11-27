@@ -1,0 +1,1 @@
+../../../../AlivcRace/AlivcRace/Classes/Core/VC/AlivcRaceBeautyMetalRenderController.h

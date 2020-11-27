@@ -18,7 +18,7 @@
 #import "AliyunEffectMorePreviewCell.h"
 #import "MBProgressHUD+AlivcHelper.h"
 #import "AlivcDefine.h"
-#import "AFNetworking.h"
+#import <AFNetworking/AFNetworking.h>
 #import "NSString+AlivcHelper.h"
 
 

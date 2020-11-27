@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/ResourceManager/Manager/LocalResources/AliyunEffectPrestoreManager.h

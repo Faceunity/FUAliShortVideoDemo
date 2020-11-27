@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/ResourceManager/Models/AliyunEffectPasterGroup.h

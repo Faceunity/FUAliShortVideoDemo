@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/UIConfig/AlivcEditUIConfig.h

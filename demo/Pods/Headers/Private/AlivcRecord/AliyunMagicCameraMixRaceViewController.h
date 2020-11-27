@@ -1,0 +1,1 @@
+../../../../AlivcRecord/AlivcRecord/Classes/Recording/VC/AliyunMagicCameraMixRaceViewController.h

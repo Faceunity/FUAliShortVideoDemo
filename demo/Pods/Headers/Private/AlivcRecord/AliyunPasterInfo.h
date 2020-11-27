@@ -1,0 +1,1 @@
+../../../../AlivcRecord/AlivcRecord/Classes/Recording/Utilities/ResourceManager/AliyunPasterInfo.h
