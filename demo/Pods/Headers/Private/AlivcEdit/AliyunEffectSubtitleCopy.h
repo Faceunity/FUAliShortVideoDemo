@@ -1,0 +1,1 @@
+../../../../AlivcEdit/AlivcEdit/Classes/Edit/Utilities/Caption/AliyunEffectSubtitleCopy.h

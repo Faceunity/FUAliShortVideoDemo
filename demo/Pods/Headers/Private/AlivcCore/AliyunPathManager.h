@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/PathManager/AliyunPathManager.h

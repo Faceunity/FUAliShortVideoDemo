@@ -1,0 +1,1 @@
+../../../../AlivcCommon/AlivcCommon/Classes/UIConfig/AlivcRecordUIConfig.h

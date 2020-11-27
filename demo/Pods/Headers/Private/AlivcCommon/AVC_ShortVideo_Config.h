@@ -1,0 +1,1 @@
+../../../../AlivcCommon/AlivcCommon/Classes/Macro/AVC_ShortVideo_Config.h

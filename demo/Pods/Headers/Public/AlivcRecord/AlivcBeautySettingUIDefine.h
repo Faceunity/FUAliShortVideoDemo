@@ -1,0 +1,1 @@
+../../../../AlivcRecord/AlivcRecord/Classes/Recording/View/BeatyView/AlivcBeautySettingUIDefine.h

@@ -11,7 +11,7 @@
 #import "AlivcShortVideoUploadManager.h"
 #import "AliyunPublishTopView.h"
 #import <AVFoundation/AVFoundation.h>
-#import "AFNetworking.h"
+#import <AFNetworking/AFNetworking.h>
 
 @interface AliyunUploadViewController () <AliyunPublishTopViewDelegate,
                                           AlivcShortVideoUploadManagerDelegate>

@@ -1,0 +1,1 @@
+../../../../AlivcCore/AlivcCore/Classes/Regulator/View/AlivcRegulatorCell.h

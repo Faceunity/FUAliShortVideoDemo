@@ -1,0 +1,1 @@
+../../../../AlivcEdit/AlivcEdit/Classes/Edit/Utilities/Paster/AliyunPasterControllerCopy.h

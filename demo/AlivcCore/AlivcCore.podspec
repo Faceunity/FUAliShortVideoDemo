@@ -61,10 +61,10 @@ TODO: Add long description of the pod here.
    #柯南SDK-短视频SDK依赖的数据埋点
    s.dependency 'AlivcConan', '1.0.3'
 
-#   s.dependency 'AliyunVideoCore','3.16.0.13090663'
+#   s.dependency 'AliyunVideoCore','3.16.1.13297788'
 
    #短视频SDK
-   s.dependency 'AliyunVideoSDKPro', '3.16.0'
+   s.dependency 'AliyunVideoSDKPro', '3.16.2'
 
    #三方库ffmpeg
    s.dependency 'QuCore-ThirdParty', '3.15.0'

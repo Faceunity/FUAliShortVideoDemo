@@ -1,0 +1,1 @@
+../../../../AlivcEdit/AlivcEdit/Classes/Edit/View/ColorPalette/AliyunColorPaletteView.h
