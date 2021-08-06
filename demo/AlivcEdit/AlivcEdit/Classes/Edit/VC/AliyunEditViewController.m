@@ -83,6 +83,10 @@
 #import "AliyunEffectMVView.h"
 #import "AliyunEffectTimeFilterView.h"
 #import "AliyunMusicPickViewController.h"
+#import "AlivcRollCaptionView.h"
+#import "AliyunRollCaptionWordsController.h"
+#import <AliyunVideoSDKPro/AliyunRollCaptionItemStyle.h>
+#import "AliyunVideoAugmentationView.h"
 
 //#import "AliyunPublishViewController.h"
 //#import "AlivcExportViewController.h"
@@ -125,8 +129,8 @@ const CGFloat PASTER_MIN_DURANTION = 0.1; //动图最小持续时长
 @interface AliyunEditViewController () <
 AliyunIExporterCallback, AliyunIPlayerCallback, AliyunICanvasViewDelegate,
 AliyunPaintingEditViewDelegate, AliyunMusicPickViewControllerDelegate,
-AliyunPasterBottomBaseViewDelegate, AliyunEffectCaptionShowViewDelegate,
-AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate>
+AliyunPasterBottomBaseViewDelegate, AliyunEffectCaptionShowViewDelegate, AliyunVideoAugmentationViewDelegate,
+AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate,AlivcRollCaptionViewDelegate>
 
 @property(nonatomic, strong) UIView *movieView;
 @property(nonatomic, strong) AliyunTimelineView *currentTimelineView;
@@ -165,8 +169,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 @property(nonatomic, strong) AliyunEffectTransitionView *transitionView;
 //音效弹出的菜单
 @property(nonatomic, strong) AlivcAudioEffectView *effectSoundsView;
+//视频增强弹出的菜单
+@property(nonatomic, strong) AliyunVideoAugmentationView *videoAugmentationView;
 //fe
 @property(nonatomic, strong) AlivcCoverImageSelectedView *coverSelectedView;
+
+@property(nonatomic, strong) AlivcRollCaptionView *rollCaptionView;
+@property(nonatomic,assign) BOOL isRollCaptionType;
 
 
 /**
@@ -329,6 +338,8 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     
     
     AliyunAudioEffectType lastAudioEffectType;//上次设置的音效
+    
+    NSMutableDictionary *_videoAugmentationValues;
 }
 
 #pragma mark - System
@@ -340,6 +351,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [self initSDKAbout];
     [self addNotifications];
     [self addWatermarkAndEnd];
+    [self setDenoise];
 }
 
 - (void)dealloc {
@@ -527,6 +539,10 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     }
 }
 
+- (void)setDenoise {
+    [self.editor setMainStreamsAudioDenoise:_config.denoise];
+}
+
 /**
  初始化一个timeLineView
  
@@ -556,6 +572,9 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (_isRollCaptionType) {
+        return;
+    }
     self.isAppear = YES;
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
     //为了让导航条播放时长匹配，必须在这里设置时长
@@ -578,6 +597,9 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    if (_isRollCaptionType) {
+        return;
+    }
     self.isAppear = NO;
     [self pause];
     _tryResumeWhenBack = YES;
@@ -593,6 +615,9 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    if (_isRollCaptionType) {
+        return;
+    }
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
@@ -708,6 +733,18 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     }
     return _filterView;
 }
+
+//翻转字幕
+- (AlivcRollCaptionView *)rollCaptionView{
+    if (!_rollCaptionView) {
+        _rollCaptionView = [[AlivcRollCaptionView alloc]
+                            initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 120+SafeBottom)];
+        _rollCaptionView.delegate = self;
+        [self.view addSubview:_rollCaptionView];
+    }
+    return _rollCaptionView;
+}
+
 //特效
 - (AlivcSpecialEffectView *)specialFilterView {
     if (!_specialFilterView) {
@@ -758,6 +795,16 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         [self.view addSubview:_effectSoundsView];
     }
     return _effectSoundsView;
+}
+
+- (AliyunVideoAugmentationView *)videoAugmentationView {
+    if (!_videoAugmentationView) {
+        _videoAugmentationView = [[AliyunVideoAugmentationView alloc]initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 185)];
+        _videoAugmentationView.delegate =self;
+        _videoAugmentationView.hidden =YES;
+        [self.view addSubview:_videoAugmentationView];
+    }
+    return _videoAugmentationView;
 }
 
 
@@ -1405,6 +1452,10 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
                  CompletionHandle:completion];
     }
     
+    if (type==AliyunEditSouceClickTypeRollCaption) {
+        [self.rollCaptionView showSubView:NO];
+    }
+    
     BOOL canEditFrame = [self isEditFrameType:type];
     if (canEditFrame) {
         [self p_changeUIToQuitEditFrameMode];
@@ -1482,11 +1533,17 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         case AliyunEditSouceClickTypePaint:
             return self.paintShowView;
             break;
+        case AliyunEditSouceClickTypeVideoAugmentation:
+            return self.videoAugmentationView;
+            break;
         case AliyunEditSouceClickTypeEffectSound:
             return self.effectSoundsView;
             break;
         case AliyunEditSouceClickTypeCover:
             return self.coverSelectedView;
+            break;
+        case AliyunEditSouceClickTypeRollCaption:
+            return self.rollCaptionView;
             break;
         default:
             break;
@@ -2646,6 +2703,11 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [self updateDrawRect:self.movieView.frame];
 }
 
+- (void)videoAugmentationButtonClicked {
+    [self enterEditWithActionType:AliyunEditSouceClickTypeVideoAugmentation animationCompletion:nil];
+}
+
+
 
 //封面选择
 - (void)coverButtonClicked {
@@ -2655,6 +2717,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
               animationCompletion:^(BOOL finished){
         
     }];
+}
+
+//翻转字幕
+- (void)rollCaptionClicked{
+    NSLog(@"=========11111111");
+    [self enterEditWithActionType:AliyunEditSouceClickTypeRollCaption
+              animationCompletion:nil];
 }
 
 #pragma mark - AliyunEffectFilter2ViewDelegate - 滤镜
@@ -2999,6 +3068,14 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         AliyunEffectMusic *effectMusic =[[AliyunEffectMusic alloc] initWithFile:music.path];
         effectMusic.startTime = music.startTime * 0.001;
         effectMusic.duration = music.duration;
+        
+        effectMusic.fadeIn = [[AliyunAudioFade alloc] init];
+        effectMusic.fadeIn.shape = AliyunAudioFadeShapeLinear;
+        effectMusic.fadeIn.duration = 3;
+        
+        effectMusic.fadeOut = [[AliyunAudioFade alloc] init];
+        effectMusic.fadeOut.shape = AliyunAudioFadeShapeLinear;
+        effectMusic.fadeOut.duration = 3;
         [self.editor applyMusic:effectMusic];
     }
     self.music = music;
@@ -3855,9 +3932,71 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
                          @(AlivcEffectSoundTypeDenoise):@(AliyunAudioEffectDenoise),
                          @(AlivcEffectSoundTypeMinion):@(AliyunAudioEffectMinions),
                          @(AlivcEffectSoundTypeRobot):@(AliyunAudioEffectRobot),
-                         @(AlivcEffectSoundTypeDevil):@(AliyunAudioEffectBigDevil)
+                         @(AlivcEffectSoundTypeDevil):@(AliyunAudioEffectBigDevil),
+                         @(AlivcEffectSoundTypeDialect):@(AliyunAudioEffectDialect),
     };
     return (AliyunAudioEffectType)[dic[@(type)] integerValue];
+}
+
+#pragma mark - AliyunVideoAugmentationViewDelegate
+
+- (void)videoAugmentationDidSelectType:(NSInteger)type value:(CGFloat)value {
+    for (AliyunClip *clip in [self.editor getClipConstructor].mediaClips) {
+        if (type == -1) {
+            [self.editor resetVideoAugmentation:AliyunVideoAugmentationTypeBrightness streamId:clip.streamId];
+            [self.editor resetVideoAugmentation:AliyunVideoAugmentationTypeContrast streamId:clip.streamId];
+            [self.editor resetVideoAugmentation:AliyunVideoAugmentationTypeSaturation streamId:clip.streamId];
+            [self.editor resetVideoAugmentation:AliyunVideoAugmentationTypeSharpness streamId:clip.streamId];
+            [self.editor resetVideoAugmentation:AliyunVideoAugmentationTypeVignette streamId:clip.streamId];
+            
+            [self resetVideoAugmentationValue];
+        }
+        else {
+            [self.editor setVideoAugmentation:(AliyunVideoAugmentationType)type value:value streamId:clip.streamId];
+            [self updateVideoAugmentationValue:value forType:type];
+        }
+    }
+}
+
+- (float)videoAugmentationGetCurrentValue:(NSInteger)type
+{
+    return [self getVideoAugmentationValue:type];
+}
+
+- (NSMutableDictionary *)videoAugmentationValues {
+    if (_videoAugmentationValues == nil) {
+        AliyunClip *clip = [self.editor getClipConstructor].mediaClips.firstObject;
+        _videoAugmentationValues = [NSMutableDictionary dictionary];
+        [_videoAugmentationValues setObject:@(0.0) forKey:@(-1)]; // 重置
+        [_videoAugmentationValues setObject: clip ? @(clip.brightnessValue) : @(AliyunVideoBrightnessDefaultValue) forKey:@(AliyunVideoAugmentationTypeBrightness)]; // 亮度
+        [_videoAugmentationValues setObject: clip ? @(clip.contrastValue) : @(AliyunVideoContrastDefaultValue) forKey:@(AliyunVideoAugmentationTypeContrast)]; // 对比度
+        [_videoAugmentationValues setObject: clip ? @(clip.saturationValue) : @(AliyunVideoSaturationDefaultValue) forKey:@(AliyunVideoAugmentationTypeSaturation)]; // 饱和度
+        [_videoAugmentationValues setObject: clip ? @(clip.sharpnessValue) : @(AliyunVideoSharpnessDefaultValue) forKey:@(AliyunVideoAugmentationTypeSharpness)]; // 锐度
+        [_videoAugmentationValues setObject: clip ? @(clip.vignetteValue) : @(AliyunVideoVignetteDefaultValue) forKey:@(AliyunVideoAugmentationTypeVignette)]; // 暗角
+    }
+    
+    return _videoAugmentationValues;
+}
+
+- (void)resetVideoAugmentationValue {
+    _videoAugmentationValues = nil;
+}
+
+- (float)getVideoAugmentationValue:(NSInteger)type {
+    return [[[self videoAugmentationValues] objectForKey:@(type)] floatValue];
+}
+
+- (void)updateVideoAugmentationValue:(CGFloat)value forType:(NSInteger)type {
+    if (type == -1) {
+        [[self videoAugmentationValues] setObject:@(AliyunVideoBrightnessDefaultValue) forKey:@(AliyunVideoAugmentationTypeBrightness)];
+        [[self videoAugmentationValues] setObject:@(AliyunVideoContrastDefaultValue) forKey:@(AliyunVideoAugmentationTypeContrast)];
+        [[self videoAugmentationValues] setObject:@(AliyunVideoSaturationDefaultValue) forKey:@(AliyunVideoAugmentationTypeSaturation)];
+        [[self videoAugmentationValues] setObject:@(AliyunVideoSharpnessDefaultValue) forKey:@(AliyunVideoAugmentationTypeSharpness)];
+        [[self videoAugmentationValues] setObject:@(AliyunVideoVignetteDefaultValue) forKey:@(AliyunVideoAugmentationTypeVignette)];
+    }
+    else {
+        [[self videoAugmentationValues] setObject:@(value) forKey:@(type)];
+    }
 }
 
 #pragma mark - AlivcCoverImageSelectedViewDelegate - 封面
@@ -3889,6 +4028,55 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     
     UIGraphicsEndImageContext();
     return image;
+}
+
+#pragma --mark AlivcRollCaptionViewDelegate - 翻转字幕
+-(void)didRollCaptionSelColor:(UIColor*)color {
+    AliyunRollCaptionComposer *rollCaptionComposer = [self.editor rollCaptionComposer];
+    for (AliyunRollCaptionItemStyle *stlye in self.rollCaptionView.wordList) {
+        [stlye setTextColor:color];
+    }
+    [rollCaptionComposer updateCaptionList:self.rollCaptionView.wordList];
+}
+
+-(void)didRollCaptionSelFont:(NSString*)fontName{
+    AliyunRollCaptionComposer *rollCaptionComposer = [self.editor rollCaptionComposer];
+    for (AliyunRollCaptionItemStyle *stlye in self.rollCaptionView.wordList) {
+        [stlye setFontName:fontName];
+    }
+    [rollCaptionComposer updateCaptionList:self.rollCaptionView.wordList];
+}
+
+-(void)didRollCaptionClickWordsBtn{
+    AliyunRollCaptionWordsController *vc = [[AliyunRollCaptionWordsController alloc] init];
+    vc.dataArr = self.rollCaptionView.wordList;
+    self.isRollCaptionType = YES;
+    __weak typeof(self) weakSelf = self;
+    vc.didChangeWordsFinish = ^(NSArray * _Nonnull dataArr) {
+        AliyunRollCaptionComposer *rollCaptionComposer = [weakSelf.editor rollCaptionComposer];
+        [rollCaptionComposer updateCaptionList:dataArr];
+    };
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:vc animated:YES completion:^{
+        self.isRollCaptionType = NO;
+    }];
+}
+
+-(void)didRollCaptionClickFinishBtn{
+    
+    //应用翻转字幕后 从初始位置开始播放
+    [self.player seek:0];
+    [self play];
+    
+    AliyunRollCaptionComposer *rollCaptionComposer = [self.editor rollCaptionComposer];
+    [rollCaptionComposer show];
+    [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
+}
+
+-(void)didRollCaptionClickClearBtn{
+    AliyunRollCaptionComposer *rollCaptionComposer = [self.editor rollCaptionComposer];
+    [rollCaptionComposer reset];
+    [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
 }
 
 @end

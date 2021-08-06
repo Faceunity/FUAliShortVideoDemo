@@ -32,12 +32,20 @@
     "#import \"AVC_ShortVideo_Config.h\""
   ],
   "static_framework": true,
+  "frameworks": [
+    "SystemConfiguration",
+    "MobileCoreServices"
+  ],
+  "libraries": [
+    "resolv",
+    "c++"
+  ],
   "dependencies": {
     "AlivcConan": [
       "1.0.3"
     ],
     "AliyunVideoSDKPro": [
-      "3.16.2"
+      "3.21.0"
     ],
     "QuCore-ThirdParty": [
       "3.15.0"

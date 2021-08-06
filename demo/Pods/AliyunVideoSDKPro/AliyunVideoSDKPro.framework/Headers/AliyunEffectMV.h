@@ -31,14 +31,34 @@
 @property(nonatomic, assign) int audioMixWeight;
 
 /**
+ 降噪大小
+
+ 0-100，0关闭降噪，值越大降噪幅度越大
+ */
+@property(nonatomic, assign) int audioDenoiseWeight;
+
+/**
  是否对mv去燥
 
  已废弃，请使用音效列表AliyunAudioEffect代替
  */
-@property(nonatomic, assign) BOOL denoise __deprecated_msg("deprecated");
+@property(nonatomic, assign) BOOL denoise __deprecated_msg("use audioDenoiseWeight");
 
 /**
  音效列表
  */
 @property(nonatomic, strong) NSMutableArray<AliyunAudioEffect *> *audioEffects;
+
+/**
+ API_AVAILABLE(3.20.0)
+ 淡入Model
+ */
+@property(nonatomic, strong) AliyunAudioFade *fadeIn;
+
+/**
+ API_AVAILABLE(3.20.0)
+ 淡出Model
+ */
+@property(nonatomic, strong) AliyunAudioFade *fadeOut;
+
 @end

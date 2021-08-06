@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, AlivcEffectSoundType) {
     AlivcEffectSoundTypeMinion, // 小黄人
     AlivcEffectSoundTypeRobot, // 机器人
     AlivcEffectSoundTypeDevil, // 大魔王
+    AlivcEffectSoundTypeDialect,//方言
 };
 
 

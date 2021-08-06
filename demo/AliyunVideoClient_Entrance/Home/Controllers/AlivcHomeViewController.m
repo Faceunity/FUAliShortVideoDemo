@@ -17,7 +17,6 @@
 
 #import "AlivcAppInfoViewController.h"
 
-
 #if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
 #import <AliyunVideoSDKPro/AliyunVideoSDKInfo.h>
 #endif 

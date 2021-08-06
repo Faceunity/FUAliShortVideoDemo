@@ -319,6 +319,7 @@
             [self.navigationController popViewControllerAnimated:YES];
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"裁剪完成", nil) message:NSLocalizedString(@"已保存到手机相册", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
 //            [alert show];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifySavedPhotosAlbumFinish object:nil];
             [MBProgressHUD showMessage:NSLocalizedString(@"已保存到手机相册", nil) inView:self.view];
         });
     }];
@@ -457,6 +458,13 @@
         weakSelf.mediaInfo.hasEnd = open;
     };
     
+    AliyunRecordParamCellModel *cellModel9 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel9.title = NSLocalizedString(@"降噪", nil);
+    cellModel9.reuseId = @"switch";
+    cellModel9.switchBlock = ^(BOOL open){
+        weakSelf.mediaInfo.denoise = open;
+    };
+    
     AliyunRecordParamCellModel *cellModel8 = [[AliyunRecordParamCellModel alloc] init];
     cellModel8.title = NSLocalizedString(@"视频编码方式", nil);
     cellModel8.buttonTitleArray = @[NSLocalizedString(@"硬编", nil),NSLocalizedString(@"软编", nil)];
@@ -466,9 +474,9 @@
         weakSelf.mediaInfo.encodeMode = (AliyunEncodeMode)encodeMode;
     };
     if ([self.isClipConfig isEqualToString:@"YES"]) {
-        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel8];
+        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel9,cellModel8];
     }else{
-        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7,cellModel8];
+        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7, cellModel9,cellModel8];
     }
     
 }

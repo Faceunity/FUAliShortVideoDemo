@@ -5,10 +5,10 @@
 //  Created by Worthy on 2017/5/23.
 //  Copyright © 2017年 Alibaba Group Holding Limited. All rights reserved.
 // BUILD INFO
-// AliyunAlivcCommitId:7b3c612
+// AliyunAlivcCommitId:09de3ce
 // AliyunMediaCoreCommitId:f391ff1
-// AliyunVideoSDKCommitId:cc1599a
-// AliyunVideoSDKBuildId:13102753
+// AliyunVideoSDKCommitId:264d8b6
+// AliyunVideoSDKBuildId:14832337
 
 #import <Foundation/Foundation.h>
 
@@ -40,7 +40,8 @@ extern NSString *const kAliyunVideoSDKModuleBasic;
  */
 typedef NS_ENUM(NSInteger, AlivcLogLevel)
 {
-    AlivcLogVerbose = 2,
+    AlivcLogClose = 1,
+    AlivcLogVerbose,
     AlivcLogDebug,
     AlivcLogInfo,
     AlivcLogWarn,
@@ -131,6 +132,13 @@ typedef NS_ENUM(NSInteger, AlivcDebugLogLevel)
  目前无需调用
  */
 + (void)registerSDK;
+
+/**
+ 获取日志等级
+ 
+ @return AlivcLogLevel.
+ */
++ (AlivcLogLevel)logLevel;
 
 /**
  设置日志等级

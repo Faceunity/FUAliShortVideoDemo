@@ -81,5 +81,10 @@
  */
 @property (strong, nonatomic) UIImage *finishImage;
 
+/**
+ 视频调节对应图片
+ */
+@property (strong, nonatomic) UIImage *augmentationImage;
+
 
 @end

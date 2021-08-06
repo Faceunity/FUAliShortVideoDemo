@@ -8,11 +8,11 @@ install! 'cocoapods', :deterministic_uuids => false
 platform :ios, '9.0'
 
 target 'AliyunVideoClient_Entrance' do
-  
-  #友盟crash收集
-  pod 'UMCCommon','2.0.0'
-  pod 'UMCAnalytics','6.0.1'
-  
+    
+    #友盟crash收集
+    pod 'UMCCommon','2.0.0'
+    pod 'UMCAnalytics','6.0.1'
+    
 pod 'AlivcCommon', :path => 'AlivcCommon/' 
 pod 'AlivcCore', :path => 'AlivcCore/' 
 pod 'AlivcCrop', :path => 'AlivcCrop/' 

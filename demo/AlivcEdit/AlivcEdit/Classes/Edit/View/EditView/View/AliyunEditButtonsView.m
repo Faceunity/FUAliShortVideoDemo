@@ -165,10 +165,25 @@
     }
 }
 
+//视频增强
+- (void)videoAugmentationButtonClicked:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(videoAugmentationButtonClicked)]) {
+        [self.delegate videoAugmentationButtonClicked];
+    }
+}
+
 //封面选择
 - (void)coverButtonClicked:(id)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(coverButtonClicked)]) {
         [self.delegate coverButtonClicked];
     }
 }
+
+//翻转字幕
+- (void)rollCaptionClicked:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(rollCaptionClicked)]) {
+        [self.delegate rollCaptionClicked];
+    }
+}
+
 @end

@@ -39,6 +39,6 @@
     _playImage = [AlivcImage imageNamed:@"alivc_shortVideo_play"];
     _pauseImage = [AlivcImage imageNamed:@"alivc_svEdit_pause"];
     _finishImage = [AlivcImage imageNamed:@"shortVideo_finishButtonNormal"];
-    
+    _augmentationImage = [AlivcImage imageNamed:@"alivc_svEdit_augmentation"];
 }
 @end

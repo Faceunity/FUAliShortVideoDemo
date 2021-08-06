@@ -8,6 +8,7 @@
 
 #import "AlivcShortVideoUIConfig.h"
 
+
 @interface AlivcRecordUIConfig : AlivcShortVideoUIConfig
 
 /**

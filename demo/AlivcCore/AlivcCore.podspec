@@ -35,7 +35,8 @@ TODO: Add long description of the pod here.
    s.resource_bundles = {
      'AlivcCore' => ['AlivcCore/Assets/Images/**/*.{png,PNG,jpg}','AlivcCore/Classes/**/*.xib']
    }
-   s.resource = 'AlivcCore/Assets/ShortVideoResource/*'
+
+ s.resource = 'AlivcCore/Assets/ShortVideoResource/*' 
 
    s.prefix_header_contents = '#import "AlivcMacro.h"','#import "AlivcImage.h"','#import "AVC_ShortVideo_Config.h"'
 
@@ -43,6 +44,10 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
 
    s.static_framework = true
+
+   s.frameworks = "SystemConfiguration", "MobileCoreServices"
+
+   s.libraries   = "resolv","c++"
 
   #  s.dependency 'AFNetworking'
 
@@ -61,10 +66,11 @@ TODO: Add long description of the pod here.
    #柯南SDK-短视频SDK依赖的数据埋点
    s.dependency 'AlivcConan', '1.0.3'
 
-#   s.dependency 'AliyunVideoCore','3.16.1.13297788'
+#   s.dependency 'AliyunVideoCore','3.17.0.13297788'
 
    #短视频SDK
-   s.dependency 'AliyunVideoSDKPro', '3.16.2'
+   s.dependency 'AliyunVideoSDKPro', '3.21.0'
+
 
    #三方库ffmpeg
    s.dependency 'QuCore-ThirdParty', '3.15.0'

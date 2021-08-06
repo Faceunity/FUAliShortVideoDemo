@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kNotifySavedPhotosAlbumFinish   @"kNotifySavedPhotosAlbumFinish"
+
 @interface AliyunIConfig : NSObject
 
 

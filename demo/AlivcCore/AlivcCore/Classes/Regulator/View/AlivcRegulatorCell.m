@@ -41,7 +41,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     _title = [[UILabel alloc] initWithFrame:CGRectMake(16, (CGRectGetHeight(self.frame)-21)/2, 100, 21)];
-    [self addSubview:_title];
+    [self.contentView addSubview:_title];
     [_title setTextColor:[UIColor whiteColor]];
     
     _slider = [[_AlivcLiveBeautifySliderView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_title.frame), (CGRectGetHeight(self.frame)-78)/2, ScreenWidth-116, 78)];
@@ -49,7 +49,7 @@
     [_slider setBackgroundColor:[UIColor clearColor]];
     _slider.delegate = self;
     
-    [self addSubview:_slider];
+    [self.contentView addSubview:_slider];
     
 }
 

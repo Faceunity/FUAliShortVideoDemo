@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger,AliyunEditSouceClickType){
     AliyunEditSouceClickTypeTimeFilter,
     AliyunEditSouceClickTypeTranslation,
     AliyunEditSouceClickTypePaint,
+    AliyunEditSouceClickTypeRollCaption,
+    AliyunEditSouceClickTypeVideoAugmentation,
     AliyunEditSouceClickTypeCover
 };
 

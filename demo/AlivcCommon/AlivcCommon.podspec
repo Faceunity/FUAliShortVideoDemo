@@ -53,6 +53,6 @@ TODO: Add long description of the pod here.
 
    s.dependency  'MBProgressHUD'
 
-   s.dependency  'SDWebImage'
+   s.dependency  'SDWebImage','~>5.8.1'
 
 end

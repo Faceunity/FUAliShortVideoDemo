@@ -173,6 +173,11 @@ typedef NS_ENUM(NSInteger, AlivcBeautyType) {
 @property (nonatomic, strong) UIImage *phImage;
 
 /**
+ 原始媒体分辨率
+ */
+@property (nonatomic, readonly) CGSize originalMediaSize;
+
+/**
  是否仅展示视频
  */
 @property (nonatomic, assign) BOOL videoOnly;
@@ -196,6 +201,12 @@ typedef NS_ENUM(NSInteger, AlivcBeautyType) {
  是否有片尾
  */
 @property (nonatomic, assign) BOOL hasEnd;
+
+/**
+ 是否降噪
+ */
+@property (nonatomic, assign) BOOL denoise;
+
 /**
  美颜类型
  */
@@ -205,6 +216,41 @@ typedef NS_ENUM(NSInteger, AlivcBeautyType) {
  录制的视频是否左右翻转
  */
 @property (nonatomic, assign) BOOL videoFlipH;
+
+/**
+ 合成视频的音频类型
+ */
+@property (nonatomic, assign) int mixAudioType;
+
+/**
+ 合成视频的背景颜色
+ */
+@property (nonatomic, assign) int mixbgColorType;
+
+/**
+ 合成视频的背景图片
+ */
+@property (nonatomic, assign) int mixbgImgType;
+
+/**
+ 合成视频的背景图片拉伸模式
+ */
+@property (nonatomic, assign) int mixbgImgScaleType;
+
+/**
+ 合拍回声消除
+ */
+@property (nonatomic, assign) int mixAECType;
+
+/**
+ 视频带边框
+ */
+@property (nonatomic, assign) BOOL hasVideoBorder;
+
+/**
+ 合拍视频在最顶层
+ */
+@property (nonatomic, assign) BOOL isMixVideoTopLayer;
 
 
 /**

@@ -7,7 +7,7 @@
 //
 
 #import "AliyunCompositionViewController.h"
-#import <sys/utsname.h>
+#import "UIDevice+AlivcInfo.h"
 #import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
 #import <AliyunVideoSDKPro/AliyunErrorCode.h>
 #import <MBProgressHUD/MBProgressHUD.h>
@@ -720,21 +720,7 @@
 }
 
 - (int)deviceCode {
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString *phoneType = [NSString stringWithCString: systemInfo.machine encoding:NSASCIIStringEncoding];
-    NSRange range = [phoneType rangeOfString:@","];
-    NSRange range1 = NSMakeRange(6, range.location - 6);
-    int code;
-    @try {
-        NSString *subStr = [phoneType substringWithRange:range1];
-        code = [subStr intValue];
-    } @catch (NSException *exception) {
-        code = 0;
-    } @finally {
-        
-    }
-    return code;
+    return [UIDevice iphoneDeviceCode];
 }
 
 - (BOOL)isBelowIphone_5 {
@@ -743,13 +729,7 @@
 }
 
 - (BOOL)isBelowIphone_6 {
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString *phoneType = [NSString stringWithCString: systemInfo.machine encoding:NSASCIIStringEncoding];
-    NSRange range = [phoneType rangeOfString:@","];
-    NSRange range1 = NSMakeRange(6, range.location - 6);
-    NSString *subStr = [phoneType substringWithRange:range1];
-    int code = [subStr intValue];
+    int code = [self deviceCode];
     return code < 7;
 }
 

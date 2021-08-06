@@ -51,8 +51,14 @@ typedef NS_ENUM(NSInteger, AliyunEditMaterialType) {
 //涂鸦
 - (void)paintButtonClicked;
 
+//视频增强
+- (void)videoAugmentationButtonClicked;
+
 //封面选择
 - (void)coverButtonClicked;
+
+//翻转字幕
+- (void)rollCaptionClicked;
 @end
 
 
