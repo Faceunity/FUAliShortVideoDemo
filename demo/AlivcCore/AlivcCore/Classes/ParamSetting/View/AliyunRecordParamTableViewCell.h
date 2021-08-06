@@ -57,12 +57,19 @@ typedef NS_ENUM(NSUInteger, AlivcRecordType) {
  */
 @property (nonatomic, copy) void(^valueBlock)(int value);
 
+//按钮可否点击 0 忽略 1：不可点 2 可点击
+@property (nonatomic, assign) int btnEnable;
+
 /**
  分辨率的block回调
  */
 @property (nonatomic, copy) void(^sizeBlock)(CGFloat videoWidth);
 @property (nonatomic, copy) void(^ratioBack)(CGFloat videoRatio);
 @property (nonatomic, copy) void(^recodeTypeBlock)(AlivcRecordType recordType);
+@property (nonatomic, copy) void(^mixAudioSourceBlock)(int type);
+@property (nonatomic, copy) void(^mixBgColorBlock)(int type);
+@property (nonatomic, copy) void(^mixBgImgBlock)(int type);
+@property (nonatomic, copy) void(^mixBgImgScaleBlock)(int type);
 
 @property (nonatomic, copy) void(^encodeModelBlock)(NSInteger encodeMode);
 @property (nonatomic, copy) void(^beautyTypeBlock)(NSInteger beautyType);

@@ -77,14 +77,14 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
 - (void)exportVideo{
    int result = [self.publishManager exportWithTaskPath:_taskPath outputPath:_config.outputPath];
     if (result != 0) {
-        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请返回重试" localString]];
+        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请先检查手机空间或返回重试" localString]];
     }
 }
 //继续合成
 - (void)resumeExportVideo{
     int result = [self.publishManager resumeExport];
     if (result != 0) {
-        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请返回重试" localString]];
+        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,合成失败,请先检查手机空间或返回重试" localString]];
     }
 }
 

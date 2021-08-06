@@ -94,7 +94,12 @@
     effctDevil.type = AlivcEffectSoundTypeDevil;
     effctDevil.iconPath = @"audioEffect_devil_icon";
     
-    NSArray *audios = @[effctNone,effctLolita,effctUncle,effctEcho,effctRevert,effctMinion,effctRobot,effctDevil];
+    AlivcAudioEffectModel *effctNewDialect = [[AlivcAudioEffectModel alloc] init];
+    effctNewDialect.title = @"方言";
+    effctNewDialect.type = AlivcEffectSoundTypeDialect;
+    effctNewDialect.iconPath = @"audioEffect_devil_icon";
+    
+    NSArray *audios = @[effctNone,effctLolita,effctUncle,effctEcho,effctRevert,effctMinion,effctRobot,effctDevil,effctNewDialect];
     
     return audios;
 }

@@ -60,25 +60,25 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.delegate = self;
     self.scrollView.contentInset = UIEdgeInsetsMake(0, ScreenWidth/4, 0, ScreenWidth/4);
-    [self addSubview:self.scrollView];
+    [self.contentView addSubview:self.scrollView];
     self.lineView = [[AliyunMusicLineView alloc] initWithFrame:self.bounds];
     [self.scrollView addSubview:self.lineView];
     
     
     self.coverView = [[AliyunMusicPickCoverView alloc] initWithFrame:self.bounds];
-    [self addSubview:self.coverView];
+    [self.contentView addSubview:self.coverView];
     
     
     _startLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _startLabel.textColor = [UIColor whiteColor];
     _startLabel.font = [UIFont systemFontOfSize:11];
     _startLabel.textAlignment = NSTextAlignmentLeft;
-    [self addSubview:_startLabel];
+    [self.contentView addSubview:_startLabel];
     _endLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _endLabel.textColor = [UIColor whiteColor];
     _endLabel.font = [UIFont systemFontOfSize:11];
     _endLabel.textAlignment = NSTextAlignmentRight;
-    [self addSubview:_endLabel];
+    [self.contentView addSubview:_endLabel];
 }
 
 -(void)layoutSubviews {

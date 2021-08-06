@@ -202,7 +202,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/AliyunRace/Face3D.framework"
   install_framework "${PODS_ROOT}/AliyunRace/opencv2.framework"
   install_framework "${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoCore.framework"
-  install_framework "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS-v7.2.0/libCNamaSDK.framework"
+  install_framework "${PODS_ROOT}/FURenderKit/FURenderKit.framework"
   install_framework "${PODS_ROOT}/QuCore-ThirdParty/frameworks/alivcffmpeg.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -211,7 +211,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_ROOT}/AliyunRace/Face3D.framework"
   install_framework "${PODS_ROOT}/AliyunRace/opencv2.framework"
   install_framework "${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoCore.framework"
-  install_framework "${PODS_ROOT}/Nama/FaceUnity-SDK-iOS-v7.2.0/libCNamaSDK.framework"
+  install_framework "${PODS_ROOT}/FURenderKit/FURenderKit.framework"
   install_framework "${PODS_ROOT}/QuCore-ThirdParty/frameworks/alivcffmpeg.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

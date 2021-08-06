@@ -1759,6 +1759,10 @@
 "分辨率" = "Resolution";
 "视频编码方式" = "Encoding";
 "片尾" = "Credits";
+"硬件回声消除" = "Hareware AEC effect";
+"视频边框" = "Video Border";
+"合拍视频在最顶层" = "Put Mix Video at TopLayer";
+"降噪" = "Denoise";
 //更多动图
 "更多动图" = "More Stickers";
 //更多字幕
@@ -1993,3 +1997,12 @@
 "检测到新版本，是否更新？" = "A new version is available. Upgrade to the new version?";
 "设备内存不足，请及时清理" = "Insufficient memory. Please clear memory cache";
 "SDK版本信息" = "SDK Version";
+
+//视频增强算法
+"增强" = "Augmentation";
+"重置" = "Reset";
+"亮度" = "Brightness";
+"对比度" = "Contrast";
+"饱和度" = "Saturation";
+"锐度" = "Sharpness";
+"暗角" = "Vignette";

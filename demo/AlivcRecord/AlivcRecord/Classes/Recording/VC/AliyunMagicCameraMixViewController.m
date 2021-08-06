@@ -11,7 +11,7 @@
 #import <AliyunVideoSDKPro/AliyunMixRecorder.h> 
 #import "AliyunPathManager.h"
 #import "MBProgressHUD+AlivcHelper.h"
-#import <sys/utsname.h> 
+#import "UIDevice+AlivcInfo.h"
 
 @interface AliyunMagicCameraMixViewController ()<AliyunMixRecorderDelegate>
 
@@ -112,12 +112,64 @@
         
         AliyunMixMediaInfoParam *mixMediaInfo = [[AliyunMixMediaInfoParam alloc] init];
         mixMediaInfo.mixVideoFilePath = self.quVideo.sourcePath;
-        mixMediaInfo.mixVideoViewFrame = CGRectMake(CGRectGetWidth(outputSizeView.bounds) / 2, 0, CGRectGetWidth(outputSizeView.bounds) / 2, CGRectGetHeight(outputSizeView.bounds));
+        
+        if (self.quVideo.hasVideoBorder || self.quVideo.isMixVideoTopLayer) {
+            //如果设置了视频边框 则调整合拍样本视频的窗口大小 和 合拍摄像头采集窗口的大小 以便于展示效果
+            CGFloat resolutionRatio = 9.0 / 16.0;
+            if (self.quVideo.isMixVideoTopLayer) {
+                CGSize videoResoultion = self.quVideo.originalMediaSize;
+                resolutionRatio = videoResoultion.width / videoResoultion.height;
+            }
+            
+            CGFloat height = outputSizeView.bounds.size.height * 0.4;
+            CGRect frontViewFrame = CGRectMake(20.0, 0, height * resolutionRatio, height);
+            frontViewFrame.origin.y = (outputSizeView.bounds.size.height - frontViewFrame.size.height) * 0.5;
+            
+            AliyunMixMediaVideoInfo *bgInfo;
+            AliyunMixMediaVideoInfo *frontInfo;
+            
+            if (self.quVideo.isMixVideoTopLayer) {
+                bgInfo = mixMediaInfo.recordVideoInfo;
+                frontInfo = mixMediaInfo.mixVideoInfo;
+            } else {
+                bgInfo = mixMediaInfo.mixVideoInfo;
+                frontInfo = mixMediaInfo.recordVideoInfo;
+            }
+            
+            bgInfo.layerLevel = 1;
+            bgInfo.frame = outputSizeView.bounds;
+            
+            frontInfo.layerLevel = 2;
+            frontInfo.frame = frontViewFrame;
+            
+            CGSize resolution = mixMediaInfo.recordVideoInfo.frame.size;
+            mixMediaInfo.recordVideoInfo.resolution = CGSizeMake(resolution.width * 2.0, resolution.height * 2.0);
+            
+            if (self.quVideo.hasVideoBorder) {
+                frontInfo.borderInfo.width = 2.0;
+                frontInfo.borderInfo.cornerRadius = 10.0;
+                frontInfo.borderInfo.color = UIColor.whiteColor;
+            }
+            
+        }else if (self.quVideo.mixbgImgType>0 || self.quVideo.mixbgColorType>0) {
+            //如果设置了合拍背景颜色或合拍背景图片 则调整合拍样本视频的窗口大小 和 合拍摄像头采集窗口的大小 以便于展示效果
+            CGFloat preViewWidth = (CGRectGetWidth(outputSizeView.bounds)/2)*0.75;
+            CGFloat preViewheight = CGRectGetWidth(outputSizeView.bounds)*0.75;
+            
+            CGFloat preViewOffsetX = (CGRectGetWidth(outputSizeView.bounds)/2 - preViewWidth)/2;
+            
+            mixMediaInfo.mixVideoViewFrame = CGRectMake(preViewWidth + 2*preViewOffsetX, 0, preViewWidth, preViewheight);
+            
+            mixMediaInfo.previewViewFrame = CGRectMake(preViewOffsetX, 0, preViewWidth, preViewheight);
+            mixMediaInfo.previewVideoSize = CGSizeMake(outputSize.width * 0.5, outputSize.height);
+        }else{
+            mixMediaInfo.mixVideoViewFrame = CGRectMake(CGRectGetWidth(outputSizeView.bounds) / 2, 0, CGRectGetWidth(outputSizeView.bounds) / 2, CGRectGetHeight(outputSizeView.bounds));
+            
+            mixMediaInfo.previewViewFrame = CGRectMake(0, 0, CGRectGetWidth(outputSizeView.bounds) / 2, CGRectGetHeight(outputSizeView.bounds));
+            mixMediaInfo.previewVideoSize = CGSizeMake(outputSize.width * 0.5, outputSize.height);
+        }
         
         mixMediaInfo.outputSizeView = outputSizeView;
-        
-        mixMediaInfo.previewViewFrame = CGRectMake(0, 0, CGRectGetWidth(outputSizeView.bounds) / 2, CGRectGetHeight(outputSizeView.bounds));
-        mixMediaInfo.previewVideoSize = CGSizeMake(outputSize.width * 0.5, outputSize.height);
         
         _recorder = [[AliyunMixRecorder alloc] initWithMediaInfo:mixMediaInfo outputSize:self.quVideo.outputSize];
         
@@ -141,23 +193,40 @@
         _recorder.cameraRotate = 0;
         self.quVideo.outputPath = _recorder.outputPath;
         _recorder.beautifyStatus = YES;
+        _recorder.frontCameraSupportVideoZoomFactor = YES;
         //录制片段设置
         
         [_recorder setRecordMaxDuration:self.quVideo.maxDuration];
         [_recorder setRecordMinDuration:self.quVideo.minDuration];
+        
+        //设置合成视频使用录制音轨
+        [_recorder setMixAudioSource:self.quVideo.mixAudioType];
+        
+        //设置合拍颜色
+        if(self.quVideo.mixbgColorType>0){
+            if (self.quVideo.mixbgColorType==1) {
+                [_recorder setBackgroundColor:0xff0000];
+            }else if (self.quVideo.mixbgColorType==2) {
+                [_recorder setBackgroundColor:0x00ff00];
+            }
+        }
+        if (self.quVideo.mixbgImgType>0) {
+
+            NSString *suff = [NSString stringWithFormat:@"mixbgimg%d.png",self.quVideo.mixbgImgType];
+            NSString *imgPath = [[NSBundle mainBundle] pathForResource:suff ofType:nil];
+            [_recorder setBackgroundImageFilePath:imgPath imageDisplayMode:self.quVideo.mixbgImgScaleType];
+        }
+        
+        //设置硬件回声消除效果
+        _recorder.recorderAECType = self.quVideo.mixAECType;
+        
     }
     return _recorder;
 }
 
 
 - (BOOL)isBelowIphone_8 {
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString *phoneType = [NSString stringWithCString: systemInfo.machine encoding:NSASCIIStringEncoding];
-    NSRange range = [phoneType rangeOfString:@","];
-    NSRange range1 = NSMakeRange(6, range.location - 6);
-    NSString *subStr = [phoneType substringWithRange:range1];
-    int code = [subStr intValue];
+    int code = [UIDevice iphoneDeviceCode];
     return code <=9;
 }
 

@@ -16,10 +16,10 @@
 @implementation AlivcEditItemManager
 + (NSArray <AlivcEditItemModel*>*)defaultModelsWithUIConfig:(AlivcEditUIConfig *)uiConfig{
     NSMutableArray *resultArray = [[NSMutableArray alloc]init];
-    NSInteger defaultAllValue = 10;
+    NSInteger defaultAllValue = 12;
     AlivcOutputProductType productType = kAlivcProductType;
     if (productType == AlivcOutputProductTypeSmartVideo) {
-        defaultAllValue = 11;
+        defaultAllValue = 13;
     }
     for (NSInteger i = 0; i < defaultAllValue; i++) {
         AlivcEditItemModel *model =[AlivcEditItemManager configModelsWithIndex:i withUIConfig:uiConfig];
@@ -110,6 +110,20 @@
             model.title = [@"音效" localString];
             model.showImage = uiConfig.soundImage;
             model.selString = @"soundButtonClicked:";
+        }
+            break;
+        case AliyunEditSouceClickTypeRollCaption:
+        {
+            model.title = [@"翻转字幕" localString];
+            model.showImage = uiConfig.captionImage;
+            model.selString = @"rollCaptionClicked:";
+        }
+            break;
+        case AliyunEditSouceClickTypeVideoAugmentation:
+        {
+            model.title = [@"增强" localString];
+            model.showImage = uiConfig.augmentationImage;
+            model.selString = @"videoAugmentationButtonClicked:";
         }
             break;
         default:

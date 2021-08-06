@@ -40,6 +40,8 @@
     [self addNotifications];
     
     [self fetchPhotoData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchPhotoData) name:kNotifySavedPhotosAlbumFinish object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

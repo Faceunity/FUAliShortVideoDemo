@@ -1,1 +1,0 @@
-../../../../AlivcRecord/AlivcRecord/Classes/Recording/Utilities/FaceUnityManager/authpack.h

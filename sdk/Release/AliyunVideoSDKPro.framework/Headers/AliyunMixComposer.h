@@ -73,11 +73,27 @@
 - (void)setOutputDurationReferenceTrack:(AliyunMixTrack *)referenceTrack;
 
 /**
- 指定以某个轨道的音频作为最终合成视频的音频
+ 指定以某个轨道的音频作为最终合成视频的音频，v3.18.0之后未指定音轨则为静音
 
  @param referenceTrack 轨道
  */
 - (void)setOutputAudioReferenceTrack:(AliyunMixTrack *)referenceTrack;
+
+/**
+ 指定合成的背景颜色 API_AVAILABLE(3.19.0)
+ 
+ @param backgroundColor 颜色, 默认0，黑色 如0xfffff;
+ */
+- (void)setBackgroundColor:(int)backgroundColor;
+
+/**
+ 指定合成的背景图片路径 默认nil nil 不设置图片 API_AVAILABLE(3.19.0)
+ 
+ @param backgroundImageFilePath 图片路径
+ @param imageDisplayMode        图片裁剪模式 查看 AliyunMixVideoBackgroundImageMode
+ */
+- (void)setBackgroundImageFilePath:(NSString *)backgroundImageFilePath
+                  imageDisplayMode:(AliyunMixVideoBackgroundImageMode)imageDisplayMode;
 
 /**
  开始合成

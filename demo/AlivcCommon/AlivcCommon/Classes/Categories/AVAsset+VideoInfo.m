@@ -16,18 +16,9 @@
     if (videoTracks.count) {
         assetTrackVideo = videoTracks[0];
     }
-    float sw = assetTrackVideo.naturalSize.width, sh = assetTrackVideo.naturalSize.height;
-    BOOL isAssetPortrait = NO;
     CGAffineTransform trackTrans = assetTrackVideo.preferredTransform;
-    if ((trackTrans.b == 1.0 && trackTrans.c == -1.0) || (trackTrans.b == -1.0 && trackTrans.c == 1.0)) {
-        isAssetPortrait = YES;
-    }
-    if (isAssetPortrait) {
-        float t = sw;
-        sw = sh;
-        sh = t;
-    }
-    return CGSizeMake(sw, sh);
+    CGSize size = CGSizeApplyAffineTransform(assetTrackVideo.naturalSize, trackTrans);
+    return CGSizeMake(fabs(size.width), fabs(size.height));
 }
 
 - (float)frameRate {

@@ -7,10 +7,40 @@
 //
 
 #import "AliyunMixStream.h"
+#import "AliyunMixMediaInfoParam.h"
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface AliyunMixTrack : NSObject
+
+/**
+ 标记该轨道的时长是否作为最终合成视频的时长
+ API_AVAILABLE(3.19.0)
+ */
+@property(nonatomic, assign) BOOL outputDurationReferenceTrack;
+
+/**
+ 标记该轨道的音频是否输出
+ API_AVAILABLE(3.19.0)
+ */
+@property(nonatomic, assign) BOOL outputAudioReferenceTrack;
+
+/**
+ 音量输出大小（多路混音时生效，单路设置无效）
+ 范围：[0-100]
+ API_AVAILABLE(3.19.0)
+ */
+@property(nonatomic, assign) int outputAudioWeight;
+
+/**
+ 边框信息
+ API_AVAILABLE(3.21.0)
+ */
+/**
+ The border info of the video
+ API_AVAILABLE(3.21.0)
+ */
+@property(nonatomic, strong) AliyunPureColorBorderInfo *borderInfo;
 
 /**
  向该轨道加入视频

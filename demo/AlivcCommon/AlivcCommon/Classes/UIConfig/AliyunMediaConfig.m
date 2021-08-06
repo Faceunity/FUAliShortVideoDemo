@@ -7,6 +7,7 @@
 //
 
 #import "AliyunMediaConfig.h"
+#import "AVAsset+VideoInfo.h"
 
 @implementation AliyunMediaConfig
 
@@ -33,8 +34,16 @@
     config.backgroundColor = self.backgroundColor;
     config.gpuCrop = self.gpuCrop;
     config.hasEnd = self.hasEnd;
+    config.denoise = self.denoise;
     config.beautyType = self.beautyType;
     config.videoFlipH = self.videoFlipH;
+    config.mixAudioType = self.mixAudioType;
+    config.mixbgColorType = self.mixbgColorType;
+    config.mixbgImgType = self.mixbgImgType;
+    config.mixbgImgScaleType = self.mixbgImgScaleType;
+    config.mixAECType = self.mixAECType;
+    config.hasVideoBorder = self.hasVideoBorder;
+    config.isMixVideoTopLayer = self.isMixVideoTopLayer;
     return config;
 }
 -(instancetype)mutableCopyWithZone:(NSZone *)zone{
@@ -60,8 +69,16 @@
     config.backgroundColor = self.backgroundColor;
     config.gpuCrop = self.gpuCrop;
     config.hasEnd = self.hasEnd;
+    config.denoise = self.denoise;
     config.videoFlipH = self.videoFlipH;
     config.beautyType = self.beautyType;
+    config.mixAudioType = self.mixAudioType;
+    config.mixbgColorType = self.mixbgColorType;
+    config.mixbgImgType = self.mixbgImgType;
+    config.mixbgImgScaleType = self.mixbgImgScaleType;
+    config.mixAECType = self.mixAECType;
+    config.hasVideoBorder = self.hasVideoBorder;
+    config.isMixVideoTopLayer = self.isMixVideoTopLayer;
     return config;
 }
 
@@ -186,6 +203,28 @@
         _minDuration = 2;
     }
     return _minDuration;
+}
+
+- (CGSize) originalMediaSize {
+    if (_phAsset) {
+        if (_phImage) {
+            return _phImage.size;
+        }
+        
+        return CGSizeMake(_phAsset.pixelWidth, _phAsset.pixelHeight);
+    }
+    
+    if (_avAsset) {
+        return _avAsset.avAssetNaturalSize;
+    }
+    
+    NSURL *url = [NSURL fileURLWithPath:_sourcePath];
+    if (url) {
+        AVAsset *asset = [AVAsset assetWithURL:url];
+        return asset.avAssetNaturalSize;
+    }
+    
+    return _outputSize;
 }
 
 @end

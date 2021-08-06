@@ -40,6 +40,33 @@
 
 @end
 
+
+/**
+ 设置合成视频使用的音轨类型
+ 
+ - MixAudioSourceTypeOriginal:  原始媒体的音轨
+ - MixAudioSourceTypeRecorded:  录制的音轨
+ - MixAudioSourceTypeMute:      静音
+ - MixAudioSourceTypeBoth:      2个音轨进行混音  API_AVAILABLE(3.19.0)
+ */
+typedef NS_ENUM(NSUInteger, MixAudioSourceType) {
+    MixAudioSourceTypeOriginal,
+    MixAudioSourceTypeRecorded,
+    MixAudioSourceTypeMute,
+    MixAudioSourceTypeBoth,
+};
+
+/**
+ 录音回音消除效果
+ 
+ - AliyunIRecorderAECTypeNone:  回音消除不开启
+ - AliyunIRecorderAECTypeHardware:  开启硬件回音消除
+ */
+typedef NS_ENUM(NSInteger, AliyunIRecorderAECType) {
+    AliyunIRecorderAECTypeNone,
+    AliyunIRecorderAECTypeHardware,
+};
+
 @interface AliyunMixRecorder : NSObject
 
 /**
@@ -104,9 +131,14 @@
  每次调用videoZoomFactor,实际变焦值zoom为设定的1/100
  例：调用videoZoomFactor = 10.0f，实际zoom += 0.1f
  例：调用videoZoomFactor = -5.0f，实际zoom -= 0.05f
- 前置摄像头时，该参数是无效的
  */
 @property(nonatomic, assign) CGFloat videoZoomFactor;
+
+/**
+ 设置前置摄像头是否支持调整变焦，后置摄像头默认支持变焦，前置摄像头默认不支持变焦
+ 当supportVideoZoomFactorForFrontCamera = YES时，前置摄像头支持变焦
+ */
+@property(nonatomic, assign) BOOL frontCameraSupportVideoZoomFactor;
 
 /**
  编码方式
@@ -211,6 +243,11 @@
 @property(nonatomic, assign, readonly) BOOL isRecording;
 
 /**
+ 录音回音效果，默认AliyunIRecorderAECTypeNone，不开启回音消除，API_AVAILABLE(3.19.0)
+ */
+@property(nonatomic, assign) AliyunIRecorderAECType recorderAECType;
+
+/**
  人脸数量的回调
 
  在useFaceDetect开启的状态下生效
@@ -225,6 +262,22 @@
  @return 合拍对象
  */
 - (instancetype)initWithMediaInfo:(AliyunMixMediaInfoParam *)param outputSize:(CGSize)outputSize;
+
+/**
+ 设置合成视频使用的录制音轨 默认使用原始媒体的音轨
+ 
+ @param audioSourceType 查看MixAudioSourceType定义
+ */
+- (void)setMixAudioSource:(MixAudioSourceType)audioSourceType;
+
+
+/**
+ 设置音轨音量，audioSourceType为MixAudioSourceTypeBoth生效
+ API_AVAILABLE(3.19.0)
+ @param originalWeight 原始音轨混音音量大小[0~100]
+ @param recordWeight 录制音轨混音音量大小[0~100]
+ */
+- (void)setMixAudioOriginalWeight:(int)originalWeight recordWeight:(int)recordWeight;
 
 /**
  删除最后一段
@@ -272,6 +325,22 @@
  @return 片段数
  */
 - (NSInteger)partCount;
+
+/**
+ 指定合成的背景颜色，默认为0，黑色，API_AVAILABLE(3.19.0)
+ 
+ @param backgroundColor 颜色, 如0xfffff;
+ */
+- (void)setBackgroundColor:(int)backgroundColor;
+
+/**
+指定合成的背景图片路径 API_AVAILABLE(3.19.0)
+
+@param backgroundImageFilePath 图片路径，nil 为不设置图片，默认nil
+@param imageDisplayMode        图片裁剪模式 查看 AliyunMixVideoBackgroundImageMode
+*/
+- (void)setBackgroundImageFilePath:(NSString *)backgroundImageFilePath
+                  imageDisplayMode:(AliyunMixVideoBackgroundImageMode)imageDisplayMode;
 
 /**
  开始预览

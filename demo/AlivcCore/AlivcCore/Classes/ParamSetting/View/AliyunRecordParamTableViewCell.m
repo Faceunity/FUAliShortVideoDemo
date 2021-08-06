@@ -11,6 +11,7 @@
 #import "AlivcUIConfig.h"
 #import "AliyunMediaConfig.h"
 #import "AlivcTextField.h"
+
 @interface AliyunRecordParamTableViewCell ()
 
 /**
@@ -93,6 +94,12 @@
         [btn setTitle:_cellModel.buttonTitleArray[i] forState:UIControlStateNormal];
         [btn setBackgroundImage:[UIImage avc_imageWithColor:rgba(255, 255, 255, 0.1)] forState:UIControlStateNormal];
         [btn setBackgroundImage:[UIImage avc_imageWithColor:[AlivcUIConfig shared].kAVCThemeColor] forState:UIControlStateSelected];
+        if(_cellModel.btnEnable==1){
+            [btn setBackgroundColor:[UIColor darkGrayColor]];
+            [btn setEnabled:NO];
+        }else if (_cellModel.btnEnable==2){
+            [btn setEnabled:YES];
+        }
         int row = i/3;
         int column = i%3;
         btn.frame = CGRectMake(leftInsect+column*(width+middleInsect), topInset+row*(height+leftInsect), width, height);
@@ -173,6 +180,40 @@
         }else {
             _cellModel.recodeTypeBlock(AlivcRecordTypeMerge);
         }
+    }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍音频类型", nil) ]){
+        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"视频原音", nil)]) {
+             _cellModel.mixAudioSourceBlock(0);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"录制声音", nil)]) {
+             _cellModel.mixAudioSourceBlock(1);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"混音", nil)]) {
+            _cellModel.mixAudioSourceBlock(3);
+       }else {
+            _cellModel.mixAudioSourceBlock(2);
+        }
+    }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍背景颜色", nil) ]){
+        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"不设置", nil)]) {
+             _cellModel.mixBgColorBlock(0);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"红色", nil)]) {
+             _cellModel.mixBgColorBlock(1);
+        }else {
+            _cellModel.mixBgColorBlock(2);
+        }
+    }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍背景图片", nil) ]){
+        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"不设置", nil)]) {
+             _cellModel.mixBgImgBlock(0);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"图片1", nil)]) {
+             _cellModel.mixBgImgBlock(1);
+        }else {
+            _cellModel.mixBgImgBlock(2);
+        }
+    }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍背景图片填充模式", nil) ]){
+        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"比例填充", nil)]) {
+             _cellModel.mixBgImgScaleBlock(0);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"比例适配", nil)]) {
+             _cellModel.mixBgImgScaleBlock(1);
+        }else {
+            _cellModel.mixBgImgScaleBlock(2);
+        }
     }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"高级美颜", nil) ]){
         if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"Race", nil)]) {
             _cellModel.beautyTypeBlock(0);
@@ -206,7 +247,7 @@
     _switcher = [[UISwitch alloc] init];
     _switcher.tintColor = [AlivcUIConfig shared].kAVCThemeColor;
     _switcher.onTintColor = [AlivcUIConfig shared].kAVCThemeColor;
-    _switcher.on = NO;
+    _switcher.on = (_cellModel.value == 1) ? YES : NO;
     [_switcher addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_switcher];
     
@@ -217,7 +258,7 @@
     [super layoutSubviews];
     CGFloat midY  = CGRectGetMidY(self.contentView.bounds);
     CGFloat width = CGRectGetWidth(self.contentView.bounds);
-    _titleLabel.frame = CGRectMake(30, 15, 120, 20);
+    _titleLabel.frame = CGRectMake(30, 15, 160, 20);
     if ([self.reuseIdentifier isEqualToString:@"cellInput"]) {
         _inputView.frame = CGRectMake(15, 45, width - 30, 50);
     }else if ([self.reuseIdentifier isEqualToString:@"switch"]){
@@ -239,6 +280,8 @@
         
         
         _inputView.attributedPlaceholder = [[NSAttributedString alloc]initWithString:cellModel.placeHolder attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14],NSParagraphStyleAttributeName:style,NSForegroundColorAttributeName:AlivcOxRGB(0xc3c5c6)}];
+    }else if ([cellModel.reuseId isEqualToString:@"switch"]) {
+        _switcher.on = (_cellModel.value == 1) ? YES : NO;
     }else{
          [self setupButtonView];
     }
@@ -275,6 +318,7 @@
     }else {
         _infoLabel.text = @"";
     }
+    _cellModel.value = isButtonOn ? 1 : 0;
     _cellModel.switchBlock(isButtonOn);
 }
 
