@@ -40,7 +40,7 @@ PODS:
   - AlivcRecord (0.1.0):
     - AlivcCore
     - AliyunRace (= 1.2.0)
-    - FURenderKit
+    - FURenderKit (~> 8.0.2)
     - Masonry
     - SVProgressHUD
   - AliyunOSSiOS (2.10.9)
@@ -49,7 +49,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - FURenderKit (7.4.0.1)
+  - FURenderKit (8.0.2)
   - JSONModel (1.8.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
@@ -117,12 +117,12 @@ SPEC CHECKSUMS:
   AlivcCrop: 146d4248ec3bc8572e898fde3c4d958b07bc7a70
   AlivcEdit: a9eb549aa4748290fb5e609b4c1531b12a6a2e77
   AlivcRace: adbff7a281251960121a4e98bda240fd07739d88
-  AlivcRecord: 53c8d9abe055919df32ff00a8a180d3681269786
+  AlivcRecord: 24d873882cfa8fe138f673e2f40d9d0f6c2e7d35
   AliyunOSSiOS: 13173e9eaf05d3816315319876025de3028ea31d
   AliyunRace: 200096bf41861945efac646402fac8359d5f4ee5
   AliyunVideoSDKPro: 135bdf317ebdb49059daecfe9ea5767901eb84b2
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  FURenderKit: be78865a55b092352af583a4999a2e6aa8c504b2
+  FURenderKit: 8897d9168a598daf283e07aefbc8fc4b880ab9d8
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
@@ -134,6 +134,6 @@ SPEC CHECKSUMS:
   VODUpload: 2c8ac654ceda839dda97a92023a270041dd9901e
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: 27e08d4996272d356aab0a8e56a0a60f62a6cef5
+PODFILE CHECKSUM: 7e641e23eafa40a556eee9be908dcbe1e3ebf69e
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.2

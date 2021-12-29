@@ -46,7 +46,7 @@ TODO: Add long description of the pod here.
    s.dependency 'AliyunRace', '1.2.0'
    s.dependency 'SVProgressHUD'
    s.dependency 'Masonry'
-   s.dependency 'FURenderKit'
+   s.dependency 'FURenderKit', '~> 8.0.2'
   s.dependency 'AlivcCore'
 
 end

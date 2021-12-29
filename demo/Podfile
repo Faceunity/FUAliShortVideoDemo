@@ -1,6 +1,6 @@
 #use_frameworks!
 install! 'cocoapods', :deterministic_uuids => false
-
+project './AliyunVideoClient_Entrance.xcodeproj'
 
 
 

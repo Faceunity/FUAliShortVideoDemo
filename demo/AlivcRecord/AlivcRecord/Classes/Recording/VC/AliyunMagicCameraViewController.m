@@ -33,7 +33,7 @@
 /** faceu */
 #import "FUManager.h"
 #import "FUTestRecorder.h"
-#import "UIViewController+FaceUnityUIExtension.h"
+#import "FUDemoManager.h"
 
 #endif
 #import "AlivcWebViewController.h"
@@ -182,9 +182,15 @@ AlivcRecordPasterViewDelegate>
     //提前加载好美颜view，防止在异步线程里惰性加载view
     [self beautyView];
     
+    // faceunity ui
+    CGFloat safeAreaBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+    }
+    
     if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeFaceUnity) {
     
-        [self setupFaceUnity];
+        [FUDemoManager setupFaceUnityDemoInController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom];
     }
     
 }
@@ -873,7 +879,6 @@ AlivcRecordPasterViewDelegate>
         CVPixelBufferRef resultBuffer = [[FUManager shareManager] renderItemsToPixelBuffer:pixelBuffer];
         if (resultBuffer) {
         
-            [self checkAI];//检测人脸人体提示语,正式环境请勿添加
             return resultBuffer;
             
         }else{

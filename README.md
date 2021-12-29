@@ -34,12 +34,21 @@ FUAliShortVideoProDemo 是 FaceUnity SDK 快速对接阿里短视频的导读说
 1、在 AliyunMagicCameraViewController.m  中添加头文件
 ```objc
 #import "FUManager.h"
-#import "UIViewController+FaceUnityUIExtension.h"
+#import "FUDemoManager.h"
 ```
 
-2、在 `viewDidLoad` 方法中初始化FU `setupFaceUnity` 会初始化FUSDK,和添加美颜工具条,具体实现可查看 `UIViewController+FaceUnityUIExtension.m`
+2、在 `viewDidLoad` 方法中初始化FU `setupFaceUnityDemoInController` 会初始化FUSDK,和添加美颜工具条,具体实现可查看 `FUDemoManager.m`
 ```objc
-[self setupFaceUnity];
+    // faceunity ui
+    CGFloat safeAreaBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+    }
+    
+    if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeFaceUnity) {
+    
+        [FUDemoManager setupFaceUnityDemoInController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom];
+    }
 ```
 
 ### 四、FaceUnity 美颜处理
