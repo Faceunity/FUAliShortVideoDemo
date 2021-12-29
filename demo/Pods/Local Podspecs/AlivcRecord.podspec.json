@@ -40,7 +40,7 @@
 
     ],
     "FURenderKit": [
-
+      "~> 8.0.2"
     ],
     "AlivcCore": [
 
