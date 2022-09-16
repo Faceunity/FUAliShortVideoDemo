@@ -37,6 +37,7 @@
 //公用类相关
 #import "AliyunDBHelper.h"
 #import "AliyunEffectMoreViewController.h"
+#import "AliyunEffectFontManager.h"
 #import "AliyunPathManager.h"
 #import "AliyunResourceFontDownload.h"
 #import "AliyunTimelineItem.h"
@@ -87,6 +88,7 @@
 #import "AliyunRollCaptionWordsController.h"
 #import <AliyunVideoSDKPro/AliyunRollCaptionItemStyle.h>
 #import "AliyunVideoAugmentationView.h"
+#import "AliyunLutFilterView.h"
 
 //#import "AliyunPublishViewController.h"
 //#import "AlivcExportViewController.h"
@@ -97,6 +99,18 @@
 #import "AliyunSubtitleActionItem.h"
 #import "AliyunPasterController+ActionType.h"
 #import "AlivcRegulatorView.h"
+
+#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+#import "UIView+OPLayout.h"
+#import "AliyunDraftConfig.h"
+#import <AliyunVideoSDKPro/AliyunEditor+Draft.h>
+#import <FURenderKit/FURenderKit.h>
+#import <FURenderKit/FUGLContext.h>
+#import <FURenderKit/FURenderer.h>
+#import "FUDemoManager.h"
+
+
+
 
 @class AliyunPasterBottomBaseView;
 
@@ -130,18 +144,19 @@ const CGFloat PASTER_MIN_DURANTION = 0.1; //动图最小持续时长
 AliyunIExporterCallback, AliyunIPlayerCallback, AliyunICanvasViewDelegate,
 AliyunPaintingEditViewDelegate, AliyunMusicPickViewControllerDelegate,
 AliyunPasterBottomBaseViewDelegate, AliyunEffectCaptionShowViewDelegate, AliyunVideoAugmentationViewDelegate,
-AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate,AlivcRollCaptionViewDelegate>
+AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate,AlivcRollCaptionViewDelegate,AliyunLutFilterViewDelegate,AliyunIRenderCallback>
 
 @property(nonatomic, strong) UIView *movieView;
 @property(nonatomic, strong) AliyunTimelineView *currentTimelineView;
 @property(nonatomic, strong) AliyunEditButtonsView *editButtonsView;
 @property(nonatomic, strong) AliyunTabController *tabController;
+@property(nonatomic, strong) AliyunTabController *gifTabController;
+
 @property(nonatomic, strong) UIButton *backgroundTouchButton;
 @property(nonatomic, strong) UILabel *currentTimeLabel;
 @property(nonatomic, strong) UIButton *playButton;
 @property(nonatomic, strong) UIView *playButtonConView;
 
-@property(nonatomic, strong) AliyunPasterManager *pasterManager;
 //动图编辑的空间 响应用户对动图的操作的事件
 @property(nonatomic, strong) AliyunEditZoneView *editZoneView;
 @property(nonatomic, strong) AliyunEditor *editor;
@@ -154,9 +169,14 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 @property (nonatomic, strong) AliyunEffectFilterInfo *intelligentFilter;
 //MV弹出的菜单
+@property(nonatomic, assign) BOOL hasInitMVViewSelected;
 @property(nonatomic, strong) AliyunEffectMVView *mvView;
 //滤镜弹出的菜单
 @property(nonatomic, strong) AliyunEffectFilterView *filterView;
+
+//lut滤镜弹出的菜单
+@property(nonatomic, strong) AliyunLutFilterView *lutFilterView;
+
 //特效滤镜弹出的菜单
 @property(nonatomic, strong) AlivcSpecialEffectView *specialFilterView;
 //时间特效弹出的菜单
@@ -176,6 +196,8 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 @property(nonatomic, strong) AlivcRollCaptionView *rollCaptionView;
 @property(nonatomic,assign) BOOL isRollCaptionType;
+
+@property(nonatomic, strong) FUDemoManager *demoManager;
 
 
 /**
@@ -228,7 +250,11 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
  记录编辑状态下，上个添加的动图
  
  */
-@property(nonatomic, strong) AliyunPasterController *lastPasterController;
+@property(nonatomic, strong) AliyunRenderBaseController *lastPasterController;
+
+
+@property(nonatomic, strong) AliyunRenderBaseController *beforeEditController;
+
 
 /**
  记录上次编辑状态添加的所有动图集合
@@ -245,7 +271,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 /**
  动图特殊处理管理器
  */
-@property(nonatomic, strong) AlivcPasterManager *alivcPasterManager;
+@property(nonatomic,strong) NSMutableArray<AliyunRenderBaseController*> *curRenderList;
 
 /**
  封面图
@@ -310,12 +336,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 
 
-/**
- 记录纯字幕特效状态，用来提示倒播不支持字幕特效，SDK修复倒播不兼容字幕特效的BUG后
- 删除此值及提示逻辑
- */
-@property(nonatomic, assign) TextActionType textActionType;
-
 @property(nonatomic, assign) CGSize inputOutputSize;
 
 @property(nonatomic,assign) CGFloat currentPlaytime;
@@ -333,9 +353,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     AliyunEffectStaticImage *_staticImage;
     AliyunEffectFilter *_processAnimationFilter;
     AliyunTimelineFilterItem *_processAnimationFilterItem;
-    
-    //    TextActionType _tmpActionType; //选择的字幕特效
-    
+        
     
     AliyunAudioEffectType lastAudioEffectType;//上次设置的音效
     
@@ -347,6 +365,16 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [super viewDidLoad];
     [self initBaseData];
     [self addSubviews];
+    
+//    CGFloat safeAreaBottom = 0;
+//    if (@available(iOS 11.0, *)) {
+//        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
+//    }
+//
+//    self.demoManager = [[FUDemoManager alloc] initWithTargetController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom - 180];
+    
+    
+    
     [self addNotificationBeforeSdk];
     [self initSDKAbout];
     [self addNotifications];
@@ -402,7 +430,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         if (_config.encodeMode ==  AliyunEncodeModeHardH264) {
             param.codecType = AliyunVideoCodecHardware;
         }else if(_config.encodeMode == AliyunEncodeModeSoftFFmpeg) {
-            param.codecType = AliyunVideoCodecFFmpeg;
+            param.codecType = AliyunVideoCodecOpenh264;
         }
         
         [importer setVideoParam:param];
@@ -482,6 +510,8 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     self.editor = [[AliyunEditor alloc] initWithPath:_taskPath
                                              preview:self.movieView];
     self.editor.delegate = (id)self;
+    self.editor.renderCallback = self;
+    
     // player
     self.player = [self.editor getPlayer];
     // exporter
@@ -496,11 +526,11 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [self.movieView addSubview:self.editZoneView];
     
     // setup pasterManager
-    self.pasterManager = [self.editor getPasterManager];
-    self.pasterManager.displaySize = self.editZoneView.bounds.size;
-    self.pasterManager.outputSize = _outputSize;
-    self.pasterManager.previewRenderSize = [self.editor getPreviewRenderSize];
-    self.pasterManager.delegate = (id)self;
+//    self.pasterManager = [self.editor getPasterManager];
+//    self.pasterManager.displaySize = self.editZoneView.bounds.size;
+//    self.pasterManager.outputSize = _outputSize;
+//    self.pasterManager.previewRenderSize = [self.editor getPreviewRenderSize];
+//    self.pasterManager.delegate = (id)self;
     //    [self.editor startEdit];
     //    [self play];
 }
@@ -511,7 +541,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)addWatermarkAndEnd {
     AlivcOutputProductType productType = kAlivcProductType;
     if (productType != AlivcOutputProductTypeSmartVideo) {
-        NSString *watermarkPath = [AlivcImage pathOfImageName:@"watermark"];
+        NSString *watermarkPath = [AlivcImage pathOfImageName:@"watermark.png"];
         
         AliyunEffectImage *watermark =
         [[AliyunEffectImage alloc] initWithFile:watermarkPath];
@@ -532,6 +562,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (_config.hasEnd && productType != AlivcOutputProductTypeSmartVideo) {
         NSString *watermarkPath = [[NSBundle mainBundle] pathForResource:@"tail" ofType:@"png"];
         AliyunEffectImage *tailWatermark = [[AliyunEffectImage alloc] initWithFile:watermarkPath];
+        tailWatermark.displaySize = _outputSize;
         tailWatermark.frame = CGRectMake(_outputSize.width / 2 - 84 / 2,
                                          _outputSize.height / 2 - 60 / 2, 84, 60);
         tailWatermark.endTime = 2;
@@ -585,7 +616,14 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         }
     }
     //从发布合成界面返回重新开始编辑并播放
-    [self.editor startEdit];
+    int ret = [self.editor startEdit];
+    if (ret != ALIVC_COMMON_RETURN_SUCCESS) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        return;
+    }
+    
     [self play];
     [self resourceDeleteAction];
     //如果是合拍 则播放原音
@@ -609,8 +647,22 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     };
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    
     //停止编辑
     [self.editor stopEdit];
+    
+    [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
+
+    
+    //重置_captionShowView
+    [_captionShowView removeFromSuperview];
+    _captionShowView = nil;
+    
+    
+    //重置_pasterShowView
+    [_pasterShowView removeFromSuperview];
+    _pasterShowView = nil;
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -696,6 +748,12 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         [_pasterShowView setupSubViews];
         [self.view addSubview:_pasterShowView];
         _pasterShowView.timeLineView = [self getOneTimeLineView];
+        
+        //草稿恢复
+        NSArray<AliyunRenderBaseController *> *list = [self.editor.getStickerManager getAllController];
+        for (AliyunRenderBaseController *vc in list) {
+            [self addPasterToTimeline:vc];
+        }
     }
     return _pasterShowView;
 }
@@ -703,20 +761,25 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (AliyunEffectCaptionShowView *)captionShowView {
     if (!_captionShowView) {
         _captionShowView = [[AliyunEffectCaptionShowView alloc]
-                            initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 200+SafeBottom)];
+                            initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 140+SafeBottom)];
         _captionShowView.delegate = self;
         _captionShowView.fontDelegate = self;
         [_captionShowView setupSubViews];
         [self.view addSubview:_captionShowView];
         _captionShowView.timeLineView = [self getOneTimeLineView];
+        
+        //草稿恢复
+        NSArray<AliyunRenderBaseController *> *list = [self.editor.getStickerManager getAllController];
+        for (AliyunRenderBaseController *vc in list) {
+            [self addPasterToTimeline:vc];
+        }
     }
     return _captionShowView;
 }
 // MV
 - (AliyunEffectMVView *)mvView {
     if (!_mvView) {
-        _mvView = [[AliyunEffectMVView alloc]
-                   initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 180)];
+        _mvView = [[AliyunEffectMVView alloc] initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 180)];
         _mvView.delegate = (id<AliyunEffectFilterViewDelegate>)self;
         [self.view addSubview:_mvView];
     }
@@ -727,11 +790,42 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (!_filterView) {
         _filterView = [[AliyunEffectFilterView alloc]
                        initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 180)];
-        _filterView.delegate = (id<AliyunEffectFilter2ViewDelegate>)self;
-        [self.view addSubview:_filterView];
         [_filterView addVisualEffect];
+        [self.view addSubview:_filterView];
+        
+        _filterView.delegate = (id<AliyunEffectFilter2ViewDelegate>)self;
+
+        for (AEPEffectFilterTrack *effect in _editor.getEditorProject.timeline.effectTracks) {
+            if ([effect isKindOfClass:AEPEffectFilterTrack.class]) {
+                [_filterView updateSelectedFilterWithResource:effect.source.path];
+                break;
+            }
+        }
     }
     return _filterView;
+}
+
+//lut滤镜
+- (AliyunLutFilterView *)lutFilterView {
+    if (!_lutFilterView) {
+        _lutFilterView = [[AliyunLutFilterView alloc]
+                       initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 220)];
+        [_lutFilterView addVisualEffect];
+        [self.view addSubview:_lutFilterView];
+        
+        _lutFilterView.delegate = self;
+
+        for (AEPEffectFilterTrack *effect in _editor.getEditorProject.timeline.effectTracks) {
+            
+            if ([effect isKindOfClass:AEPEffectLutFilterTrack.class]) {
+                
+                AEPEffectLutFilterTrack *track = effect;
+                [_lutFilterView updateSelectedFilterWithResource:track.source.path insensity:track.intensity];
+                break;
+            }
+        }
+    }
+    return _lutFilterView;
 }
 
 //翻转字幕
@@ -755,6 +849,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         [_specialFilterView addVisualEffect];
         _specialFilterView.timelineView = [self getOneTimeLineView];
         
+        for (AEPEffectAnimationFilterTrack *effect in _editor.getEditorProject.timeline.effectTracks) {
+            if ([effect isKindOfClass:AEPEffectAnimationFilterTrack.class]) {
+                [self.animationFilters addObject:effect.editorEffect];
+                [self addAnimationFilter:effect.editorEffect toTimeline:_specialFilterView.timelineView];
+            }
+        }
+
         __weak typeof(self) weakSelf = self;
         _specialFilterView.didChangeEffectFinish = ^(AliyunEffectFilter *effect) {
             weakSelf.curEffect = effect;
@@ -763,14 +864,60 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     }
     return _specialFilterView;
 }
+
 //变速（时间特效）
+- (AEPEffectTimeTrack *) currentTimeFilterFromProject
+{
+    for (AEPEffectTimeTrack *track in _editor.getEditorProject.timeline.effectTracks) {
+        if ([track isKindOfClass:AEPEffectTimeTrack.class]) {
+            return track;
+        }
+    }
+    return nil;
+}
+
+static void s_selectTimeFilter(AliyunEffectTimeFilterView *view, AEPEffectTimeTrack *timeTrack)
+{
+    switch (timeTrack.timeType) {
+        case AEPEffectTimeType_Speed: {
+            if (timeTrack.timeParam > 1.0) {
+                [view selectMomentFast];
+            } else {
+                [view selectMomentSlow];
+            }
+            break;
+        }
+        case AEPEffectTimeType_Repeat: {
+            [view selectRepeat];
+            break;
+        }
+        case AEPEffectTimeType_Invert: {
+            [view selectInvert];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 - (AliyunEffectTimeFilterView *)timeFilterView {
     if (!_timeFilterView) {
-        _timeFilterView = [[AliyunEffectTimeFilterView alloc]
-                           initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 220)];
+        _timeFilterView = [[AliyunEffectTimeFilterView alloc] initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 220)];
         _timeFilterView.delegate = self;
         [self.view addSubview:_timeFilterView];
         _timeFilterView.timelineView = [self getOneTimeLineView];
+        
+        AEPEffectTimeTrack *timeEffect = self.currentTimeFilterFromProject;
+        if (timeEffect) {
+            s_selectTimeFilter(_timeFilterView, timeEffect);
+            AliyunEffectTimeFilter *curTimeFilter = timeEffect.editorEffect;
+            self.currentTimeFilter = curTimeFilter;
+            AliyunTimelineTimeFilterItem *item = [AliyunTimelineTimeFilterItem new];
+            item.startTime = curTimeFilter.startTime;
+            item.endTime = curTimeFilter.endTime;
+            [_timeFilterView.timelineView removeAllTimelineTimeFilterItem];
+            [_timeFilterView.timelineView addTimelineTimeFilterItem:item];
+        }
     }
     
     return _timeFilterView;
@@ -781,10 +928,31 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         _paintShowView = [[AliyunPaintingEditView alloc]
                           initWithFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 185)];
         _paintShowView.delegate = self;
-        [_paintShowView showInView:self.view animation:YES];
+        __weak AliyunPaintingEditView *weakShowView = _paintShowView;
+        NSArray<AliyunICanvasLineData *> *lines = self.editor.getEditorProject.timeline.paintTrack.linesData;
+        [_paintShowView showInView:self.view animation:YES completion:^{
+            if (lines.count > 0) {
+                weakShowView.widthSelectView.currentWidth = lines.lastObject.lineWidth;
+                weakShowView.widthSelectView.widthtTagColor = lines.lastObject.lineColor;
+            }
+        }];
         self.paintView.frame = self.editZoneView.bounds;
     }
     return _paintShowView;
+}
+
+- (AlivcEffectSoundType) currentEffectSoundType
+{
+    for (AEPVideoTrack *vTrack in _editor.getEditorProject.timeline.videoTracks) {
+        for (AEPVideoTrackClip *clip in vTrack.clipList) {
+            AEPAudioEffect *audio = clip.audioEffect;
+            if (audio) {
+                return [self getProjectType:audio.effectType];
+            }
+        }
+    }
+    
+    return AlivcEffectSoundTypeClear;
 }
 
 - (AlivcAudioEffectView *)effectSoundsView{
@@ -793,6 +961,8 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         _effectSoundsView.delegate =self;
         _effectSoundsView.hidden =YES;
         [self.view addSubview:_effectSoundsView];
+        
+        _effectSoundsView.selectedType = self.currentEffectSoundType;
     }
     return _effectSoundsView;
 }
@@ -814,6 +984,9 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         _paintView = [[AliyunICanvasView alloc]initWithFrame:CGRectMake(0, 0, self.movieView.frame.size.width,self.movieView.frame.size.height) paint:paint];
         _paintView.delegate = self;
         _paintView.backgroundColor = [UIColor clearColor];
+        if (_editor.getEditorProject.timeline.paintTrack) {
+            _paintView.lines = _editor.getEditorProject.timeline.paintTrack.linesData;
+        }
     }
     return _paintView;
 }
@@ -848,6 +1021,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
              weakSelf.transitionRetention.transitionCovers = [[NSArray alloc] initWithArray:covers copyItems:YES];
              weakSelf.transitionRetention.transitionIcons = [[NSArray alloc] initWithArray:icons copyItems:YES];
          }];
+        [_transitionView reloadSelectedForClips:_editor.getEditorProject.timeline.videoTracks.firstObject.clipList];
         
         _transitionView.didChangeEffectFinish = ^(AliyunTransitionEffect *effect,int idx) {
             [weakSelf.editor updateTransition:effect atIndex:idx];
@@ -872,12 +1046,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     return _coverSelectedView;
 }
 
-- (AlivcPasterManager *)alivcPasterManager {
-    if (!_alivcPasterManager) {
-        _alivcPasterManager = [[AlivcPasterManager alloc] init];
-    }
-    return _alivcPasterManager;
-}
 
 - (AliyunDBHelper *)dbHelper {
     if (!_dbHelper) {
@@ -903,10 +1071,18 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 - (AliyunTabController *)tabController {
     if (!_tabController) {
-        _tabController = [[AliyunTabController alloc] init];
+        _tabController = [[AliyunTabController alloc] initWithSuperView:self.view needInputView:YES];
         _tabController.delegate = (id)self;
     }
     return _tabController;
+}
+
+- (AliyunTabController *)gifTabController {
+    if (!_gifTabController) {
+        _gifTabController = [[AliyunTabController alloc] initWithSuperView:self.view needInputView:NO];
+        _gifTabController.delegate = (id)self;
+    }
+    return _gifTabController;
 }
 
 
@@ -1043,19 +1219,12 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)cancel {
     if (_editSouceClickType == AliyunEditSouceClickTypePaster ||
         _editSouceClickType == AliyunEditSouceClickTypeCaption) {
-        [self.editZoneView.currentPasterView removeFromSuperview];
-        self.editZoneView.currentPasterView = nil;
-        if (_lastPasterController) {
-            //            [self.pasterManager
-            //            deletePasterController:_lastPasterController];
-            [self.pasterManager removePasterController:_lastPasterController];
-        }
-    }
-    if (_editSouceClickType == AliyunEditSouceClickTypeCaption) {
-        AliyunPasterController *parsterControl = [self.pasterManager getCurrentEditPasterController];
         
-        [self removePasterFromTimeline:parsterControl];
+        [self removePasterFromTimeline:self.editZoneView.currentPasterView.pasterController];
+        [self.editor.getStickerManager remove:self.editZoneView.currentPasterView.pasterController];
+        [self resetCurrentPasterView];
     }
+
     
     // 2
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
@@ -1070,18 +1239,36 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     // 2
     if (_editSouceClickType == AliyunEditSouceClickTypePaster ||
         _editSouceClickType == AliyunEditSouceClickTypeCaption) {
+        [self resetCurrentPasterView];
         [self forceFinishLastEditPasterView];
     }
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
+}
+
+static NSString * s_currentTime()
+{
+    NSDateFormatter *dateFormat = [NSDateFormatter new];
+    dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    return [dateFormat stringFromDate:NSDate.date];
+}
+
+- (AliyunDraft *) saveToDraft {
+    if (self.editor.getEditorProject.title.length == 0) {
+        return [self.editor saveToDraft:AliyunDraftConfig.Shared.localManager.originMgr withTitle:s_currentTime()];
+    }
+    return [self.editor saveToDraft:AliyunDraftConfig.Shared.localManager.originMgr];
 }
 
 /**
  返回
  */
 - (void)back {
+    [self saveToDraft];
+    
     [self.player stop];
     _transitionRetention = nil;
     _config.outputSize = _inputOutputSize;
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1113,6 +1300,8 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (self.isExporting){
         return;
     }
+    AliyunDraft *draft = [self saveToDraft];
+    
     [self.player stop];
     [self.editor stopEdit];
     AlivcOutputProductType productType = kAlivcProductType;
@@ -1142,10 +1331,20 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
             
         }else {
             
+            UIImage *coverImage = nil;
+            if (draft.cover.isLocal) {
+                coverImage = [UIImage imageWithContentsOfFile:draft.cover.path];
+            }
+            if (!coverImage) {
+                coverImage = _currentTimelineView.coverImage;
+            }
+            
             [controller  setValue:_taskPath forKey:@"taskPath"];
-            [controller  setValue:_config forKey:@"config"];
+            [controller  setValue:_config.outputPath forKey:@"outputPath"];
             [controller  setValue:[NSValue valueWithCGSize:_config.outputSize] forKey:@"outputSize"];
-            [controller  setValue:_currentTimelineView.coverImage forKey:@"backgroundImage"];
+            [controller  setValue:draft forKey:@"draft"];
+            [controller  setValue:coverImage forKey:@"backgroundImage"];
+            [controller  setValue:coverImage forKey:@"coverImage"];
             [controller  setValue:_finishBlock forKey:@"finishBlock"];
             
             [self.navigationController pushViewController:controller animated:YES];
@@ -1182,16 +1381,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     for (int i = 0; i < paths.count; i++) { // 13
         if (i >= paths.count - 7 && i < paths.count - 2) {
             contrastStr = [NSString stringWithFormat:@"%@/%@", contrastStr, paths[i]];
-        }
-    }
-    NSArray *pasterList = [self.pasterManager getAllPasterControllers];
-    //倒序删除
-    for (int i = (int)pasterList.count - 1; i >= 0; i--) {
-        AliyunPasterController *controller = [pasterList objectAtIndex:i];
-        if ([[controller getIconPath] containsString:contrastStr]) {
-            NSLog(@"删除动图");
-            //            [self deletePasterController:controller isEditing:NO];
-            [self.willRemovePasters addObject:controller];
         }
     }
     AliyunEffectResourceModel *model = noti.userInfo[@"deleteModel"];
@@ -1268,7 +1457,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)applicationWillResignActiveBeforeSDK {
     if (_currentEditPasterType == AliyunPasterEffectTypeCaption)
     {//如果是字幕气泡
-        [self cancelButtonClicked];
+        [self tabControllerCancelButtonClicked];
     }
     
     [self forceFinishLastEditPasterView];
@@ -1290,9 +1479,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         [pasterView.delegate eventPasterViewClosed:pasterView];
         pasterView.editStatus = NO;
         [pasterView removeFromSuperview];
-        [self.pasterManager removePasterController:paster];
     }else if (paster){//动图非编辑态直接删除
-        [self.pasterManager removePasterController:paster];
     }
 }
 
@@ -1463,9 +1650,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     } else {
         [self p_dismissBackgroundButton];
     }
-    if (_currentTextInputView) {
-        [self textInputViewEditCompleted];
-    }
+ 
     
     //播放按钮位置
     CGPoint current = self.playButton.center;
@@ -1508,6 +1693,9 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     switch (type) {
         case AliyunEditSouceClickTypeFilter:
             return self.filterView;
+            break;
+        case AliyunEditSouceClickTypeLutFilter:
+            return self.lutFilterView;
             break;
         case AliyunEditSouceClickTypeMusic:
             return nil;
@@ -1556,6 +1744,12 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)presentAliyunEffectMoreControllerWithAliyunEffectType:(AliyunEffectType)effectType
                                                    completion:(void (^)(AliyunEffectInfo *selectEffect))completion
 {
+    [self removePasterFromTimeline:self.editZoneView.currentPasterView.pasterController];
+    [self tabControllerCancelButtonClicked];
+    [self.tabController dismissPresentTabContainerView];
+
+    
+    
     //    if (!self.mvMoreVC) {
     AliyunEffectMoreViewController *effectMoreVC = [[AliyunEffectMoreViewController alloc]
                                                     initWithEffectType:effectType];
@@ -1623,104 +1817,37 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 }
 
 - (void)destroyInputView {
-    [_currentTextInputView removeFromSuperview];
+//    _currentTextInputView.pasterView = nil;
+    [_currentTextInputView setText:nil];
     _currentTextInputView = nil;
 }
 //使一个动图进入编辑状态
-- (void)makePasterControllerBecomeEditStatus:(AliyunPasterController *)pasterController {
-    self.editZoneView.currentPasterView =(AliyunPasterView *)[pasterController pasterView];
+- (void)makePasterControllerBecomeEditStatus:(AliyunPasterView *)pasterView {
+    self.editZoneView.currentPasterView = pasterView;
     
-    //内部刷新_pasterTextView的属性
-    [self.editZoneView.currentPasterView setTextColor:self.editZoneView.currentPasterView.textColor];
-    [self.editZoneView.currentPasterView setTextFontName:self.editZoneView.currentPasterView.textFontName];
-    
-    [pasterController editWillStart];
+    AliyunRenderBaseController * vc = pasterView.pasterController;
+    self.editZoneView
+    .currentPasterView = pasterView;
     self.editZoneView.currentPasterView.editStatus = YES;
-    [self editPasterItemBy:pasterController]; // TimelineView联动
-    NSString *fontName = self.editZoneView.currentPasterView.textFontName;
-    [[NSUserDefaults standardUserDefaults] setObject:fontName forKey:AlivcEditPlayerPasterFontName];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self editPasterItemBy:vc]; // TimelineView联动
 }
-//使一个动图完成编辑（CopyPasterController专用）
-- (void)addPasterViewToDisplayAndRenderWithCopyPasterController:(AliyunPasterController *)pasterController pasterFontId:(NSInteger)fontId {
-    AliyunPasterView *pasterView = [[AliyunPasterView alloc] initWithPasterController:pasterController];
-    pasterView.delegate = (id)pasterController;
-    pasterView.actionTarget = (id)self;
-    
-    CGAffineTransform t = CGAffineTransformIdentity;
-    t = CGAffineTransformMakeRotation(-pasterController.pasterRotate);
-    pasterView.layer.affineTransform = t;
-    
-    [pasterController setPasterView:pasterView];
-    [self.editZoneView addSubview:pasterView];
-    
-    if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-        [pasterController editCompletedWithImage:[pasterView textImage]];
-        [self animateWithObject:pasterController animation:[pasterController tempActionType]];
-    } else if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
-        [pasterController editCompleted];
-    } else {
-        [pasterController editCompletedWithImage:[pasterView textImage]];
-    }
-}
+
 //使一个动图完成编辑
 - (void)addPasterViewToDisplayAndRender:
-(AliyunPasterController *)pasterController
+(AliyunRenderBaseController *)pasterController
                            pasterFontId:(NSInteger)fontId {
-    AliyunPasterView *pasterView =[[AliyunPasterView alloc] initWithPasterController:pasterController];
+    AliyunPasterView *pasterView =[[AliyunPasterView alloc] initWithRenderBaseController:pasterController];
     
-    if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-        pasterView.textColor = [_currentTextInputView getTextColor];
-        pasterView.textFontName = [_currentTextInputView fontName];
-        pasterController.subtitleFontName = pasterView.textFontName;
-        pasterController.subtitleStroke = pasterView.textColor.isStroke;
-        pasterController.subtitleColor = [pasterView contentColor];
-        pasterController.subtitleStrokeColor = [pasterView strokeColor];
-        pasterController.subtitleBackgroundColor = [UIColor clearColor];
-    }
-    if (pasterController.pasterType == AliyunPasterEffectTypeCaption) {
-        UIColor *textColor = pasterController.subtitleColor;
-        UIColor *textStokeColor = pasterController.subtitleStrokeColor;
-        BOOL stroke = pasterController.subtitleStroke;
-        AliyunColor *color = [[AliyunColor alloc] initWithColor:textColor
-                                                    strokeColor:textStokeColor
-                                                          stoke:stroke];
-        pasterView.textColor = color;
-        AliyunEffectFontInfo *fontInfo = (AliyunEffectFontInfo *)[self.dbHelper
-                                                                  queryEffectInfoWithEffectType:1
-                                                                  effctId:fontId];
-        
-        if (fontInfo == nil) {
-            pasterView.textFontName = AlivcSystemFontName;
-            pasterController.subtitleFontName = AlivcSystemFontName;
-            AliyunResourceFontDownload *download =[[AliyunResourceFontDownload alloc] init];
-            [download downloadFontWithFontId:fontId
-                                    progress:nil
-                                  completion:^(AliyunEffectResourceModel *newModel, NSError *error) {
-                if (!error) {
-                    pasterView.textFontName = newModel.fontName;
-                    pasterController.subtitleFontName = newModel.fontName;
-                }
-            }];
-        } else {
-            pasterView.textFontName = fontInfo.fontName;
-            pasterController.subtitleFontName = fontInfo.fontName;
-        }
-    }
-    pasterView.delegate = (id)pasterController;
+    pasterView.pasterController = pasterController;
     pasterView.actionTarget = (id)self;
     CGAffineTransform t = CGAffineTransformIdentity;
-    t = CGAffineTransformMakeRotation(pasterController.pasterRotate);
+    t = CGAffineTransformMakeRotation(-pasterController.model.rotation);
     pasterView.layer.affineTransform = t;
-    [pasterController setPasterView:pasterView];
     [self.editZoneView addSubview:pasterView];
-    if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-        [pasterController editCompletedWithImage:[pasterView textImage]];
-    } else if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
-        [pasterController editCompleted];
-    } else {
-        [pasterController editCompletedWithImage:[pasterView textImage]];
-    }
+    pasterView.center = pasterController.model.center;
+    
+    [self makePasterControllerBecomeEditStatus:pasterView];
+
 }
 //计算动图效果初始范围
 - (AliyunPasterRange)calculatePasterStartTimeWithDuration:(CGFloat)duration {
@@ -1813,7 +1940,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         self.movieView.frame = editFrame;
         self.editZoneView.frame = self.movieView.bounds;
     } completion:^(BOOL finished) {
-        self.pasterManager.displaySize = editFrame.size;
+//        self.pasterManager.displaySize = editFrame.size;
         //修正由于编辑区域变化引起的精度偏差从而导致动图位置偏移的BUG,如果pasterManager.displaySize一直没变则不需要进行此处理
         //        [self.alivcPasterManager
         //            correctedPasterFrameAtEditStatusWithPasterManager:self.pasterManager
@@ -1882,22 +2009,20 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 //}
 - (CGRect)playStatusFrameMovieView {
     CGFloat factor = _outputSize.height / _outputSize.width;
-    CGFloat y = ScreenWidth / 8 + SafeTop;
-    if ([_config mediaRatio] == AliyunMediaRatio9To16) {
-        if (IS_IPHONEX) {
-            CGFloat width = ScreenHeight / factor;
-            return CGRectMake(-(width - ScreenWidth)*0.5, 0, width ,ScreenHeight);
-        } else {
-            y = 0;
-        }
+    CGSize screenSize = UIScreen.mainScreen.bounds.size;
+    CGFloat screenFactor = screenSize.height / screenSize.width;
+    CGRect frame = CGRectZero;
+    // 等比留白
+    if (factor < screenFactor) {
+        frame.size.width = screenSize.width;
+        frame.size.height = screenSize.width * factor;
+    } else {
+        frame.size.height = screenSize.height;
+        frame.size.width = frame.size.height / factor;
     }
-    //适配不同比例下的播放视图摆放位置
-    if (factor < 1 || factor == 1) {
-        y = self.view.center.y - ScreenWidth * factor / 2;
-    }
-    CGRect targetFrame = CGRectMake(0, y, ScreenWidth, ScreenWidth * factor);
-    self.pasterManager.outputSize = targetFrame.size;
-    return targetFrame;
+    frame.origin.x = (screenSize.width - frame.size.width) * 0.5;
+    frame.origin.y = (screenSize.height - frame.size.height) * 0.5;
+    return frame;
 }
 /**
  让播放视图回归正常的大小
@@ -1920,7 +2045,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
                      } completion:^(BOOL finished) {
                          if (finished) {
                              // vvvv 恢复在非编辑状态时的displaySize
-                             self.pasterManager.displaySize = self.editZoneView.bounds.size;
                              //修正由于编辑区域变化引起的精度偏差从而导致动图位置偏移的BUG,如果pasterManager.displaySize一直没变则不需要进行此处理
                              //          [self.alivcPasterManager
                              //              correctedPasterFrameAtPreviewStatusWithPasterManager:
@@ -1969,8 +2093,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (_processAnimationFilter) { //如果当前有正在添加的动效滤镜 则pause
         //        [self.player replay];
         [self updateUIAndDataWhenPlayStatusChanged];
+        
         _processAnimationFilter.endTime = [self.player getDuration];
-        _processAnimationFilter.streamEndTime = [self.player getStreamDuration];
+        if ([self.editor getTimeFilter] == 3) { //倒放
+            _processAnimationFilter.streamEndTime = 0;
+        } else {
+            _processAnimationFilter.streamEndTime = [self.player getStreamDuration];
+        }
         
         [self.specialFilterView endLongPress];
     } else {
@@ -2031,6 +2160,27 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     //        self.filter = [[AliyunCustomFilter alloc] initWithSize:size];
     //    }
     //    return [self.filter render:srcTexture size:size];
+    
+//    CVPixelBufferRef buffer = [[FURenderer shareRenderer] getPixelBufferFromTexture:srcTexture textureSize:size outputSize:size outputFormat:0];
+////
+    
+    if ([FUGLContext shareGLContext].currentGLContext != [EAGLContext currentContext]) {
+        [[FUGLContext shareGLContext] setCustomGLContext:[EAGLContext currentContext]];
+    }
+    FURenderInput *input = [[FURenderInput alloc] init];
+    // 处理效果对比问题
+    input.renderConfig.imageOrientation = FUImageOrientationDown;
+    FUTexture tex = {srcTexture, CGSizeMake(size.width, size.height)};
+    input.texture = tex;
+    input.pixelBuffer = nil;
+
+    //开启重力感应，内部会自动计算正确方向，设置fuSetDefaultRotationMode，无须外面设置
+    input.renderConfig.gravityEnable = YES;
+    input.renderConfig.textureTransform = CCROT0_FLIPVERTICAL;
+    FURenderOutput *outPut = [[FURenderKit shareRenderKit] renderWithInput:input];
+    if (outPut.texture.ID != 0) {
+        return outPut.texture.ID;
+    }
     return srcTexture;
 }
 
@@ -2118,7 +2268,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 }
 
 #pragma mark - AliyunTimelineView相关 -
-- (void)addAnimationFilterToTimeline:(AliyunEffectFilter *)animationFilter {
+- (void)addAnimationFilter:(AliyunEffectFilter *)animationFilter toTimeline:(AliyunTimelineView *)timeline{
     AliyunTimelineFilterItem *filterItem = [[AliyunTimelineFilterItem alloc] init];
     NSLog(@"边缘特效:%f--%f", animationFilter.streamStartTime, animationFilter.streamEndTime);
     if ([self.editor getTimeFilter] == 3) { //倒放
@@ -2138,7 +2288,11 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     
     filterItem.displayColor = [self generateColor];
     filterItem.obj = animationFilter;
-    [self.currentTimelineView addTimelineFilterItem:filterItem];
+    [timeline addTimelineFilterItem:filterItem];
+}
+
+- (void)addAnimationFilterToTimeline:(AliyunEffectFilter *)animationFilter {
+    [self addAnimationFilter:animationFilter toTimeline:self.currentTimelineView];
 }
 
 - (void)updateAnimationFilterToTimeline:(AliyunEffectFilter *)animationFilter {
@@ -2169,21 +2323,24 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [self.currentTimelineView removeLastFilterItemFromTimeline];
 }
 
-- (void)addPasterToTimeline:(AliyunPasterController *)pasterController {
+- (void)addPasterToTimeline:(AliyunRenderBaseController *)pasterController {
     AliyunTimelineItem *timeline = [[AliyunTimelineItem alloc] init];
-    timeline.startTime = pasterController.pasterStartTime;
-    timeline.endTime = pasterController.pasterEndTime;
+    
+    AliyunRenderModel *model = pasterController.model;
+    
+    timeline.startTime = model.startTime;
+    timeline.endTime = model.startTime + model.duration;
     timeline.obj = pasterController;
-    timeline.minDuration = pasterController.pasterMinDuration;
-    if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
+    timeline.minDuration = 0.2;
+    if ([pasterController isKindOfClass:[AliyunGifStickerController class]]) {
         [self.pasterShowView.timeLineView addTimelineItem:timeline];
     } else {
         [self.captionShowView.timeLineView addTimelineItem:timeline];
     }
 }
 
-- (void)removePasterFromTimeline:(AliyunPasterController *)pasterController {
-    if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
+- (void)removePasterFromTimeline:(AliyunRenderBaseController *)pasterController {
+    if ([pasterController isKindOfClass:[AliyunGifStickerController class]]) {
         AliyunTimelineItem *timeline = [self.pasterShowView.timeLineView getTimelineItemWithOjb:pasterController];
         [self.pasterShowView.timeLineView removeTimelineItem:timeline];
     } else {
@@ -2192,10 +2349,10 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     }
 }
 
-- (void)editPasterItemBy:(AliyunPasterController *)pasterController {
+- (void)editPasterItemBy:(AliyunRenderBaseController *)pasterController {
     AliyunTimelineItem *timeline =
     [self.currentTimelineView getTimelineItemWithOjb:pasterController];
-    if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
+    if ([pasterController isKindOfClass:[AliyunGifStickerController class]]) {
         [self.pasterShowView.timeLineView editTimelineItem:timeline];
     } else {
         [self.captionShowView.timeLineView editTimelineItem:timeline];
@@ -2251,22 +2408,16 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     return color;
 }
 
-#pragma mark - AliyunPasterManagerDelegate -
-//某个动图即将被删除
-- (void)pasterManagerWillDeletePasterController:(AliyunPasterController *)pasterController {
-    [self removePasterFromTimeline:pasterController]; //与timelineView联动
-}
-
 #pragma mark - AliyunTimelineViewDelegate -
 //动图效果开始时间、结束时间调整
 - (void)timelineDraggingTimelineItem:(AliyunTimelineItem *)item {
     NSLog(@"timelineDraggingTimelineItem");
-    [[self.pasterManager getAllPasterControllers] enumerateObjectsUsingBlock:^(AliyunPasterController *pasterController, NSUInteger idx, BOOL *_Nonnull stop) {
+    [[self.editor.getStickerManager getAllController] enumerateObjectsUsingBlock:^(AliyunRenderBaseController *pasterController, NSUInteger idx, BOOL *_Nonnull stop) {
         if ([pasterController isEqual:item.obj]) {
-            pasterController.pasterStartTime = item.startTime;
-            pasterController.pasterEndTime = item.endTime;
-            pasterController.pasterMinDuration = item.endTime - item.startTime;
-            pasterController.pasterDuration = item.endTime - item.startTime;
+            pasterController.model.startTime = item.startTime;
+            pasterController.model.duration = item.endTime - item.startTime;
+//            pasterController.pasterMinDuration = item.endTime - item.startTime;
+//            pasterController.pasterDuration = item.endTime - item.startTime;
             *stop = YES;
         }
     }];
@@ -2308,37 +2459,42 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)oneClick:(id)obj {
     //    [self p_presentBackgroundButton];
     AliyunPasterView *pasterView = (AliyunPasterView *)obj;
-    AliyunPasterController *pasterController =
-    (AliyunPasterController *)pasterView.delegate;
-    [pasterController editDidStart];
-    _currentEditPasterType = pasterController.pasterType;
-    
-    int maxCharacterCount = 0;
-    if (pasterController.pasterType == AliyunPasterEffectTypeCaption) {
-        maxCharacterCount = 20;
-    }else if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle){
-        maxCharacterCount = 180;//跟安卓统一为90个字 180字节
+   AliyunRenderBaseController * pasterController = pasterView.pasterController;
+ 
+    if( [pasterController isKindOfClass:AliyunCaptionStickerController.class]){
+        
+        AliyunCaptionSticker *model = pasterController.model;
+        [self  makePasterControllerBecomeEditStatus:pasterView];
+        [self.tabController.textInputView setText:model.text];
+        _currentTextInputView = self.tabController.textInputView;
+        _currentTextInputView.delegate = self;
+        [self.tabController.textInputView.textView becomeFirstResponder];
+        
+        int lastAnimationType = 0;
+        
+        if (model.getAllActionList.count) {
+            NSArray<AliyunAction *> *actions = model.getAllActionList;
+            lastAnimationType = [actions.lastObject sourceId].intValue;
+        }
+        
+        if (model.getPartActionList.count) {
+            lastAnimationType = [model.getPartActionList.lastObject.action sourceId].intValue;
+        }
+        
+        [self.tabController setFontEffectDefault:lastAnimationType];
+        
+        [self.tabController alivcTabbarViewDidSelectedType:TabBarItemTypeKeboard];
+
     }
-    AliyunPasterTextInputView *inputView = [AliyunPasterTextInputView
-                                            createPasterTextInputViewWithText:[pasterController subtitle]
-                                            textColor:pasterView.textColor
-                                            fontName:pasterView.textFontName
-                                            maxCharacterCount:maxCharacterCount];
-    NSLog(@"~~~~~~>createPasterTextInputViewWithText:%@",pasterView.textFontName);
-    inputView.maxWidth = CGRectGetWidth(self.movieView.bounds);
-    [inputView viewFit];
-    [self.view addSubview:inputView];
-    inputView.delegate = (id)self;
-    inputView.center = CGPointMake(CGRectGetMidX(self.view.bounds),
-                                   CGRectGetMidY(self.view.bounds) - 50);
-    [inputView setTextAnimationType:pasterController.tempActionType];
-    _currentTextInputView = inputView;
 }
 
 //删除动图
 - (void)deleteEndPaster {
-    self.editZoneView.currentPasterView.editStatus = NO;
-    self.editZoneView.currentPasterView = nil;
+    
+    [self removePasterFromTimeline:self.editZoneView.currentPasterView.pasterController];
+
+    [[self.editor getStickerManager] remove:self.editZoneView.currentPasterView.pasterController];
+    [self resetCurrentPasterView];
 }
 
 - (void)clickAnimation {
@@ -2348,15 +2504,14 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
            ];
     CGFloat hieght = 216;
     
-    AliyunPasterController *editPasterController =
-         (AliyunPasterController *)self.editZoneView.currentPasterView.delegate;
-    [self.tabController setFontEffectDefault:editPasterController.tempActionType];
     
-    [self.tabController presentTabContainerViewInSuperView:self.view
+    [self.gifTabController presentTabContainerViewInSuperView:self.view
                                                     height:hieght
                                                   duration:0.2
                                                   tabItems:tabItems];
-  
+    
+    [self.gifTabController alivcTabbarViewDidSelectedType:TabBarItemTypePasterAnimation];
+    
     
     
 }
@@ -2366,85 +2521,51 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (_vcStatus == AlivcEditVCStatus_Normal) {
         return;
     }
-    if (self.editZoneView
-        .currentPasterView) { //如果当前有正在编辑的动图，且点击的位置正好在动图上
+    if (self.editZoneView.currentPasterView) { //如果当前有正在编辑的动图，且点击的位置正好在动图上
         BOOL hitSubview =[self.editZoneView.currentPasterView touchPoint:point
                                                                 fromView:self.editZoneView];
         if (hitSubview == YES) {
             return;
         }
     }
-    AliyunPasterController *pasterController =
-    [self.pasterManager touchPoint:point
+    
+    [self resetCurrentPasterView];
+
+    AliyunRenderBaseController *pasterController =
+    [self.editor.getStickerManager findControllerAtPoint:point
                             atTime:[self.player getCurrentStreamTime]];
     
-    if (pasterController) { //如果当前点击位置上存在一个动图
-        if (_editSouceClickType != AliyunEditSouceClickTypePaster &&
-            _editSouceClickType != AliyunEditSouceClickTypeCaption) {
-            return; //不是动图和字幕不响应点击事件
-        }
-        if (pasterController.pasterType == AliyunPasterEffectTypeNormal &&
-            _editSouceClickType != AliyunEditSouceClickTypePaster) {
-            //当前是字幕的编辑状态，点击到的是动图，不响应点击事件
-            return;
-        } else if ((pasterController.pasterType == AliyunPasterEffectTypeCaption ||
-                    pasterController.pasterType == AliyunPasterEffectTypeSubtitle) &&
-                   _editSouceClickType != AliyunEditSouceClickTypeCaption) {
-            //当前是动图的编辑状态，点击到的是字幕，不响应点击事件
-            return;
-        }
-        [self pause];
-        AliyunPasterView *pasterView =(AliyunPasterView *)[pasterController pasterView];
-        if (pasterView) { //当前点击的位置有动图
-            //逻辑：将上次有编辑的动图完成，让该次选择的动图进入编辑状态
-            [self forceFinishLastEditPasterView];
-            [self makePasterControllerBecomeEditStatus:pasterController];
-        }
-        //动图进入编辑状态，停止缩略图的滑动
-        [self.currentTimelineView stopSlid];
-    } else { //如果当前点击位置上不存在动图
-        self.editZoneView.currentPasterView.editStatus = NO;
-        [self forceFinishLastEditPasterView];
+    if (!pasterController) {
+        return;
     }
+
+    [self pause];
+    
+    
+    [self addPasterViewToDisplayAndRender:pasterController pasterFontId:-1];
+    
+        //动图进入编辑状态，停止缩略图的滑动
+    [self.currentTimelineView stopSlid];
 }
 
 //强制将上次正在编辑的动图进入编辑完成状态 - cm
 - (void)forceFinishLastEditPasterView {
-   
-    if (!self.editZoneView.currentPasterView) {
-        return;
-    }
+
+    [self resetCurrentPasterView];
+
+    [self.currentTimelineView editTimelineComplete];
     
-    [self.tabController dismissPresentTabContainerView];
-    
-    AliyunPasterController *editPasterController =
-    (AliyunPasterController *)self.editZoneView.currentPasterView.delegate;
-    self.editZoneView.currentPasterView.editStatus = NO;
-    if (editPasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-        [editPasterController
-         editCompletedWithImage:[self.editZoneView.currentPasterView textImage]];
-        [self animateWithObject:editPasterController animation:[editPasterController tempActionType]];
-    } else if (editPasterController.pasterType == AliyunPasterEffectTypeNormal) {
-       
-        [editPasterController editCompleted];
-         [self animateWithObject:editPasterController animation:[editPasterController tempActionType]];
-    } else {
-        [editPasterController
-         editCompletedWithImage:[self.editZoneView.currentPasterView textImage]];
-        [self animateWithObject:editPasterController animation:[editPasterController tempActionType]];
-    }
-    [self editPasterItemComplete];
-    self.editZoneView.currentPasterView = nil;
     // 产品要求 动图需要一直放在涂鸦下面，所以每次加新动图，需要重新加一次涂鸦
     if (self.paintImage) {
         [self.editor removePaint:self.paintImage];
-        [self.editor applyPaint:self.paintImage];
+        [self.editor applyPaint:self.paintImage linesData:self.paintView.lines];
     }
 }
 
 - (void)mv:(CGPoint)fp to:(CGPoint)tp {
     if (self.editZoneView.currentPasterView) {
         [self.editZoneView.currentPasterView touchMoveFromPoint:fp to:tp];
+        
     }
 }
 
@@ -2455,64 +2576,184 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 }
 
 #pragma mark - AliyunTabControllerDelegate -
-- (void)completeButtonClicked {
+
+- (void)tabControllerCompleteButtonClicked {
     [self.editZoneView setEditStatus:YES];
-    self.playButton.enabled = YES;
-    if (_currentTextInputView) {
-        [_currentTextInputView shouldHiddenKeyboard];
-        if (_currentEditPasterType == AliyunPasterEffectTypeSubtitle &&
-            [_currentTextInputView getText].length <= 0) { //如果是纯文字模式，并且文字输入为空的情况下直接销毁输入框
-            [self destroyInputView];
-        } else {
-            [self textInputViewEditCompleted];
-        }
+
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+
+    if ([caption isKindOfClass:[AliyunCaptionSticker class]]) {
+        caption.text = self.tabController.textInputView.getText;
+        [self.editZoneView.currentPasterView updateCaptionModel];
+        
+        [self animateWithObject:self.editZoneView.currentPasterView.pasterController animation:self.tabController.selectedActionType];
+        
+    } else if ([caption isKindOfClass:[AliyunGifSticker class]]) {
+        [self animateWithObject:self.editZoneView.currentPasterView.pasterController animation:self.gifTabController.selectedActionType];
     }
-}
-
-- (void)pasterActionCompleteButtonClicked:(TextActionType)actionType {
     
-    AliyunPasterController *editPasterController =
-    (AliyunPasterController *)self.editZoneView.currentPasterView.delegate;
     
-    [editPasterController setTempActionType:actionType];
-    
-}
-
-- (void)cancelButtonClicked {
-    [self.editZoneView setEditStatus:YES];
     self.playButton.enabled = YES;
-    [_currentTextInputView shouldHiddenKeyboard];
     [self destroyInputView];
-    //    if (_currentEditPasterType == AliyunPasterEffectTypeCaption)
-    //    {//如果是字幕气泡
-    AliyunPasterController *editPasterController = [self.pasterManager getCurrentEditPasterController];
-    if(editPasterController) {
-        [self makePasterControllerBecomeEditStatus:editPasterController];
+}
+
+
+- (void)tabControllerCancelButtonClicked {
+    [self.editZoneView setEditStatus:YES];
+    self.playButton.enabled = YES;
+    [self destroyInputView];
+}
+
+- (AliyunEffectFontInfo *) confirmFontInfo:(AliyunEffectFontInfo *)fontInfo {
+    if (!fontInfo || fontInfo.fontName.length == 0) {
+        return nil;
     }
-    //    }
+    
+    UIFont *testFont = [UIFont fontWithName:fontInfo.fontName size:10];
+    if (testFont) {
+        return fontInfo;
+    }
+    
+    NSString *fontPath = fontInfo.resourcePath;
+    if (fontPath.length > 0) {
+        fontPath = [NSHomeDirectory() stringByAppendingPathComponent:fontPath];
+        fontPath = [fontPath stringByAppendingPathComponent:@"font.ttf"];
+    }
+    
+    if (![NSFileManager.defaultManager fileExistsAtPath:fontPath]) {
+        fontPath = [AliyunEffectFontManager.manager findFontPathWithName:fontInfo.fontName];
+    }
+    
+    if (![NSFileManager.defaultManager fileExistsAtPath:fontPath]) {
+        return nil;
+    }
+    
+    NSString *registerFontName = [AliyunEffectFontManager.manager registerFontWithFontPath:fontPath];
+    if (registerFontName.length == 0) {
+        return nil;
+    }
+    
+    testFont = [UIFont fontWithName:registerFontName size:10];
+    if (testFont) {
+        fontInfo.fontName = registerFontName;
+        return fontInfo;
+    }
+    return nil;
 }
 
-- (void)keyboardShouldHidden {
-    [_currentTextInputView shouldHiddenKeyboard];
+- (void)tabControllerCaptionBubbleViewDidSeleted:(NSString *)path fontId:(NSInteger)fontId
+{
+   
+    NSString *configJson = path;
+    
+    if (path.length > 0) {
+        configJson = [NSString stringWithFormat:@"%@/%@/config.json",NSHomeDirectory(),path];
+        //判断资源是否存在 config.json
+        if(![[NSFileManager defaultManager] fileExistsAtPath:configJson]) {
+            return;
+        }
+        
+        configJson = [configJson stringByDeletingLastPathComponent];
+    }
+   
+   // path.length = 0 清除
+    
+    
+    
+    AliyunCaptionStickerController *vc = self.editZoneView.currentPasterView.pasterController;
+    
+    AliyunCaptionSticker *caption = vc.model;
+    caption.resourePath = configJson;
+    
+    AliyunEffectFontInfo *fontInfo = (AliyunEffectFontInfo *)[self.dbHelper queryEffectInfoWithEffectType:1 effctId:fontId];
+    fontInfo = [self confirmFontInfo:fontInfo];
+    
+    if (fontInfo == nil) {
+        __weak typeof(self) weakSelf = self;
+        AliyunResourceFontDownload *download =[[AliyunResourceFontDownload alloc] init];
+        [download downloadFontWithFontId:fontId progress:nil completion:^(AliyunEffectResourceModel *newModel, NSError *error) {
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    caption.fontName = newModel.fontName;
+                    [weakSelf.editZoneView.currentPasterView updateCaptionModel];
+                });
+            }
+        }];
+    } else {
+        caption.fontName = fontInfo.fontName;
+        [self.editZoneView.currentPasterView updateCaptionModel];
+    }
+
+    //    self.editZoneView.currentPasterView.op_width = vc.model.size.width * vc.model.scale;
+    //    self.editZoneView.currentPasterView.op_height = vc.model.size.height * vc.model.scale;
 }
 
-- (void)keyboardShouldAppear {
-    [_currentTextInputView shouldAppearKeyboard];
+
+- (void)tabControllerTextAndStrokeColor:(AliyunColor *)color
+{
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    
+    if(color.isBgColor){
+        caption.backgroundColor = color.sA == 0 ? nil : [UIColor colorWithRed:color.tR/255.0 green:color.tG/255.0 blue:color.tB/255.0 alpha:1];
+        return;
+    }
+    if (color.isStroke) {
+        caption.outlineColor = [UIColor colorWithRed:color.sR/255.0 green:color.sG/255.0 blue:color.sB/255.0 alpha:color.sA];
+    } else {
+        caption.color = [UIColor colorWithRed:color.tR/255.0 green:color.tG/255.0 blue:color.tB/255.0 alpha:1];
+    }
 }
 
-- (void)textColorChanged:(AliyunColor *)color {
-    [_currentTextInputView setFilterTextColor:color];
+- (void)tabControllerStrokeWidth:(CGFloat)width
+{
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    caption.outlineWidth = width;
 }
 
-- (void)textFontChanged:(NSString *)fontName {
-    [_currentTextInputView setFontName:fontName];
+- (void)tabControllerFontName:(NSString *)fontName faceType:(int)faceType
+{
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    caption.fontName = fontName;
+    caption.faceType = faceType;
+    [self.editZoneView.currentPasterView updateCaptionModel];
+
+}
+
+- (void)tabControllerCaptionSeletedTabChanged:(int)seletedTab
+{
+//    if (seletedTab != 0) {
+//        AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+//        caption.text = self.tabController.textInputView.getText;
+//        [self.editZoneView.currentPasterView updateUIFromModel];
+//
+//
+//    }
+}
+
+- (void)tabControllerShadowColor:(UIColor *)color offset:(UIOffset)offset
+{
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    caption.shadowColor = color;
+    caption.shadowOffset = offset;
+}
+
+- (void)tabControllerFlowerDidSeleted:(NSString *)path
+{
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    caption.fontEffectTemplatePath = path;
+}
+
+- (void)captionTextAlignmentSelected:(NSInteger)type{
+    
+    AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+    caption.textAlignment = 1<<type;
+
 }
 
 //字体动画切换
 - (void)textActionType:(TextActionType)actionType {
     if ([self.editor getTimeFilter] != 3 || actionType == TextActionTypeNull ||
         actionType == TextActionTypeClear) { //倒播
-        [_currentTextInputView setTextAnimationType:actionType];
     } else {
         //        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
         //        message:@"倒播时不支持添加字幕动画效果" delegate:nil
@@ -2521,9 +2762,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     }
 }
 
-- (void)textStrokeColorClear {
-    [_currentTextInputView removeStrokeColor];
-}
 
 #pragma mark - AliyunPasterTextInputViewDelegate -
 
@@ -2531,12 +2769,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     NSArray *tabItems;
     if (self.currentEditPasterType == AliyunPasterEffectTypeSubtitle) {
         tabItems = @[
-            @(TabBarItemTypeKeboard), @(TabBarItemTypeColor), @(TabBarItemTypeFont),
-            @(TabBarItemTypeAnimation)
+            @(TabBarItemTypeKeboard), @(TabBarItemTypeStyle), @(TabBarItemTypeBubble),
+           @(TabBarItemTypeFlower), @(TabBarItemTypeAnimation)
         ];
     } else {
         tabItems = @[
-            @(TabBarItemTypeKeboard), @(TabBarItemTypeColor), @(TabBarItemTypeFont),@(TabBarItemTypeAnimation)
+            @(TabBarItemTypeKeboard), @(TabBarItemTypeStyle), @(TabBarItemTypeBubble),
+            @(TabBarItemTypeFlower), @(TabBarItemTypeAnimation)
         ];
     }
     CGFloat hieght = rect.size.height;
@@ -2545,25 +2784,32 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
                                                     height:hieght
                                                   duration:duration
                                                   tabItems:tabItems];
-//    if (self.currentEditPasterType == AliyunPasterEffectTypeSubtitle) {
-        
-        //        NSInteger actionType = [self.alivcPasterManager getAlivcSubtitleAnimateTypeWithPasterController:[self.pasterManager getCurrentEditPasterController]];
-        AliyunPasterController *pasterController =  [self.pasterManager getCurrentEditPasterController];
-        NSInteger actionType = [pasterController tempActionType];
-        NSLog(@"%ld==========%ld",(long)pasterController.actionType,pasterController.tempActionType);
-        actionType = (actionType < 0 ? 0 : actionType);
-        [self.tabController setFontEffectDefault:actionType];
-//    }
-    [self.editZoneView setEditStatus:NO];
+
     self.playButton.enabled = NO;
+    
 }
 
-- (void)editWillFinish:(CGRect)inputviewFrame
-                  text:(NSString *)text
-              fontName:(NSString *)fontName {
-    //    [self backgroundTouchButtonClicked:nil];
-    [self textInputViewEditCompleted];
+- (void)textInputViewTextDidChanged
+{
+    
+    NSString *text = _currentTextInputView.getText;
+    
+    if (text.length <=  0) {
+        text = @"输入文本";
+    }
+ 
+    if (self.editZoneView.currentPasterView) {
+        AliyunCaptionSticker *caption = self.editZoneView.currentPasterView.pasterController.model;
+        caption.text = text;
+        [self.editZoneView.currentPasterView updateCaptionModel];
+    } else {
+        [self addNewCaption:text];
+    }
+
+
+    
 }
+
 
 #pragma mark - 底部视图响应以及各视图代理
 
@@ -2576,14 +2822,18 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     if (!self.hasUesedintelligentFilter) {
         self.hasUesedintelligentFilter = YES;
         if (self.intelligentFilter) {
-            AliyunEffectFilter *filter = [[AliyunEffectFilter alloc]
-                                          initWithFile:[self.intelligentFilter localFilterResourcePath]];
-            [self.editor applyFilter:filter];
+            [[self.editor getFilterManager] applyShadeFilterWithPath:[self.intelligentFilter localFilterResourcePath]];
             [self.filterView updateSelectedFilter:self.intelligentFilter];
             NSString *message = [NSString stringWithFormat:@"%@%@%@",[@"已为你智能推荐" localString],self.intelligentFilter.filterTypeName,[@"滤镜" localString]];
             [MBProgressHUD showMessage:message  inView:self.view];
         }
     }
+}
+
+//滤镜
+- (void)lutFilterButtonClicked:(AliyunEditMaterialType)type {
+    [self enterEditWithActionType:AliyunEditSouceClickTypeLutFilter animationCompletion:nil];
+
 }
 
 //音乐
@@ -2617,13 +2867,20 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     _currentEditPasterType = AliyunPasterEffectTypeCaption;
     [self enterEditWithActionType:AliyunEditSouceClickTypeCaption
               animationCompletion:nil];
-    [self.captionShowView fetchCaptionGroupDataWithCurrentShowGroup:nil];
 }
 
 // mv
 - (void)mvButtonClicked:(AliyunEditMaterialType)type {
     [self enterEditWithActionType:AliyunEditSouceClickTypeMV animationCompletion:nil];
     [self.mvView reloadDataWithEffectType:type];
+    if (!_hasInitMVViewSelected) {
+        _hasInitMVViewSelected = YES;
+        for (AEPEffectMVTrack *mv in _editor.getEditorProject.timeline.effectTracks) {
+            if ([mv isKindOfClass:AEPEffectMVTrack.class]) {
+                self.mvGroup = [_mvView upateSelectedWithResource:mv.source.path];
+            }
+        }
+    }
 }
 
 -(void)soundButtonClicked{
@@ -2693,7 +2950,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     __weak typeof(self) weakSelf = self;
     [self enterEditWithActionType:AliyunEditSouceClickTypePaint animationCompletion:^(BOOL finished) {
         if (finished) {
-            weakSelf.pasterManager.displaySize =     weakSelf.editZoneView.bounds.size;
             if (weakSelf.paintView) {
                 weakSelf.paintView.frame = weakSelf.editZoneView.bounds;
             }
@@ -2721,7 +2977,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 //翻转字幕
 - (void)rollCaptionClicked{
-    NSLog(@"=========11111111");
     [self enterEditWithActionType:AliyunEditSouceClickTypeRollCaption
               animationCompletion:nil];
 }
@@ -2729,17 +2984,27 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 #pragma mark - AliyunEffectFilter2ViewDelegate - 滤镜
 
 - (void)didSelectEffectFilter:(AliyunEffectFilterInfo *)filter {
-    AliyunEffectFilter *filter2 = [[AliyunEffectFilter alloc]
-                                   initWithFile:[filter localFilterResourcePath]];
-    [self.editor applyFilter:filter2];
+    if (filter.localFilterResourcePath) {
+        [[self.editor getFilterManager] applyShadeFilterWithPath:filter.localFilterResourcePath];
+        
+    } else {
+        
+        NSArray *list = [[self.editor getFilterManager] getShaderFilterControllers];
+        [[self.editor getFilterManager] removeFilter:list.firstObject];
+    }
 }
 #pragma mark - AliyunEffectFilterViewDelegate - MV
 - (void)didSelectEffectMV:(AliyunEffectMvGroup *)mvGroup {
     NSString *str = [mvGroup localResoucePathWithVideoRatio:(AliyunEffectMVRatio)[_config mediaRatio]];
     [self pause];
-    [self.editor removeMusics];
-    [self.editor applyMV:[[AliyunEffectMV alloc] initWithFile:str]];
-    
+    if (mvGroup) {
+        [self.editor removeMusics];
+        [self.editor applyMV:[[AliyunEffectMV alloc] initWithFile:str]];
+        [self.player seek:0];
+    } else {
+        [self.editor removeMV];
+    }
+
     self.mvGroup = mvGroup;
     
     if (!mvGroup) {
@@ -3114,8 +3379,15 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [self.playButton setSelected:NO];
 }
 
-#pragma mark - AliyunPasterShowViewDelegate - 贴图、字幕气泡
-//选择一个贴图、字幕气泡
+- (void) resetCurrentPasterView
+{
+    self.editZoneView.currentPasterView.editStatus = NO;
+    [self.editZoneView.currentPasterView removeFromSuperview];
+    self.editZoneView.currentPasterView = nil;
+}
+
+#pragma mark - AliyunPasterShowViewDelegate - 动图贴图
+//选择一个贴图
 - (void)pasterBottomView:(AliyunPasterBottomBaseView *)bottomView didSelectedPasterModel:(AliyunEffectPasterInfo *)pasterInfo {
     if (self.userAction == AliyunEditUserEvent_Effect_Slider) {
         return;
@@ -3126,125 +3398,70 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         return;
     }
     
-    AliyunPasterController *editPasterController =
-    (AliyunPasterController *)self.editZoneView.currentPasterView.delegate;
     [self pause];
     
-    //    动图在编辑状态下另外点击动图执行替换操作，else执行添加操作，业务需求
-    BOOL editStaut = self.editZoneView.currentPasterView.editStatus;
-    if (editStaut && editPasterController) {
-        [self deletePasterController:editPasterController isEditing:YES];
-    } else {
-        [self forceFinishLastEditPasterView];
-    }
+ //动图在编辑状态下另外点击动图执行替换操作，else执行添加操作，业务需求
+    
+    configJson = [configJson stringByDeletingLastPathComponent];
     AliyunPasterRange range = [self calculatePasterStartTimeWithDuration:[pasterInfo defaultDuration]];
-    AliyunPasterController *pasterController = [self.pasterManager addPaster:pasterInfo.resourcePath startTime:range.startTime
-                                                                    duration:range.duration];
-    pasterController.pasterMinDuration = range.duration;
-    pasterController.pasterDuration = range.duration;
-    self.currentEditPasterType = pasterController.pasterType;
-    [self addPasterViewToDisplayAndRender:pasterController
+
+    
+    BOOL editStaut = self.editZoneView.currentPasterView.editStatus;
+    
+    
+    if (editStaut) {
+        
+        
+        [self removePasterFromTimeline:self.editZoneView.currentPasterView.pasterController];
+
+        [[self.editor getStickerManager] remove:self.editZoneView.currentPasterView.pasterController];
+
+        [self resetCurrentPasterView];
+    }
+        
+    AliyunGifStickerController *gifVC = [[self.editor getStickerManager] addGif:configJson startTime:range.startTime duration:range.duration];
+    AliyunGifSticker *model = gifVC.model;
+//    CGSize size = model.originSize;
+//    CGFloat scale = [UIScreen mainScreen].scale;
+//    model.size = CGSizeMake(size.width/scale, size.height/scale);
+//    model.size = model.originSize;
+
+    
+        
+    [self addPasterViewToDisplayAndRender:gifVC
                              pasterFontId:[pasterInfo.fontId integerValue]];
-    [self addPasterToTimeline:pasterController];
-    [self makePasterControllerBecomeEditStatus:pasterController];
-    [self.currentPasterControllers addObject:pasterController];
-    _lastPasterController = pasterController;
+    
+    [self addPasterToTimeline:gifVC];
+    
+    
 }
 //贴图、字幕气泡取消
 - (void)pasterBottomViewCancel:(AliyunPasterBottomBaseView *)bottomView {
-    AliyunPasterController *editPasterController =
-    (AliyunPasterController *)self.editZoneView.currentPasterView.delegate;
-    //如果当前有正在编辑的动图则强制完成编辑
-    if (editPasterController) {
-        [self forceFinishLastEditPasterView];
-    }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSArray *pasterArr = [self.pasterManager getAllPasterControllers];
-        //倒序遍历删除本次操作类型的动图或者字幕，然后根据记录重新添加上次确认添加的动图或者字幕,由于目前SDK不支持撤销功能，所以暂时只能通过这种方式来实现本次操作的撤销功能
-        __weak typeof(self) weakSelf = self;
-        [pasterArr enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
-            AliyunPasterController *pasterVC = (AliyunPasterController *)obj;
-            
-            if ((pasterVC.pasterType == AliyunPasterEffectTypeNormal && weakSelf.currentEditPasterType == AliyunPasterTypeNormal)
-                || (pasterVC.pasterType != AliyunPasterEffectTypeNormal && weakSelf.currentEditPasterType != AliyunPasterTypeNormal)) {
-                [weakSelf.pasterManager removePasterController:pasterVC];
-            }
-        }];
-        [self batchAddPasterWithPasterControllers:self.pasterInfoCopyArr]; //批量添加
-        
-        //恢复动画
-        for (AliyunPasterController *pasterController in [self.pasterManager getAllPasterControllers]) {
-//            if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-                [pasterController setActionType:pasterController.tempActionType];
-                NSLog(@"%ld==========%ld",(long)pasterController.actionType,pasterController.tempActionType);
-                [self animateWithObject:pasterController animation:pasterController.actionType];
-//            }
-        }
-        [weakSelf.currentPasterControllers removeAllObjects];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
-        });
-    });
+    //移除pasterview
+    [self cancel];
     
-}
-//批量添加贴图、字幕气泡
-- (void)batchAddPasterWithPasterControllers:(NSMutableArray<AliyunPasterControllerCopy *> *)pasterInfo {
-    for (AliyunPasterControllerCopy *pasterCopy in pasterInfo) { //只添加本次操作的类型
-        if ((pasterCopy.pasterType == AliyunPasterEffectTypeNormal && _currentEditPasterType == AliyunPasterTypeNormal) ||
-            (pasterCopy.pasterType != AliyunPasterEffectTypeNormal && _currentEditPasterType != AliyunPasterTypeNormal)) {
-            double dutation = pasterCopy.pasterEndTime - pasterCopy.pasterStartTime;
-            //检验即将添加的本地动图资源是否存在
-            if (![self.alivcPasterManager checkResourceIsExistence:pasterCopy.resoucePath]) {
-                //如果动图资源不存在，则不添加并且移除动图信息，跳出本次循环
-                [pasterInfo removeObject:pasterCopy];
-                break;
-            }
-            AliyunPasterController *pasterController = [self.pasterManager addPaster:pasterCopy.resoucePath startTime:pasterCopy.pasterStartTime duration:dutation];
-            [pasterCopy setPropertysInPasterController:pasterController];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self addPasterViewToDisplayAndRenderWithCopyPasterController:pasterController pasterFontId:-2];
-                [self addPasterToTimeline:pasterController];
-                [self editPasterItemComplete];
-                self.editZoneView.currentPasterView = nil;
-            });
-            
-        }
-    }
-    // 产品要求 动图需要一直放在涂鸦下面，所以每次加新动图，需要重新加一次涂鸦
-    if (self.paintImage) {
-        [self.editor removePaint:self.paintImage];
-        [self.editor applyPaint:self.paintImage];
-    }
-}
-//贴图、字幕气泡确认
-- (void)pasterBottomViewApply:(AliyunPasterBottomBaseView *)bottomView {
-    [self forceFinishLastEditPasterView];
-    //设置动画
-    for (AliyunPasterController *pasterController in [self.pasterManager getAllPasterControllers]) {
-        if (pasterController.pasterType == AliyunPasterEffectTypeSubtitle) {
-            NSLog(@"%ld==========%ld",(long)pasterController.actionType,pasterController.tempActionType);
-            [pasterController setActionType:pasterController.tempActionType];
-            NSLog(@"%ld==========%ld",(long)pasterController.actionType,pasterController.tempActionType);
-        }
-    }
+    //倒序遍历删除本次操作类型的动图或者字幕，然后根据记录重新添加上次确认添加的动图或者字幕,由于目前SDK不支持撤销功能，所以暂时只能通过这种方式来实现本次操作的撤销功能
+//    __weak typeof(self) weakSelf = self;
+//    [self.curRenderList enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+//        AliyunRenderBaseController *pasterVC = (AliyunRenderBaseController *)obj;
+//
+//        [[weakSelf.editor getStickerManager] remove:pasterVC];
+//        [weakSelf removePasterFromTimeline:pasterVC];
+//    }];
+    
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
-    //点击确认时保存本次添加的动图或者字幕气泡，用来实现下次进入编辑状态点击取消进行撤销逻辑
-    [self copyPasterControllers:[self.pasterManager getAllPasterControllers]];
-    [self.currentPasterControllers removeAllObjects];
+    
+}
+
+//贴图确认
+- (void)pasterBottomViewApply:(AliyunPasterBottomBaseView *)bottomView {
+ 
+    [self apply];
+    [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
     _lastPasterController = nil;
 }
-//深copy本次确认添加的动图
-- (void)copyPasterControllers:(NSArray *)pasterControllers {
-    [self.pasterInfoCopyArr removeAllObjects];
-    for (AliyunPasterController *control in pasterControllers) {
-        AliyunPasterControllerCopy *controlCopy =[[[AliyunPasterControllerCopy alloc] init] copyPropertysForPasterController:control];
-        [self.pasterInfoCopyArr addObject:controlCopy];
-        NSLog(@"%ld-----%ld",(long)controlCopy.actionType,(long)controlCopy.tempActionType);
-    }
-}
+
 //更多
 - (void)pasterBottomViewMore:(AliyunPasterBottomBaseView *)bottomView {
     [self forceFinishLastEditPasterView];
@@ -3255,195 +3472,523 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         }];
     } else if (bottomView == self.captionShowView) { //字幕贴图
         [self presentAliyunEffectMoreControllerWithAliyunEffectType: AliyunEffectTypeCaption completion:^(AliyunEffectInfo *selectEffect) {
-            [weakSelf.captionShowView fetchCaptionGroupDataWithCurrentShowGroup:(AliyunEffectCaptionGroup *) selectEffect];
+     
         }];
     }
 }
 
+
 #pragma mark - AliyunEffectCaptionShowViewDelegate - 字幕
 //添加一个纯字幕
-- (void)onClickFontWithFontInfo:(AliyunEffectFontInfo *)font {
+- (void)captionShowViewonClickAddNew {
     if (self.userAction == AliyunEditUserEvent_Effect_Slider) {
         return;
-    }
+    }    
     [self pause];
     [self.playButton setSelected:YES];
+    
     self.currentEditPasterType = AliyunPasterEffectTypeSubtitle;
-    [self forceFinishLastEditPasterView];
-    AliyunPasterTextInputView *textInputView =
-    [AliyunPasterTextInputView createPasterTextInputView];
-    textInputView.maxWidth = CGRectGetWidth(self.movieView.bounds);
-    textInputView.fontName = font.fontName;
-    [self.movieView addSubview:textInputView];
-    textInputView.center = CGPointMake(CGRectGetMidX(self.movieView.bounds),
-                                       CGRectGetMidY(self.movieView.bounds) - 50);
-    textInputView.delegate = (id)self;
-    textInputView.maxCharacterCount = 180;
-    _currentTextInputView = textInputView;
-    [[NSUserDefaults standardUserDefaults] setObject:font.fontName forKey:AlivcEditPlayerPasterFontName];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+    [self.tabController.textInputView setText:@"输入文本"];
+    self.tabController.textInputView.delegate = self;
+    [self.tabController.textInputView.textView becomeFirstResponder];
+    _currentTextInputView = self.tabController.textInputView;
+    [self addNewCaption:_currentTextInputView.getText];
+
 }
 
-- (void)onClickRemoveCaption {
-    // 移除纯文字动图和字幕动图
-    [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
-    [self.pasterManager removeAllSubtitlePasterControllers];
-    [self.pasterManager removeAllCaptionPasterControllers];
-    _lastPasterController = nil;
-}
+- (void)animateWithObject:(AliyunRenderBaseController *)pasterController
+                animation:(TextActionType)type
+{
+    
+    AliyunRenderModel *model = pasterController.model;
+    id<AliyunFrameAnimationProtocol> vc = pasterController;
+    
+    //1.移除普通动画
+    if ([model isKindOfClass:[AliyunSticker class]]) {
+        AliyunSticker *sticker = model;
+        NSArray *tempList = [sticker getAllActionList];
+        for (AliyunAction *action in tempList) {
+            [vc removeFrameAnimation:action];
+        }
+    }
+    
+    //2.移除逐字动画
+    if ([model isKindOfClass:[AliyunCaptionSticker class]]) {
+        
+        [[(AliyunCaptionSticker *)model getPartActionList] enumerateObjectsUsingBlock:^(AliyunPartAction * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id<AliyunPartFrameAnimationProtocol> animaVC = vc;
+            [animaVC removePartFrameAnimation:obj];
+        }];
+    }
+    
 
-//添加字幕动画
-- (void)animateWithObject:(AliyunPasterController *)pasterController
-                animation:(TextActionType)type {
-    AliyunEffectPaster *effectPaster = [pasterController getEffectPaster];
-    [effectPaster stopAllActions];
-    // AliyunEffectPaster
-//    if (pasterController.pasterType == AliyunPasterEffectTypeNormal) {
-//        pasterControlle
-//        return; //动图不添加动画
-//    }
-    _textActionType = type;
-    [pasterController setTempActionType:type];
-    NSLog(@"%ld==========%ld",(long)pasterController.actionType,pasterController.tempActionType);
-
+    NSString *sourceId = [NSString stringWithFormat:@"%ld",type];
+    
     switch (type) {
         case TextActionTypeClear: {
-            [effectPaster stopAllActions];
-            _textActionType = TextActionTypeNull;
         } break;
         case TextActionTypeMoveLeft: {
             AliyunMoveAction *moveAction = [[AliyunMoveAction alloc] init];
-            moveAction.startTime = [pasterController pasterStartTime];
+            moveAction.startTime = [model startTime];
             moveAction.duration = 1;
             moveAction.fromePoint = CGPointMake(CGRectGetWidth(self.movieView.frame),
-                                                pasterController.pasterPosition.y);
-            moveAction.toPoint = pasterController.pasterPosition;
-            //            [effectPaster runAction:moveAction];
-            [self.editor add:effectPaster withFrameAnimation:moveAction];
+                                                model.center.y);
+            moveAction.toPoint = model.center;
+            moveAction.sourceId = sourceId;
+            [vc addFrameAnimation:moveAction];
         } break;
         case TextActionTypeMoveRight: {
             AliyunMoveAction *moveAction = [[AliyunMoveAction alloc] init];
-            moveAction.startTime = [pasterController pasterStartTime];
+            moveAction.startTime = [model startTime];
             moveAction.duration = 1;
-            moveAction.fromePoint = CGPointMake(CGRectGetWidth(pasterController.pasterFrame) * -1,
-                                                pasterController.pasterPosition.y);
-            moveAction.toPoint = pasterController.pasterPosition;
-            //            [effectPaster runAction:moveAction];
-            [self.editor add:effectPaster withFrameAnimation:moveAction];
+            moveAction.fromePoint = CGPointMake(model.size.width * -1,
+                                                model.center.y);
+            moveAction.toPoint = model.center;
+            moveAction.sourceId = sourceId;
+            [vc addFrameAnimation:moveAction];
         } break;
         case TextActionTypeMoveTop: {
             AliyunMoveAction *moveAction = [[AliyunMoveAction alloc] init];
-            moveAction.startTime = [pasterController pasterStartTime];
+            moveAction.startTime = [model startTime];
             moveAction.duration = 1;
-            moveAction.fromePoint = CGPointMake(pasterController.pasterPosition.x,
+            moveAction.fromePoint = CGPointMake(model.center.x,
                                                 CGRectGetHeight(self.editZoneView.frame));
-            moveAction.toPoint = pasterController.pasterPosition;
-            //            [effectPaster runAction:moveAction];
-            
-            [self.editor add:effectPaster withFrameAnimation:moveAction];
+            moveAction.toPoint = model.center;
+            moveAction.sourceId = sourceId;
+
+            [vc addFrameAnimation:moveAction];
         } break;
         case TextActionTypeMoveDown: {
             AliyunMoveAction *moveAction = [[AliyunMoveAction alloc] init];
-            moveAction.startTime = [pasterController pasterStartTime];
+            moveAction.startTime = [model startTime];
             moveAction.duration = 1;
-            moveAction.fromePoint = CGPointMake(pasterController.pasterPosition.x,
-                                                CGRectGetHeight(pasterController.pasterFrame) * -1);
-            moveAction.toPoint = pasterController.pasterPosition;
-            //            [effectPaster runAction:moveAction];
-            [self.editor add:effectPaster withFrameAnimation:moveAction];
+            moveAction.fromePoint = CGPointMake(model.center.x,
+                                                model.size.height * -1);
+            moveAction.toPoint = model.center;
+            moveAction.sourceId = sourceId;
+            [vc addFrameAnimation:moveAction];
         } break;
         case TextActionTypeLinerWipe: {
-            AliyunCustomAction *customAction = [[AliyunCustomAction alloc] init];
-            customAction.startTime = [pasterController pasterStartTime];
-            customAction.duration = 1;
-            customAction.fragmentShader = kLinearSwipFragmentShader;
-            customAction.customUniformsMapper = @{
-                @"direction" : @[ @0 ],
-                @"wipeMode" : @[ @0 ],
-                @"offset" : @[ @1.0, @0.0 ],
-            };
-            //            [effectPaster runAction:customAction];
-            [self.editor add:effectPaster withFrameAnimation:customAction];
+            AliyunWipeAction *wipe = [[AliyunWipeAction alloc] init];
+            wipe.startTime = [model startTime];
+            wipe.duration = 1;
+            wipe.direction = AliWipeActionDirection_LeftToRight;
+            wipe.wipeMode = AliWipeActionMode_Appear;
+            wipe.sourceId = sourceId;
+
+            [vc addFrameAnimation:wipe];
         } break;
         case TextActionTypeFade: {
             AliyunAlphaAction *alphaAction_in = [[AliyunAlphaAction alloc] init]; //淡入
-            alphaAction_in.startTime = [pasterController pasterStartTime];
+            alphaAction_in.startTime = [model startTime];
             alphaAction_in.duration = 0.5;
             alphaAction_in.fromAlpha = 0.2f;
             alphaAction_in.toAlpha = 1.0f;
             
             AliyunAlphaAction *alphaAction_out = [[AliyunAlphaAction alloc] init]; //淡出
-            alphaAction_out.startTime = [pasterController pasterStartTime]+1;
+            alphaAction_out.startTime = model.startTime +1;
             alphaAction_out.duration = 0.5;
             alphaAction_out.fromAlpha = 1.0f;
             alphaAction_out.toAlpha = 0.2f;
             //            [effectPaster runAction:alphaAction_in];
             //            [effectPaster runAction:alphaAction_out];
-            [self.editor add:effectPaster withFrameAnimation:alphaAction_in];
-            [self.editor add:effectPaster withFrameAnimation:alphaAction_out];
+            
+            alphaAction_in.sourceId = sourceId;
+            alphaAction_out.sourceId = sourceId;
+            [vc addFrameAnimation:alphaAction_in];
+            [vc addFrameAnimation:alphaAction_out];
+
+
             
         } break;
         case TextActionTypeScale: {
             AliyunScaleAction *scaleAction = [[AliyunScaleAction alloc] init];
-            scaleAction.startTime = [pasterController pasterStartTime];
+            scaleAction.startTime =model.startTime;
             scaleAction.duration = 1;
             scaleAction.fromScale = 1.0;
             scaleAction.toScale = 0.25;
-            //            [effectPaster runAction:scaleAction];
-            [self.editor add:effectPaster withFrameAnimation:scaleAction];
+            scaleAction.sourceId = sourceId;
+            [vc addFrameAnimation:scaleAction];
         } break;
+            
+        case TextActionTypePrinter:
+        {
+            float startTime = model.startTime;
+            float duration = 2;
+            AliyunAlphaAction *action = [[AliyunAlphaAction alloc] init];
+            action.startTime = startTime;
+            action.duration = duration;
+            action.fillBefore = YES;
+            action.animationConfig = @"0:0;0.7:1;";
+            action.sourceId = sourceId;
+
+            AliyunPartAction *partAimation = [[AliyunPartAction alloc] initWithAction:action];
+            if ([vc conformsToProtocol:@protocol(AliyunPartFrameAnimationProtocol)]) {
+                id<AliyunPartFrameAnimationProtocol> animaVC = vc;
+                [animaVC addPartFrameAnimation:partAimation];
+            }
+
+        }
+            break;
+        case TextActionTypeClock:
+        {
+            
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunSetAction *action = [[AliyunSetAction alloc]init];
+            action.subSetMode = AliyunSetActionPlayModeIndependent;
+        
+          //首选向左转 30度
+          AliyunRotateByAction *action1 = [[AliyunRotateByAction alloc] init];
+          action1.fromDegree = 0;
+          action1.rotateDegree = -M_PI/6.0;
+         action1.normalizedCenter = CGPointMake(0, 1);
+            
+          action1.startTime = startTime;
+         action1.duration = duration/6;
+            
+            AliyunRotateByAction *action2 = [[AliyunRotateByAction alloc] init];
+            action2.fromDegree = -M_PI/6.0;
+            action2.rotateDegree = M_PI/3.0;
+            action2.normalizedCenter = CGPointMake(0, 1);
+            action2.repeatMode = 2;
+            
+            action2.startTime = startTime + action1.duration;
+            action2.duration = duration * 2 / 6.0;
+
+  
+            action.sourceId = sourceId;
+            action.subList = @[action1, action2];
+            [vc addFrameAnimation:action];
+
+        }
+            break;
+        case TextActionTypeBrush:
+        {
+            
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunSetAction *action = [AliyunSetAction new];
+            action.subSetMode = AliyunSetActionPlayModeIndependent;
+
+            //雨刷使用RotateTo的实现
+            AliyunRotateToAction *lActionRotateTo1 = [AliyunRotateToAction new];
+            //首选向右转 30度
+            lActionRotateTo1.fromDegree = 0;
+            lActionRotateTo1.toDegree = M_PI/6.0;
+            lActionRotateTo1.normalizedCenter = CGPointMake(0, -1);
+            lActionRotateTo1.startTime = startTime;
+            lActionRotateTo1.duration = duration/6.0;
+            //再向左转60，并来回转动
+            AliyunRotateToAction * lActionRotateTo2 = [AliyunRotateToAction new];
+            lActionRotateTo2.fromDegree = M_PI/6.0;
+            lActionRotateTo2.toDegree = -M_PI/6.0;
+            lActionRotateTo2.normalizedCenter = CGPointMake(0, -1);
+
+            lActionRotateTo2.repeatMode = AliyunActionRepeatModeReverse;
+            lActionRotateTo2.startTime = startTime + lActionRotateTo1.duration  ;
+            lActionRotateTo2.duration = duration/3;
+
+            action.sourceId = sourceId;
+            action.subList = @[lActionRotateTo1,lActionRotateTo2];
+            [vc addFrameAnimation:action];
+
+
+        }
+            break;
+        case TextActionTypeSet_1:
+        {
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunSetAction *action = [AliyunSetAction new];
+            action.subSetMode = AliyunSetActionPlayModeTogether;
+      
+            AliyunAlphaAction *lActionFade1 = [AliyunAlphaAction new];
+            lActionFade1.fromAlpha  = 0.1;
+            lActionFade1.toAlpha  = 1;
+            lActionFade1.startTime = startTime;
+            lActionFade1.duration = duration;
+            lActionFade1.fillBefore = YES;
+            
+            AliyunAlphaAction *lActionFade2 = [AliyunAlphaAction new];
+            lActionFade2.fromAlpha  = 1;
+            lActionFade2.toAlpha  =0.1;
+            lActionFade2.startOffset = duration/4.0 * 3;
+
+            lActionFade2.duration = duration/4.0;
+
+     
+
+            AliyunRotateByAction *lActionRotateBy1 = [AliyunRotateByAction new];
+            lActionRotateBy1.fromDegree = 0;
+            lActionRotateBy1.rotateDegree = M_PI * 2.0;
+            lActionRotateBy1.duration = duration/2.0;
+            lActionRotateBy1.fillBefore = YES;
+            lActionRotateBy1.fillAfter = YES;
+
+            AliyunScaleAction *lActionScale1 = [AliyunScaleAction new];
+            lActionScale1.fromScale = 0.25;
+            lActionScale1.toScale = 1.0;
+            lActionScale1.duration = duration/2.0;
+            lActionScale1.fillBefore = YES;
+            lActionScale1.fillAfter = YES;
+            action.sourceId = sourceId;
+            action.subList = @[lActionFade1,lActionFade2,lActionRotateBy1,lActionScale1];
+            action.startTime = startTime;
+            action.duration = duration;
+            [vc addFrameAnimation:action];
+        }
+            break;
+        case TextActionTypeSet_2:
+        {
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunSetAction *action = [AliyunSetAction new];
+            action.subSetMode = 1;
+
+            AliyunAlphaAction *lActionFade1 = [AliyunAlphaAction new];
+            lActionFade1.fromAlpha  = 1;
+            lActionFade1.toAlpha  =1;
+            lActionFade1.startTime = 0.f;
+            lActionFade1.duration = duration/3.0;
+            lActionFade1.fillAfter = YES;
+            
+
+            
+            
+            AliyunRotateByAction *lActionRotateBy1 = [AliyunRotateByAction new];
+            lActionRotateBy1.fromDegree = 0;
+            lActionRotateBy1.rotateDegree = M_PI * 2.0;
+            lActionRotateBy1.duration = duration/2.0;
+            lActionRotateBy1.fillAfter = YES;
+
+
+            AliyunScaleAction *lActionScale1 = [AliyunScaleAction new];
+            lActionScale1.fromScale = 0.f;
+            lActionScale1.toScale = 1.0;
+            lActionScale1.startTime = 0.f;
+            lActionScale1.duration = duration/2.0;
+            lActionScale1.fillAfter = YES;
+
+            action.subList = @[lActionFade1,lActionRotateBy1,lActionScale1];
+            action.startTime = startTime;
+            action.duration = duration;
+            action.sourceId = sourceId;
+            [vc addFrameAnimation:action];
+
+        }
+            break;
+        case TextActionTypeWave:
+        {
+        
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunCustomAction *custom = [AliyunCustomAction new];
+            
+            
+            NSString *dirPath =  [[NSBundle mainBundle] pathForResource:@"AnimationFrag.bundle" ofType:nil];
+            
+            NSString *vertexPath = [dirPath stringByAppendingPathComponent:@"wave.vert"];
+            
+            NSString *vertexFunc = [NSString stringWithContentsOfFile:vertexPath encoding:kCFStringEncodingUTF8 error:nil];
+            
+            
+            NSString *fragmentPath =  [dirPath stringByAppendingPathComponent:@"wave.frag"];
+            NSString *fragmentFunc = [NSString stringWithContentsOfFile:fragmentPath encoding:kCFStringEncodingUTF8 error:nil];
+            
+            
+            custom.vertexShader = vertexFunc;
+            custom.fragmentShader = fragmentFunc;
+            custom.startTime = startTime;
+            custom.duration = duration;
+            custom.sourceId = sourceId;
+            [vc addFrameAnimation:custom];
+
+        }
+            break;
+        case TextActionTypeScrewUp:
+        {
+            float startTime = model.startTime;
+            float duration = 3;
+            
+            AliyunSetAction *action = [AliyunSetAction new];
+            action.subSetMode = 0;
+            
+            AliyunActionPartParam *lPartParam = [AliyunActionPartParam new];
+            lPartParam.partMode = 0;
+            lPartParam.partOverlayRadio = 0.7;
+            
+            AliyunPartAction *partAimation = [[AliyunPartAction alloc] initWithAction:action];
+            partAimation.partParam = lPartParam;
+            
+            AliyunAlphaAction *lActionFade1 = [AliyunAlphaAction new];
+            lActionFade1.fromAlpha  = 0.1;
+            lActionFade1.toAlpha  = 1;
+            lActionFade1.duration = duration/4.0;
+            lActionFade1.fillBefore = YES;
+            lActionFade1.fillAfter = YES;
+
+
+            AliyunRotateByAction *lActionRotateBy1 = [AliyunRotateByAction new];
+            lActionRotateBy1.fromDegree = 0;
+            lActionRotateBy1.rotateDegree = M_PI * 2.0;
+            lActionRotateBy1.duration = duration/2.0;
+            lActionRotateBy1.fillBefore = YES;
+            lActionRotateBy1.fillAfter = YES;
+            lActionRotateBy1.repeatMode = AliyunActionRepeatModeNormal;
+
+
+            AliyunMoveAction *lActionTranslate = [[AliyunMoveAction alloc]init];
+            lActionTranslate.translateType = 1;
+            lActionTranslate.startTime = 0;
+            lActionTranslate.duration = duration;
+            lActionTranslate.fromePoint = CGPointMake(model.center.x, model.center.y + 300);
+            lActionTranslate.toPoint = CGPointMake(model.center.x, model.center.y);
+            lActionTranslate.fillBefore = YES;
+
+
+            action.fillBefore = YES;
+            action.duration = duration * 3 / 4.0;
+            action.startTime = startTime;
+            action.subList = @[lActionFade1,lActionRotateBy1,lActionTranslate];
+            
+            action.sourceId = sourceId;
+            if ([vc conformsToProtocol:@protocol(AliyunPartFrameAnimationProtocol)]) {
+                id<AliyunPartFrameAnimationProtocol> animaVC = vc;
+                [animaVC addPartFrameAnimation:partAimation];
+            }
+
+        }
+            break;
+        case TextActionTypeHeart:
+        {
+            AliyunScaleAction *lActionScale1 = [AliyunScaleAction new];
+
+            lActionScale1.animationConfig =
+            
+           @"0:1.0,1.0;0.06:0.92,0.92;0.12:1.0252,1.0252;0.18:1.1775,1.1775;0.24:1.3116,1.3116;0.3:1.4128,1.4128;0.36:1.4761,1.4761;0.42:1.5,1.5;0.48:1.5,1.5;0.54:1.4727,1.4727;0.6:1.4089,1.4089;0.66:1.3093,1.3093;0.72:1.1779,1.1779;0.78:1.0283,1.0283;0.9:0.92,0.92;1.0:1.0,1.0;";
+
+
+            
+            lActionScale1.startTime = model.startTime;
+            lActionScale1.duration = 2;
+            lActionScale1.repeatMode = AliyunActionRepeatModeNormal;
+            lActionScale1.sourceId = sourceId;
+            [vc addFrameAnimation:lActionScale1];
+        }
+            break;
+        case TextActionTypeCircularScan:
+        {
+            float startTime = model.startTime;
+            float duration = 4;
+            
+            AliyunCustomAction *custom = [AliyunCustomAction new];
+            
+            NSString *dirPath =  [[NSBundle mainBundle] pathForResource:@"AnimationFrag.bundle" ofType:nil];
+            
+            NSString *vertexPath = [dirPath stringByAppendingPathComponent:@"round_scan.vert"];
+            
+
+            NSString *vertexFunc = [NSString stringWithContentsOfFile:vertexPath encoding:kCFStringEncodingUTF8 error:nil];
+            
+            
+            NSString *fragmentPath = [dirPath stringByAppendingPathComponent:@"round_scan.frag"];
+            NSString *fragmentFunc = [NSString stringWithContentsOfFile:fragmentPath encoding:kCFStringEncodingUTF8 error:nil];
+            
+            
+            custom.vertexShader = vertexFunc;
+            custom.fragmentShader = fragmentFunc;
+            custom.startTime = startTime;
+            custom.duration = duration;
+            custom.sourceId = sourceId;
+
+            [vc addFrameAnimation:custom];
+
+        }
+            break;
+        case TextActionTypeWaveIn:
+        {
+            float startTime = model.startTime;
+            float duration = model.duration;
+            
+            AliyunSetAction *action = [AliyunSetAction new];
+            action.subSetMode = 0;
+            
+            
+            AliyunActionPartParam *lPartParam = [AliyunActionPartParam new];
+            lPartParam.partMode = AliyunActionPartParamModeSequence;
+            lPartParam.partOverlayRadio = 0.6;
+            
+            AliyunPartAction *partAimation = [[AliyunPartAction alloc] initWithAction:action];
+            partAimation.partParam = lPartParam;
+
+            
+            AliyunMoveAction *lActionTranslate = [[AliyunMoveAction alloc]init];
+            lActionTranslate.translateType = 1;
+            lActionTranslate.startTime = 0;
+            lActionTranslate.duration = duration/2;
+            lActionTranslate.fromePoint = CGPointMake(model.center.x, model.center.y);
+            lActionTranslate.toPoint = CGPointMake(model.center.x, model.center.y + 300);
+            lActionTranslate.fillBefore = YES;
+            
+
+            AliyunMoveAction *lActionTranslate2 = [[AliyunMoveAction alloc]init];
+            lActionTranslate2.translateType = 1;
+            lActionTranslate2.startOffset = duration / 2.0f;
+            lActionTranslate2.duration = duration/2;
+            lActionTranslate2.fromePoint = CGPointMake(model.center.x, model.center.y + 300);
+            lActionTranslate2.toPoint = CGPointMake(model.center.x, model.center.y);
+            lActionTranslate2.fillAfter = YES;
+    
+            AliyunAlphaAction *lActionFade1 = [AliyunAlphaAction new];
+            lActionFade1.fromAlpha  = 0.0;
+            lActionFade1.toAlpha  = 1;
+            lActionFade1.startTime = 0.f;
+            lActionFade1.duration = duration/4.0;
+            lActionFade1.fillBefore = YES;
+
+
+            action.subList = @[lActionTranslate,lActionTranslate2,lActionFade1];
+            action.fillBefore = YES;
+            action.fillAfter = YES;
+            
+            action.startTime = startTime;
+            action.duration = duration;
+            
+            action.sourceId = sourceId;
+
+            if ([vc conformsToProtocol:@protocol(AliyunPartFrameAnimationProtocol)]) {
+                id<AliyunPartFrameAnimationProtocol> animaVC = vc;
+                [animaVC addPartFrameAnimation:partAimation];
+            }
+        }
+            break;
+            
+            
         default:
             break;
     }
-    //    字幕特效先注释掉，保持跟安卓同步
-    //    if (type <= TextActionTypeFade && type > TextActionTypeNull) {
-    //        float seekTime = [pasterController pasterStartTime] - 0.5;
-    //        if (seekTime < 0) {
-    //            seekTime = 0;
-    //        }
-    //        [self.player seek:seekTime];
-    //    }
+
 }
 
-//完成字幕编辑
-- (void)textInputViewEditCompleted {
-    [self.tabController dismissPresentTabContainerView];
-    self.editZoneView.currentPasterView = nil;
-    AliyunPasterController *editPasterController = [self.pasterManager getCurrentEditPasterController];
+- (void)addNewCaption:(NSString *)text
+{
+    [self forceFinishLastEditPasterView];
+   
+    AliyunPasterRange range = [self calculatePasterStartTimeWithDuration:1];
+    AliyunCaptionStickerController *captionController = [[self.editor getStickerManager] addCaptionText:text bubblePath:nil startTime:range.startTime duration:range.duration];
     
-    if (editPasterController) { //当前有正在编辑的动图控制器，则更新
-        AliyunPasterView *pasterView =(AliyunPasterView *)editPasterController.pasterView;
-        if (editPasterController.pasterType == AliyunPasterEffectTypeSubtitle) { //纯字幕情况下需要重新设置pasterView的bounds和paster位置大小信息
-
-            //            pasterView.bounds = _currentTextInputView.bounds;
-            //            [pasterView calculateRotateButtonAngle];
-            //            editPasterController.pasterFrame = pasterView.frame;
-            //            editPasterController.pasterSize = pasterView.bounds.size;
-        }
-        pasterView.textFontName = [_currentTextInputView fontName];
-        pasterView.textColor = [_currentTextInputView getTextColor];
-        pasterView.text = [_currentTextInputView getText];
-        editPasterController.subtitleFontName = [_currentTextInputView fontName];
-        editPasterController.subtitle = pasterView.text;
-        editPasterController.subtitleStroke = pasterView.textColor.isStroke;
-        editPasterController.subtitleColor = [pasterView contentColor];
-        editPasterController.subtitleStrokeColor = [pasterView strokeColor];
-        editPasterController.subtitleBackgroundColor = [UIColor clearColor];
-        [editPasterController editCompletedWithImage:[pasterView textImage]];
-    } else { //当前无正在编辑的动图控制器，则新建
-        
-        CGRect inputViewBounds = _currentTextInputView.bounds;
-        AliyunPasterRange range = [self calculatePasterStartTimeWithDuration:1];
-        editPasterController =[self.pasterManager addSubtitle:[_currentTextInputView getText]
-                                                       bounds:inputViewBounds
-                                                    startTime:range.startTime
-                                                     duration:range.duration];
-        [self addPasterViewToDisplayAndRender:editPasterController pasterFontId:-1];
-        [self addPasterToTimeline:editPasterController]; //加到timelineView联动
-    }
-    [self makePasterControllerBecomeEditStatus:editPasterController];
-    [editPasterController setTempActionType:[_currentTextInputView actionType]];
-    [self destroyInputView];
+    
+    [self addPasterViewToDisplayAndRender:captionController pasterFontId:-1];
+    [self addPasterToTimeline:captionController]; //加到timelineView联动
+    
 }
 
 #pragma mark - AliyunEffectTimeFilterDelegate - 时间特效
@@ -3851,7 +4396,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     
     self.paintImage = [[AliyunEffectImage alloc] initWithFile:realPath];
     self.paintImage.frame = self.movieView.bounds;
-    [self.editor applyPaint:self.paintImage];
+    [self.editor applyPaint:self.paintImage linesData:self.paintView.lines];
     [self.playButton setHidden:NO];
     [self.paintView removeFromSuperview];
     _paintView = nil;
@@ -3870,7 +4415,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [UIImagePNGRepresentation(paintImage) writeToFile:realPath atomically:YES];
     self.paintImage = [[AliyunEffectImage alloc] initWithFile:realPath];
     self.paintImage.frame = self.movieView.bounds;
-    [self.editor applyPaint:self.paintImage];
+    [self.editor applyPaint:self.paintImage linesData:self.paintView.lines];
     [self.paintView removeFromSuperview];
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
 }
@@ -3894,7 +4439,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 - (void)onClickPaintCancelButton {
     [self.paintView undoAllChanges];
     if (self.paintImage) {
-        [self.editor applyPaint:self.paintImage];
+        [self.editor applyPaint:self.paintImage linesData:self.paintView.lines];
     }
     [self.paintView removeFromSuperview];
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
@@ -3936,6 +4481,20 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
                          @(AlivcEffectSoundTypeDialect):@(AliyunAudioEffectDialect),
     };
     return (AliyunAudioEffectType)[dic[@(type)] integerValue];
+}
+
+-(AlivcEffectSoundType)getProjectType:(AliyunAudioEffectType)type{
+    NSDictionary *dic =@{@(AliyunAudioEffectLolita):@(AlivcEffectSoundTypeLolita),
+                         @(AliyunAudioEffectUncle):@(AlivcEffectSoundTypeUncle),
+                         @(AliyunAudioEffectEcho):@(AlivcEffectSoundTypeEcho),
+                         @(AliyunAudioEffectReverb):@(AlivcEffectSoundTypeRevert),
+                         @(AliyunAudioEffectDenoise):@(AlivcEffectSoundTypeDenoise),
+                         @(AliyunAudioEffectMinions):@(AlivcEffectSoundTypeMinion),
+                         @(AliyunAudioEffectRobot):@(AlivcEffectSoundTypeRobot),
+                         @(AliyunAudioEffectBigDevil):@(AlivcEffectSoundTypeDevil),
+                         @(AliyunAudioEffectDialect):@(AlivcEffectSoundTypeDialect),
+    };
+    return (AlivcEffectSoundType)[dic[@(type)] integerValue];
 }
 
 #pragma mark - AliyunVideoAugmentationViewDelegate
@@ -4010,7 +4569,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     //时间
     //    CGFloat time = [self.player getCurrentStreamTime];
     //截图
-    _coverImage = [self screenShotView:self.movieView];
+    _coverImage = [self.editor screenCapture];
+    if (!_coverImage) {
+        _coverImage = [self screenShotView:self.movieView];
+    }
+    if (_coverImage) {
+        [self.editor updateCover:_coverImage];
+    }
     NSLog(@"图片宽度%.2f,高度%.2f",_coverImage.size.width,_coverImage.size.height);
     NSLog(@"视图宽度%.2f,高度%.2f",self.movieView.frame.size.width,self.movieView.frame.size.height);
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:^(BOOL finished) {
@@ -4056,10 +4621,11 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
         AliyunRollCaptionComposer *rollCaptionComposer = [weakSelf.editor rollCaptionComposer];
         [rollCaptionComposer updateCaptionList:dataArr];
     };
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:vc animated:YES completion:^{
+    vc.didBack = ^{
         self.isRollCaptionType = NO;
-    }];
+    };
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 -(void)didRollCaptionClickFinishBtn{
@@ -4077,6 +4643,28 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     AliyunRollCaptionComposer *rollCaptionComposer = [self.editor rollCaptionComposer];
     [rollCaptionComposer reset];
     [self quitEditWithActionType:_editSouceClickType CompletionHandle:nil];
+}
+
+#pragma mark - AliyunLutFilterViewDelegate
+
+- (void)lutFilterViewDelegateDidSelectLutFilter:(NSString *)path indensity:(float)indensity
+{
+    if (path.length > 0) {
+        [[self.editor getFilterManager] applyLutFilterWithPath:path intensity:indensity];
+    } else {
+        [[self.editor getFilterManager] removeFilter:[[self.editor getFilterManager] getLutFilterControllers].firstObject];
+
+    }
+}
+
+- (void)lutFilterViewDelegateDidUpdateIndensity:(float)indensity
+{
+    NSArray *list = [[self.editor getFilterManager] getLutFilterControllers];
+    if (list.count) {
+        
+        AliyunLutFilterController *lutVC = list.firstObject;
+        lutVC.model.intensity = indensity;
+    }
 }
 
 @end

@@ -198,4 +198,23 @@
     return [da length];
 }
 
+- (NSString *) aliyun_urlEncode {
+    return [self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+}
+
+- (NSString *) aliyun_urlDecode {
+    return [self stringByRemovingPercentEncoding];
+}
+
+- (NSDictionary *) aliyun_urlParseQuery {
+    NSMutableDictionary *query = @{}.mutableCopy;
+    NSArray<NSString *> *kvList = [self componentsSeparatedByString:@"&"];
+    for (NSString *kv in kvList) {
+        NSArray<NSString *> *kvPair = [kv componentsSeparatedByString:@"="];
+        if (kvPair.count != 2) continue;
+        query[kvPair[0]] = kvPair[1].aliyun_urlDecode;
+    }
+    return query;
+}
+
 @end

@@ -44,6 +44,18 @@
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
+    
+    if (self.isFont) {
+        if(selected) {
+            self.contentView.layer.borderWidth = 2;
+            self.contentView.layer.borderColor = UIColor.redColor.CGColor;
+            
+        } else {
+            self.contentView.layer.borderWidth = 2;
+            self.contentView.layer.borderColor = UIColor.clearColor.CGColor;
+        }
+    }
+    
 }
 
 @end

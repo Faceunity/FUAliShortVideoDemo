@@ -1,1 +1,0 @@
-../../../../AlivcEdit/AlivcEdit/Classes/Export/VC/AliyunCoverPickViewController.h

@@ -10,6 +10,7 @@
 #import "AliyunMediaConfig.h"
 #import "AlivcShortVideoRoute.h"
 
+@class AliyunDraft;
 @interface AlivcExportViewController : UIViewController
 /**
  背景图片
@@ -22,9 +23,9 @@
 @property (nonatomic, strong) NSString *taskPath;
 
 /**
- 合成信息配置
+ 输出路径
  */
-@property (nonatomic, strong) AliyunMediaConfig *config;
+@property (nonatomic, strong) NSString *outputPath;
 /**
  完成的回调
  */
@@ -34,4 +35,11 @@
  输出大小
  */
 @property (nonatomic, assign) CGSize outputSize;
+
+@property (nonatomic, strong) UIImage *coverImage;
+
+/**
+ 草稿对象
+ */
+@property(nonatomic, strong) AliyunDraft *draft;
 @end

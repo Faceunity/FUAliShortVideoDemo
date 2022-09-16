@@ -24,6 +24,9 @@ typedef NS_ENUM(NSInteger, AliyunEditMaterialType) {
 //滤镜
 - (void)filterButtonClicked:(AliyunEditMaterialType)type;
 
+//lut滤镜
+- (void)lutFilterButtonClicked:(AliyunEditMaterialType)type;
+
 //音乐
 - (void)musicButtonClicked;
 

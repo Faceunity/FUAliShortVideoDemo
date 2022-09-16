@@ -61,14 +61,18 @@
     } 
 }
 
+static NSInteger s_widthForIndex(NSInteger idx) {
+    return SizeWidth(5.0) + 5 * idx;
+}
+
 -(void)changeWidthButtonAction:(UIButton *)btn{
     if (_currentTagBtn == btn) {
         return;
     }
     NSInteger index = btn.tag - kPaintButtonTag;
-    NSInteger width =   SizeWidth(5.0) + 5 * index;
+    _currentWidth = s_widthForIndex(index);
     if (self.changeWidthHandle) {
-        self.changeWidthHandle(width);
+        self.changeWidthHandle(_currentWidth);
     }
     _currentTagBtn.backgroundColor = [UIColor clearColor];
     __block UIButton *cursorBtn = [[UIButton alloc]initWithFrame:_currentTagBtn.frame];
@@ -96,6 +100,20 @@
     }
 }
 
-
+- (void) setCurrentWidth:(NSInteger)currentWidth {
+    if (_currentWidth == currentWidth) {
+        return;
+    }
+    _currentWidth = currentWidth;
+    for (NSInteger i = 0; i < 3; ++i) {
+        if (currentWidth <= s_widthForIndex(i)) {
+            UIButton *btn = [self viewWithTag:kPaintButtonTag + i];
+            if (btn) {
+                [self changeWidthButtonAction:btn];
+            }
+            return;
+        }
+    }
+}
 
 @end

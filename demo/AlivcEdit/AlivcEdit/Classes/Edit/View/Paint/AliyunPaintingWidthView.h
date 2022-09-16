@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-@class AliyunPaintingWidthView;
 
 typedef void(^ChangeWidthHandle)(NSInteger width);
 
@@ -27,6 +26,11 @@ typedef void(^ChangeWidthHandle)(NSInteger width);
  当前选中颜色
  */
 @property(nonatomic, strong)UIColor *widthtTagColor;
+
+/**
+ 当前选中的宽度
+ */
+@property (nonatomic, assign) NSInteger currentWidth;
 
 
 @end

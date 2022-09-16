@@ -58,4 +58,9 @@
  */
 @property (nonatomic, weak) id<AliyunEffectTimeFilterDelegate> delegate;
 
+- (void)selectRepeat;
+- (void)selectMomentSlow;
+- (void)selectMomentFast;
+- (void)selectInvert;
+
 @end

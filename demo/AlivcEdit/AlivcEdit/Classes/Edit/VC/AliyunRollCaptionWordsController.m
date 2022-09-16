@@ -145,7 +145,12 @@
 
 #pragma --mark 私有方法
 -(void)onBack{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    void(^tmpDidBack)(void) = _didBack;
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (tmpDidBack) {
+            tmpDidBack();
+        }
+    }];
 }
 
 -(void)onFinish{

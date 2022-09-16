@@ -86,6 +86,11 @@ NS_ASSUME_NONNULL_BEGIN
  @return 字符长度
  */
 + (NSInteger)charLengthWith:(NSString *)strtemp;
+
+- (NSString *) aliyun_urlEncode;
+- (NSString *) aliyun_urlDecode;
+
+- (NSDictionary *) aliyun_urlParseQuery;
 NS_ASSUME_NONNULL_END
 
 @end

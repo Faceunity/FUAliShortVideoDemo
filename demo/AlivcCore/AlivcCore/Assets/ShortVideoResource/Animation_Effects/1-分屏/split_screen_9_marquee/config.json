@@ -1,0 +1,16 @@
+{
+	"name": "九屏跑马灯",
+	"module": "ALIVC_GECF",
+	"version": 1,
+	"type": 1,
+	"nodeTree": [{
+		"nodeId": 0,
+		"name": "split_screen_9_marquee",
+		"fragment": "precision highp float;\nuniform sampler2D RACE_Tex0;\nuniform float BUILTIN_PROGRESS;\nuniform float BUILTIN_PTS;\nconst float DURATION = 3000.0;\nvarying highp vec2 textureCoordinate;\n//灰度计算比率\nconst highp vec3 ratio = vec3(0.2125, 0.7154, 0.0721);\nconst mat3 index_m = mat3(0,7,6, 1,8,5, 2,3,4);\nconst mat4 pts_m_1 = mat4(0,1,2,3, 4,5,6,7, 0,1,2,3, 4,5,6,7);\n\nvoid main() {\nint x;\nint y;\nfloat x1;\nfloat y1;\nfloat value;\nfloat show;\nvec2 uv = textureCoordinate.xy;\nif (uv.x < 1.0 / 3.0) {\n uv.x = uv.x * 3.0;\n x = 0;\n} else if (uv.x < 2.0 / 3.0) {\n uv.x = (uv.x - 1.0 / 3.0) * 3.0;\n x = 1;\n} else {\n uv.x = (uv.x - 2.0 / 3.0) * 3.0;\n x = 2;\n}\nif (uv.y <= 1.0 / 3.0) {\n uv.y = uv.y * 3.0;\n y = 0;\n} else if (uv.y < 2.0 / 3.0) {\n uv.y = (uv.y - 1.0 / 3.0) * 3.0;\n y = 1;\n} else {\n uv.y = (uv.y - 2.0 / 3.0) * 3.0;\n y = 2;\n}\nfloat pts = mod(BUILTIN_PTS, DURATION);\nfloat index = floor(pts/125.0);\nif(index <= 16.0){\nx1 = floor(index/4.0);\ny1 = floor(mod(index, 4.0));\nvalue = pts_m_1[int(x1)][int(y1)];\nshow = 1.0;\n}else{\nvalue = 8.0;\nif(mod(index, 2.0) == 0.0){\n  show = 0.0;\n}else{\n  show = 1.0;\n}\n}\nif(index_m[x][y] == value && show == 1.0){\ngl_FragColor = texture2D(RACE_Tex0, uv);\n}else{\nvec4 mask = texture2D(RACE_Tex0, uv);\n// Gray值\nfloat luminance = dot(mask.rgb, ratio);\ngl_FragColor = vec4(vec3(luminance), 1.0);\n}\n}\n",
+		"textures": [{
+			"name": "RACE_Tex0",
+			"srcType": "INPUT_NODE",
+			"nodeId": 0
+		}]
+	}]
+}

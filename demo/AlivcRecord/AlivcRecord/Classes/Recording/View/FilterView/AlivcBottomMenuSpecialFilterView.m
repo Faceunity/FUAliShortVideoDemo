@@ -264,12 +264,17 @@
             AliyunEffectInfo *info = infoModelArray[index];
             
             //判断是否是内置资源包中的
-            if ([info.icon isEqualToString:@"icon"]) {
+            if (info.eid == 0) {
                 info.groupId = -1;
                 [self.defaultFilerData addObject:info];
                 continue;
             }
             
+            if (info.eid == 1) { //录制忽略分屏
+                info.groupId = -1;
+                continue;
+            }
+
             if (!group && self.groupSelector.selectTitle) {//普通刷新
                 if ([info.name isEqualToString:self.groupSelector.selectTitle]) {
                     [weakSelf fetchDataByGroup:info];

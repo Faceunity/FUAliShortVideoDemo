@@ -23,7 +23,7 @@
  - TextActionTypeScale: 缩放
  */
 typedef NS_ENUM(NSInteger,TextActionType){
-    TextActionTypeNull,
+    TextActionTypeNull = -1,
     TextActionTypeClear,
     TextActionTypeMoveTop,
     TextActionTypeMoveDown,
@@ -31,7 +31,20 @@ typedef NS_ENUM(NSInteger,TextActionType){
     TextActionTypeMoveRight,
     TextActionTypeLinerWipe,
     TextActionTypeFade,
-    TextActionTypeScale
+    TextActionTypeScale,
+    TextActionTypePrinter,       //打字机
+    TextActionTypeClock,        //钟摆
+    TextActionTypeBrush,        //雨刷
+    TextActionTypeSet_1,       //组合动画1
+    TextActionTypeSet_2,       //钟摆
+    TextActionTypeWave,        //波浪
+    TextActionTypeScrewUp,     //螺旋上升
+    TextActionTypeHeart,       //心跳
+    TextActionTypeCircularScan,//圆形扫描
+    TextActionTypeWaveIn,      //波浪弹入
+    
+    
+
 };
 
 @interface AliyunSubtitleActionItem : NSObject

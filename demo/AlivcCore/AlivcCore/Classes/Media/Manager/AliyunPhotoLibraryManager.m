@@ -314,7 +314,7 @@ static CGFloat kQUScreenScale;
                                                                  result = normalizedImage;
                                                             }
                                                             NSData *imageData = UIImageJPEGRepresentation(result, 1);
-                                                             [imageData writeToFile:path atomically:YES];
+                                                            [imageData writeToFile:path atomically:YES];
                                                             completion(nil,result);
                                                         }
                                                     }
@@ -432,7 +432,6 @@ static CGFloat kQUScreenScale;
    allowPickingImage:(BOOL)allowPickingImage
        durationRange:(VideoDurationRange)range
           completion:(void (^)(NSArray<AliyunAlbumModel *> *models))completion {
-    
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSMutableArray *albumArr = [NSMutableArray array];
         PHFetchOptions *option = [[PHFetchOptions alloc] init];
@@ -619,7 +618,6 @@ static CGFloat kQUScreenScale;
 
 - (NSPredicate *)configurePredicateWithAllowImage:(BOOL)image allowVideo:(BOOL)video range:(VideoDurationRange)range {
     NSPredicate *predicate;
-    
     
     NSString *imageFormat = [NSString stringWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
     NSString *videoFormat = [NSString stringWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];

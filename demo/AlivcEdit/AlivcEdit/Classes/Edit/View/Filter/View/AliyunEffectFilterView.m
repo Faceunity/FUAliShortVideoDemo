@@ -134,7 +134,7 @@
 //        }
         if (eType != AliyunEffectTypeSpecialFilter) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.collectionView reloadData];
+                [weakSelf reloadData];
             });
         }
        
@@ -143,6 +143,14 @@
     }];
     
     
+}
+
+- (void) reloadData {
+    [_collectionView reloadData];
+    if (_selectIndex >= 0 && _selectIndex < _dataArray.count) {
+        NSIndexPath *idx = [NSIndexPath indexPathForRow:_selectIndex inSection:0];
+        [_collectionView selectItemAtIndexPath:idx animated:NO scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+    }
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -162,6 +170,7 @@
     
     AliyunEffectInfo *effectInfo = _dataArray[indexPath.row];
     [cell cellModel:effectInfo];
+    
     if (_effectType != AliyunEffectTypeSpecialFilter) {
         if (indexPath.row == _selectIndex) {
             [cell setSelected:YES];
@@ -171,6 +180,7 @@
             NSLog(@"滤镜测试%@：不选中：%ld",effectInfo.name,indexPath.row);
         }
     }
+
     if (_effectType == AliyunEffectTypeFilter) {
         if (indexPath.row == 0) {
             cell.imageView.contentMode = UIViewContentModeCenter;
@@ -209,6 +219,13 @@
 //    }
 //}
 
+- (void)updateSelected
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_selectIndex inSection:0];
+    [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
+    [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+}
+
 - (void)updateSelectedFilter:(AliyunEffectInfo *)filter{
     for (int i = 0; i < _dataArray.count; i++) {
         AliyunEffectInfo *tmpFilter = _dataArray[i];
@@ -217,8 +234,18 @@
             break;
         }
     }
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_selectIndex inSection:0];
-    [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
-    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    [self updateSelected];
+}
+
+- (void) updateSelectedFilterWithResource:(NSString *)resourcePath
+{
+    for (int i = 0; i < _dataArray.count; ++i) {
+        AliyunEffectInfo *tmpFilter = _dataArray[i];
+        if ([tmpFilter.localFilterResourcePath isEqualToString:resourcePath]) {
+            self.selectIndex =i;
+            break;
+        }
+    }
+    [self updateSelected];
 }
 @end

@@ -1,1 +1,0 @@
-../../../../AlivcRecord/AlivcRecord/Classes/Recording/View/BottomView/AlivcRecordBottomView.h

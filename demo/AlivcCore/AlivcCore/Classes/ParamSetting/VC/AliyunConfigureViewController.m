@@ -358,7 +358,7 @@
     AliyunRecordParamCellModel *model = _dataArray[indexPath.row];
     if ([model.reuseId isEqualToString:@"cellInput"]) {
         return 95;
-    }else if([model.reuseId isEqualToString:@"switch"]){
+    }else if([model.reuseId isEqualToString:@"switch"] || [model.reuseId isEqualToString:@"switch_subtitle"]){
         return 60;
     }else{
         if (indexPath.row == 5) {
@@ -451,6 +451,14 @@
         weakSelf.mediaInfo.cutMode = value;
     };
     
+    AliyunRecordParamCellModel *cellModel6_1 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel6_1.title = NSLocalizedString(@"转码", nil);
+    cellModel6_1.reuseId = @"switch_subtitle";
+    cellModel6_1.placeHolder = @"当视频大于1080p时，转码到1080p下";
+    cellModel6_1.switchBlock = ^(BOOL open){
+        weakSelf.mediaInfo.needTransCode = open;
+    };
+    
     AliyunRecordParamCellModel *cellModel7 = [[AliyunRecordParamCellModel alloc] init];
     cellModel7.title = NSLocalizedString(@"片尾", nil);
     cellModel7.reuseId = @"switch";
@@ -474,9 +482,9 @@
         weakSelf.mediaInfo.encodeMode = (AliyunEncodeMode)encodeMode;
     };
     if ([self.isClipConfig isEqualToString:@"YES"]) {
-        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel9,cellModel8];
+        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel6_1,cellModel8];
     }else{
-        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7, cellModel9,cellModel8];
+        _dataArray = @[cellModel0,cellModel1,cellModel3,cellModel4,cellModel5,cellModel6,cellModel6_1,cellModel7, cellModel9,cellModel8];
     }
     
 }

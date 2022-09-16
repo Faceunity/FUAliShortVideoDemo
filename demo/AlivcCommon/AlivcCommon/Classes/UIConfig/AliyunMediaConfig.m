@@ -41,9 +41,11 @@
     config.mixbgColorType = self.mixbgColorType;
     config.mixbgImgType = self.mixbgImgType;
     config.mixbgImgScaleType = self.mixbgImgScaleType;
+    config.deleteVideoClipOnExit = self.deleteVideoClipOnExit;
     config.mixAECType = self.mixAECType;
     config.hasVideoBorder = self.hasVideoBorder;
     config.isMixVideoTopLayer = self.isMixVideoTopLayer;
+    config.needMixVideo = self.needMixVideo;
     return config;
 }
 -(instancetype)mutableCopyWithZone:(NSZone *)zone{
@@ -76,9 +78,11 @@
     config.mixbgColorType = self.mixbgColorType;
     config.mixbgImgType = self.mixbgImgType;
     config.mixbgImgScaleType = self.mixbgImgScaleType;
+    config.deleteVideoClipOnExit = self.deleteVideoClipOnExit;
     config.mixAECType = self.mixAECType;
     config.hasVideoBorder = self.hasVideoBorder;
     config.isMixVideoTopLayer = self.isMixVideoTopLayer;
+    config.needMixVideo = self.needMixVideo;
     return config;
 }
 

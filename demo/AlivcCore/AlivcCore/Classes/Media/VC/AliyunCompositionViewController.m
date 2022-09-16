@@ -136,8 +136,9 @@
     }
     [self setupSubviews];
     
-    [AliyunPathManager clearDir:[AliyunPathManager compositionRootDir]];
-    
+    // 草稿需要保留文件，不要删除rootDir
+    [AliyunPathManager makeDirExist:[AliyunPathManager compositionRootDir]];
+   
     [self fetchPhotoData];
 }
 
@@ -167,8 +168,10 @@
     //设置合拍分辨率 720 * 640
     if (self.controllerType == AlivcCompositionViewControllerTypeVideoMix) {
         _compositionConfig.outputSize = CGSizeMake(720, 640);
+    } else if (self.controllerType == AlivcCompositionViewControllerTypeVideoMultiRec) {
+        _compositionConfig.outputSize = CGSizeMake(720, 1280);
     }
-    
+
 }
 
 
@@ -257,7 +260,8 @@
         return;
     }
     
-    if (self.controllerType == AlivcCompositionViewControllerTypeVideoMix) {
+    if (self.controllerType == AlivcCompositionViewControllerTypeVideoMix ||
+        self.controllerType == AlivcCompositionViewControllerTypeVideoMultiRec) {
         [self.pickView removeAssetsAtIndex:0];
     }
     
@@ -378,7 +382,8 @@
 
 -(void)pickViewDidSelectCompositionInfo:(AliyunCompositionInfo *)info {
     //合拍不允许裁剪
-    if(self.controllerType == AlivcCompositionViewControllerTypeVideoMix){
+    if(self.controllerType == AlivcCompositionViewControllerTypeVideoMix ||
+       self.controllerType == AlivcCompositionViewControllerTypeVideoMultiRec){
         return;
     }
     
@@ -425,7 +430,9 @@
 
 #if (SDK_VERSION != SDK_VERSION_BASE)
     __weak typeof(self)weakSelf = self;
-    [self compressVideoIfNeededWithAssets:assets completion:^(BOOL failed , int errorResult){
+    
+    void(^completionBlock)(BOOL,int) = ^(BOOL failed ,int errorResult){
+        
         if (failed) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
@@ -434,8 +441,8 @@
                     if (errorResult == -1) {
                         msg = NSLocalizedString(@"图片过宽或过高", nil);
                     }
-//                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:msg message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"video_affirm_common", nil) otherButtonTitles:nil, nil];
-//                    [alert show];
+                    //                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:msg message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"video_affirm_common", nil) otherButtonTitles:nil, nil];
+                    //                    [alert show];
                     [MBProgressHUD showWarningMessage:msg inView:self.view];
                 }
             });
@@ -490,7 +497,7 @@
         if (weakSelf.compositionConfig.encodeMode ==  AliyunEncodeModeHardH264) {
             param.codecType = AliyunVideoCodecHardware;
         }else if(weakSelf.compositionConfig.encodeMode == AliyunEncodeModeSoftFFmpeg) {
-            param.codecType = AliyunVideoCodecFFmpeg;
+            param.codecType = AliyunVideoCodecOpenh264;
         }
         
         [importor setVideoParam:param];
@@ -521,17 +528,28 @@
             tempConfig.maxDuration = info.duration;
             tempConfig.sourcePath = assets.firstObject.sourcePath;
             [[AlivcShortVideoRoute shared]registerMediaConfig:tempConfig];
-            UIViewController *record = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlRecordMix];
+            
+            AlivcViewControlType vcType = (self.controllerType == AlivcCompositionViewControllerTypeVideoMultiRec ? AlivcViewControlMultiSourceRecord : AlivcViewControlRecordMix);
+            UIViewController *record = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:vcType];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hideAnimated:YES];
                 [self.navigationController pushViewController:record animated:YES];
             });
         }
-    }];
+    };
+
+    if (_compositionConfig.needTransCode) {
+        [self compressVideoIfNeededWithAssets:assets completion:completionBlock];
+    } else {
+        completionBlock(NO,0);
+    }
     
 #endif
     
 }
+
+
 
 #pragma mark - AliyunCropViewControllerDelegate
 
@@ -641,8 +659,14 @@
                 CGFloat max = [weakSelf maxVideoSize].width * [weakSelf maxVideoSize].height;
                 AliyunNativeParser *avParser = [[AliyunNativeParser alloc] initWithPath:info.sourcePath];
                 NSLog(@"--------->frameRate:%f  GopSize:%zd",asset.frameRate,avParser.getGopSize);
-                //分辨率过大              //fps过大                    //Gop过大
-                if (resolution > max || asset.frameRate > 35 || avParser.getGopSize >35 || self.controllerType == AlivcCompositionViewControllerTypeVideoMix) {
+                //分辨率过大
+                
+                //合拍算一半
+                if (self.controllerType == AlivcCompositionViewControllerTypeVideoMix) {
+                    max = max / 2;
+                }
+                    
+                if (resolution > max) {
                     NSString *outputPath = [[root stringByAppendingPathComponent:[AliyunPathManager randomString]] stringByAppendingPathExtension:@"mp4"];
                     CGFloat factor = MAX(weakSelf.compositionConfig.outputSize.width,weakSelf.compositionConfig.outputSize.height)/MAX([asset avAssetNaturalSize].width, [asset avAssetNaturalSize].height);
                     if (factor > 1) {

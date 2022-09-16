@@ -53,7 +53,8 @@ typedef NS_ENUM(NSInteger,AVC_ET_ModuleType){
     AVC_ET_ModuleType_VideoPlayList = 1 << 17, //播放列表
     AVC_ET_ModuleType_VideoPlayShift = 1 << 18, //直播时移
     
-    
+    AVC_ET_ModuleType_Draft = 1 << 19, // 草稿
+    AVC_ET_ModuleType_Template = 1 << 20, // 剪同款
 };
 
 
@@ -103,23 +104,6 @@ typedef NS_ENUM(NSInteger,AVC_ET_ModuleType){
  @return 图片
  */
 + (UIImage *__nullable)imageWithModuleType:(AVC_ET_ModuleType )type;
-
-/**
- 返回创建好的所有的功能模块
-
- @return 排列好的所有的功能模块
- */
-+ (NSArray <AVC_ET_ModuleDefine *>*)allModules;
-
-
-/**
- 返回创建好的所有的demo模块
- 
- @return 排列好的所有的功能模块
- */
-+ (NSArray <AVC_ET_ModuleDefine *>*)allDemos;
-
-
 
 @end
 

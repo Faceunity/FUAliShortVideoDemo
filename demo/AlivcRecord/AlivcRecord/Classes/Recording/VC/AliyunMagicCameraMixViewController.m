@@ -98,7 +98,7 @@
     if (!_recorder) {
         //清除之前生成的录制路径
         NSString *recordDir = [AliyunPathManager createRecrodDir];
-        [AliyunPathManager clearDir:recordDir];
+        [AliyunPathManager makeDirExist:recordDir];
         //生成这次的存储路径
         NSString *taskPath = [recordDir stringByAppendingPathComponent:[AliyunPathManager randomString]];
         //视频存储路径

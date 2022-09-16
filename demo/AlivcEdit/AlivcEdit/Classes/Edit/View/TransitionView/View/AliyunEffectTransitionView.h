@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, TransitionType){
 
 @end
 
-
+@class AEPVideoTrackClip;
 
 /**
  转场View
@@ -139,10 +139,11 @@ blockHandle:(void(^)(NSArray<AliyunTransitionCover *> *covers,NSArray<AliyunTran
 
 - (void)fetchEffectGroupDataWithCurrentShowGroup:(AliyunEffectInfo *)group;
 
-
 -(void)showRegulatorView:(AliyunTransitionEffect*)effect paramList:(NSArray*)paramList index:(int)idx;
 
 -(void)updateRegulatorViewWithCover:(AliyunTransitionCover*)cover;
+
+- (void) reloadSelectedForClips:(NSArray<AEPVideoTrackClip *> *)clips;
 
 //更新分组选择器默认选中栏
 -(void)updateGroupSelector;

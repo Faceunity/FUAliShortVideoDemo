@@ -112,16 +112,22 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (self->_selectIndex >= 0 && isNewSelectIndex) {
-                [self->_collectionView.delegate collectionView:self->_collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:self->_selectIndex inSection:0]];
+            [weakSelf reloadData];
+            if (weakSelf.selectIndex >= 0 && isNewSelectIndex) {
+                [weakSelf.collectionView.delegate collectionView:weakSelf.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:weakSelf.selectIndex inSection:0]];
             }
-            
-            [self->_collectionView reloadData];
         });
     } failure:^(NSError *error) {
         
     }];
+}
+
+- (void) reloadData {
+    [_collectionView reloadData];
+    if (_selectIndex >= 0 && _selectIndex < _dataArray.count) {
+        NSIndexPath *idx = [NSIndexPath indexPathForRow:_selectIndex inSection:0];
+        [_collectionView selectItemAtIndexPath:idx animated:NO scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+    }
 }
 
 - (void)reloadDataWithEffectTypeWithDelete:(NSInteger)eType {
@@ -149,7 +155,7 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.collectionView reloadData];
+            [weakSelf reloadData];
         });
     } failure:^(NSError *error) {
         
@@ -206,10 +212,9 @@
     [lastSelectCell setSelected:NO];
     
     AliyunEffectInfo *currentEffect = _dataArray[indexPath.row];
-     if (_effectType == AliyunEffectTypeMV) {
+    if (_effectType == AliyunEffectTypeMV) {
         if ([currentEffect.name isEqualToString:NSLocalizedString(@"更多", nil)]) {
-
-            [collectionView reloadData];
+            [self reloadData];
             [_delegate didSelectEffectMoreMv];
             
             return;
@@ -220,15 +225,32 @@
             [_delegate didSelectEffectMV:nil];
             return;
         }
-
+        
         
         _selectedEffect = currentEffect;
         
         [_delegate didSelectEffectMV:(AliyunEffectMvGroup *)currentEffect];
-        [collectionView reloadData];
+        [self reloadData];
     }
 }
 
 
+- (AliyunEffectMvGroup *) upateSelectedWithResource:(NSString *)resourcePath
+{
+    for (int i = 0; i < _dataArray.count; ++i) {
+        AliyunEffectInfo *currentEffect = _dataArray[i];
+        if (currentEffect.resourcePath.length == 0) {
+            continue;
+        }
+        
+        if ([resourcePath containsString:currentEffect.resourcePath]) {
+            _selectIndex = i;
+            _selectedEffect = currentEffect;
+            [self reloadData];
+            return (AliyunEffectMvGroup *)currentEffect;
+        }
+    }
+    return nil;
+}
 
 @end

@@ -27,4 +27,6 @@
  */
 -(void)removeVisualEffectView;
 
+- (UIViewController *)getCurrentVC;
+
 @end

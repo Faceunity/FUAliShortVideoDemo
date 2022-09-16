@@ -42,11 +42,9 @@ TODO: Add long description of the pod here.
   # s.dependency 'AFNetworking', '~> 2.3'
 
   #faceUnity 高级美颜
-  # s.dependency 'Nama', '~> 7.2.0'
-   s.dependency 'AliyunRace', '1.2.0'
-   s.dependency 'SVProgressHUD'
-   s.dependency 'Masonry'
-   s.dependency 'FURenderKit', '~> 8.0.2'
+  s.dependency 'FURenderKit', '~> 8.3.0'
+   # s.dependency 'Queen', '1.3.0-official-pro'
+  
   s.dependency 'AlivcCore'
 
 end

@@ -11,7 +11,8 @@
 
 typedef NS_ENUM(NSUInteger, AlivcCompositionViewControllerType) {
     AlivcCompositionViewControllerTypeVideoEdit, //资源选择(编辑功能)
-    AlivcCompositionViewControllerTypeVideoMix //资源选择(合拍功能)
+    AlivcCompositionViewControllerTypeVideoMix, //资源选择(合拍功能)
+    AlivcCompositionViewControllerTypeVideoMultiRec, //资源选择(多源录制)
 };
 
 /**

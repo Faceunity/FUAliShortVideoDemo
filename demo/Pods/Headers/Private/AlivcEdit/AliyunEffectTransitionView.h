@@ -1,1 +1,0 @@
-../../../../AlivcEdit/AlivcEdit/Classes/Edit/View/TransitionView/View/AliyunEffectTransitionView.h

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,weak) NSMutableArray *dataArr;
 
 @property (nonatomic,copy) void (^didChangeWordsFinish)(NSArray *selDataArr);
+@property (nonatomic,copy) void (^didBack)(void);
 
 @end
 

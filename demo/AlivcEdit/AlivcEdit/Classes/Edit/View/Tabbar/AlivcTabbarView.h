@@ -18,8 +18,11 @@
  */
 typedef NS_ENUM(NSInteger, TabBarItemType){
     TabBarItemTypeKeboard  = 0,
+    TabBarItemTypeStyle,
     TabBarItemTypeColor,
     TabBarItemTypeFont,
+    TabBarItemTypeFlower,
+    TabBarItemTypeBubble,
     TabBarItemTypeAnimation,
     TabBarItemTypePasterAnimation
 };

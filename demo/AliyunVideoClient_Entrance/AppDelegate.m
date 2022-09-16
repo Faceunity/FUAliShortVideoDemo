@@ -7,23 +7,21 @@
 //
 
 #import "AppDelegate.h"
+#import "AVC_ShortVideo_Config.h"
 #import "AlivcHomeViewController.h"
 #import "AlivcUIConfig.h"
 #import "UIImage+AlivcHelper.h"
 #import "AlivcMacro.h"
 #import "AlivcDefine.h"
-
+#import "AliyunVideoConfig.h"
 
 #import <UMCommon/UMCommon.h>
 #import <UMAnalytics/MobClick.h>
 
-
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -36,14 +34,13 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self checkVersion];
     });
+    [AliyunVideoConfig Setup];
     [self UMengInit];
-    
-    
+
     return YES;
 }
 
 - (void)settingNavBar{
-    //
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     UINavigationController *nav = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     [nav.navigationBar setBackgroundImage:[UIImage avc_imageWithColor:[AlivcUIConfig shared].kAVCBackgroundColor] forBarMetrics:UIBarMetricsDefault];
@@ -51,7 +48,6 @@
     nav.navigationBar.tintColor = [UIColor whiteColor];
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 }
-
 
 
 #pragma mark - Public Method

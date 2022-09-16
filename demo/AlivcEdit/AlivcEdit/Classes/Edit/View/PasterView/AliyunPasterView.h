@@ -10,6 +10,7 @@
 #import <AliyunVideoSDKPro/AliyunPasterController.h>
 #import <AliyunVideoSDKPro/AliyunPasterUIEventProtocol.h>
 #import "AliyunColor.h"
+#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
 
 @protocol AliyunPasterViewActionTarget <NSObject>
 
@@ -72,6 +73,7 @@
 @property (nonatomic, assign) CGSize nativeDisplaySize; //用native控件播放视频的容器大小
 @property (nonatomic, assign) CGSize renderedMediaSize; //需要渲染到的视频分辨率
 
+@property (nonatomic, weak) AliyunRenderBaseController *pasterController;
 /**
  初始化一个pasterView
 
@@ -128,4 +130,11 @@
  计算旋转旋转按钮角度
  */
 -(void)calculateRotateButtonAngle;
+
+
+- (id)initWithRenderBaseController:(AliyunRenderBaseController *)pasterController;
+
+- (void)updateCaptionModel;
+
+
 @end

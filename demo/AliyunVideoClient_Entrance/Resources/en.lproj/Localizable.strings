@@ -35,9 +35,9 @@
 "自定义" = "Custom";
 
 "高级美型由faceunity提供" = "Advanced shape filter features are supported by FaceUnity";
-"高级美型由race提供" = "Advanced shape filter features are supported by Race";
+"高级美型由queen提供" = "Advanced shape filter features are supported by Queen";
 "高级美颜由faceunity提供" = "Advanced skin filter features are supported by FaceUnity";
-"高级美颜由race提供" = "Advanced skin filter features are supported by Race";
+"高级美颜由queen提供" = "Advanced skin filter features are supported by Queen";
 "如何获取" = "View details";
 
 
@@ -1332,6 +1332,7 @@
 "crop_mode" = "裁剪模式";
 "mode_fill" = "画面填充";
 "mode_crop" = "画面裁剪";
+"transcode_input" = "转码";
 "start_import" = "开始导入";
 "resolution_1_1" = "540*540";
 "resolution_3_4" = "540*720";
@@ -1707,6 +1708,7 @@
 "多段视频或图片不支持时间特效" = "Images and multiple videos do not support speed control";
 //编辑界面-主界面
 "滤镜" = "Filter";
+"lut滤镜" = "Filter";
 "音乐" = "Music";
 "动图" = "Sticker";
 "字幕" = "Caption";
@@ -1784,7 +1786,7 @@
 "裁剪模式" = "Crop Mode";
 "画面裁剪" = "Crop";
 "画面填充" = "Padding";
-
+"转码" = "transcode_input";
 //******视频拍摄******//
 //视频拍摄-1_1比例录制页面
 //视频拍摄-3_4比例录制页面
@@ -1946,6 +1948,7 @@
 "资源不存在或未下载" = "The resource does not exist or it is not downloaded";
 "视频总时长不超过5分钟，请裁剪后继续！" = "The video length cannot be greater than 5 minutes. Crop the video first";
 "最多5个视频" = "Up to five videos are supported";
+"已达到最大选择个数" = "Up to max seleted count";
 "原片" = "Original";
 "人物类" = "Characters";
 "食物类" = "Food";
@@ -1997,6 +2000,13 @@
 "检测到新版本，是否更新？" = "A new version is available. Upgrade to the new version?";
 "设备内存不足，请及时清理" = "Insufficient memory. Please clear memory cache";
 "SDK版本信息" = "SDK Version";
+
+// license
+"许可证信息" = "License Infos";
+"许可证签发时间" = "Sign Date";
+"许可证有效时间" = "License Expire Date";
+"业务到期时间" = "Expire Date";
+"增值服务" = "Feature List";
 
 //视频增强算法
 "增强" = "Augmentation";

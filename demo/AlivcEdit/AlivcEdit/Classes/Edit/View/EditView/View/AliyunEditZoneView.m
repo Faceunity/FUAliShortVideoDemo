@@ -28,6 +28,11 @@
     return self;
 }
 
+- (void)setEditStatus:(BOOL)editStatus
+{
+    _editStatus = editStatus;
+}
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];

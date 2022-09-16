@@ -1,1 +1,0 @@
-../../../../AlivcCommon/AlivcCommon/Classes/UIConfig/AlivcShortVideoUIConfig.h

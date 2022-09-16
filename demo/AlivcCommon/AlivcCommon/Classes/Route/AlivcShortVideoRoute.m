@@ -188,6 +188,22 @@ static AlivcShortVideoRoute *_instance = nil;
 //            }
         }
             break;
+        case AlivcViewControlMultiSourceRecord:
+        {// 短视频多源录制
+            Class viewControllerClass = NSClassFromString(@"AliyunMultiSourceRecordViewController");
+            controller = [[viewControllerClass alloc]init];
+            
+            if (self.mediaConfig) {
+                [controller setValue:self.mediaConfig forKey:@"quVideo"];
+            }
+            if (self.recordUIConfig) {
+                [controller setValue:self.recordUIConfig forKey:@"uiConfig"];
+            }
+            if (self.recordFinishBlock) {
+                [controller setValue:self.recordFinishBlock forKey:@"finishBlock"];
+            }
+        }
+            break;
         case AlivcViewControlCropParam:
         {//短视频裁剪参数配置页
             Class viewControllerClass = NSClassFromString(@"AliyunConfigureViewController");

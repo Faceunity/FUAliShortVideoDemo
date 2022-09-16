@@ -1,0 +1,35 @@
+{
+  "Cover" : {
+    "SourceId" : "",
+    "URL" : "https://alivc-demo-vod.aliyuncs.com/image/default/E8C817AA1CE44F2CB136A13EE39E3FDC-6-2.png"
+  },
+  "Version" : 1,
+  "Project" : {
+    "SourceId" : "",
+    "URL" : "alivc_resource:\/\/relation?path=project.aliyunvideo.json"
+  },
+  "Params" : [
+    {
+      "NodeKey" : "1",
+      "Lock" : false
+    },
+    {
+      "NodeKey" : "2",
+      "Lock" : false
+    },
+    {
+      "NodeKey" : "3",
+      "Lock" : false
+    },
+    {
+      "NodeKey" : "4",
+      "Lock" : false
+    }
+  ],
+  "TemplateId" : "B5EE86B3-36DD-4140-A4A9-936D4AFD504F",
+  "Video" : {
+    "SourceId" : "",
+    "URL" : "https://alivc-demo-vod.aliyuncs.com/sv/201839b1-17d7e2b3731/201839b1-17d7e2b3731.mp4"
+  },
+  "Title" : "我要去旅行"
+}

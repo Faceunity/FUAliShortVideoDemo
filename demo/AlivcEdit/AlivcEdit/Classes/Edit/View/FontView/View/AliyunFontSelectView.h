@@ -18,7 +18,7 @@
 
  @param fontInfo 选择的字体信息
  */
-- (void)onSelectFontWithFontInfo:(AliyunEffectFontInfo *)fontInfo;
+- (void)onSelectFontWithFontInfo:(AliyunEffectFontInfo *)fontInfo faceType:(int)faceType;
 
 @end
 

@@ -1,2 +1,0 @@
-# AlivcConanSDK
-ConanSDK-iOS

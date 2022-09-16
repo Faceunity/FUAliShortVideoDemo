@@ -9,7 +9,6 @@
 #import "AliyunPaintingEditView.h"
 #import "UIView+AlivcHelper.h"
 #import "UIColor+AlivcHelper.h"
-#import "AliyunPaintingWidthView.h"
 #import "AliyunPaintColorItemCell.h"
 #import "AlivcEditBottomHeaderView.h"
 
@@ -58,7 +57,7 @@
 
 #pragma mark - Functions
 
--(void)showInView:(UIView *)superView animation:(BOOL)animation{
+-(void)showInView:(UIView *)superView animation:(BOOL)animation completion:(void(^)(void))completion {
     [self removeFromSuperview];
     [superView addSubview:self];
     CGRect frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
@@ -67,10 +66,15 @@
         [UIView animateWithDuration:0.3 animations:^{
             self.frame = frame;
         } completion:^(BOOL finished) {
-            
+            if (completion) {
+                completion();
+            }
         }];
     }else{
         self.frame = frame;
+        if (completion) {
+            completion();
+        }
     }
 }
 

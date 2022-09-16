@@ -21,4 +21,8 @@
  */
 - (NSString *)registerFontWithFontPath:(NSString *)fontPath;
 
+- (NSString *)registerFontWithFontName:(NSString *)fontName;
+
+- (NSString *) findFontPathWithName:(NSString *)fontName;
+
 @end

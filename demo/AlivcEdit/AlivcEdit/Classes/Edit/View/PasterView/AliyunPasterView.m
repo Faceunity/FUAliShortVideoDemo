@@ -13,6 +13,8 @@
 #import "AliyunImage.h"
 #import <AliyunVideoSDKPro/AliyunEffectSubtitle.h>
 #import <AliyunVideoSDKPro/AliyunEffectCaption.h>
+#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+#import "UIView+OPLayout.h"
 
 typedef NS_ENUM(NSInteger, AliyunPasterActionType) {
     AliyunPasterActionTypeMove,
@@ -56,6 +58,9 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
 @property (nonatomic, assign) BOOL mirror;
 @property (nonatomic, assign) CGFloat viewZoomSize;//缩放最大阈值;
 
+@property (nonatomic, strong) UIImageView *captionImageView;//缩放最大阈值;
+
+
 @end
 
 @implementation AliyunPasterView
@@ -68,52 +73,68 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
 
 #pragma mark - init -
 
-- (id)initWithPasterController:(AliyunPasterController *)pasterController
+- (id)initWithRenderBaseController:(AliyunRenderBaseController *)pasterController
 {
-    //产品要求，缩放最大限制为当前屏幕最大尺寸。
-    _viewZoomSize = MAX(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
-    CGRect pasterFrame = pasterController.pasterFrame;
-    self.type = pasterController.pasterType;
-    if (self = [super initWithFrame:pasterFrame]) {
-        self.nativeDisplaySize = pasterController.displaySize;
-        self.renderedMediaSize = pasterController.previewRenderSize;
-        if (self.type == AliyunPasterEffectTypeSubtitle || self.type == AliyunPasterEffectTypeCaption) {
-            self.text = pasterController.subtitle;
-            if (self.type == AliyunPasterEffectTypeSubtitle) {
-                AliyunEffectSubtitle *subtitle = [pasterController getEffectPaster];
-                AliyunColor *color = [[AliyunColor alloc] initWithColor:subtitle.textColor
-                                                            strokeColor:subtitle.strokeColor
-                                                                  stoke:subtitle.isStroke];
-                self.textColor = color;
-                self.textFontName = subtitle.fontName;
-            }else if (self.type == AliyunPasterEffectTypeCaption){
-                AliyunEffectCaption *caption = [pasterController getEffectPaster];
-                AliyunColor *color = [[AliyunColor alloc] initWithColor:caption.textColor
-                strokeColor:caption.textStrokeColor
-                      stoke:caption.textStroke];
-                self.textColor = color;
-                self.textFontName = caption.fontName;
-            }
+    
+    self = [super init];
+    
+    if (self) {
+        
+        AliyunRenderModel *model = pasterController.model;
+        self.frame = CGRectMake(0, 0, model.size.width, model.size.height);
+        _viewZoomSize = MAX(CGRectGetWidth([UIScreen mainScreen].bounds), CGRectGetHeight([UIScreen mainScreen].bounds));
+        
+        if ([pasterController isKindOfClass:[AliyunGifStickerController class]]) {
+            [self addSubviewsWithGifController:pasterController];
+
+        } else if ([pasterController isKindOfClass:[AliyunCaptionStickerController class]]) {
+            [self addSubviewsWithCaptionController:pasterController];
+            
         }
-        [self addSubviewsWithController:pasterController];
-        if (self.type == AliyunPasterEffectTypeCaption) {
-            //记录这些变量主要是用来计算pasterView的大小变化的时候，字幕应该显示的位置大小
-            CGRect textFrame = pasterController.subtitleFrame;
-            _xRatio = (textFrame.origin.x + textFrame.size.width / 2) / pasterFrame.size.width;
-            _yRatio = (textFrame.origin.y + textFrame.size.height / 2) / pasterFrame.size.height;
-            _wRatio = textFrame.size.width / pasterFrame.size.width;
-            _hRatio = textFrame.size.height / pasterFrame.size.height;
-        }
+        
         if (self.type == AliyunPasterEffectTypeSubtitle || self.type == AliyunPasterEffectTypeCaption) {
             [self needsUpdate];
         }
     }
+    
     return self;
+}
+
+- (void)updateCaptionModel
+{
+    if ([self.pasterController isKindOfClass:AliyunCaptionStickerController.class]) {
+        
+        AliyunCaptionSticker *caption = self.pasterController.model;
+
+        CGAffineTransform transfrom = self.transform;
+        self.transform = CGAffineTransformIdentity;
+    
+        
+        self.op_height = caption.size.height;
+        self.op_width = caption.size.width;
+        self.center = CGPointMake(caption.center.x, caption.center.y);
+        
+        
+        self.transform = transfrom;
+
+    }
+  
 }
 
 - (void)setEditStatus:(BOOL)editStatus
 {
+    if (_editStatus == editStatus) {
+        return;
+    }
     _editStatus = editStatus;
+    
+    if (![self.pasterController isKindOfClass:[AliyunCaptionStickerController class]]) {
+        if (editStatus) {
+            [self.pasterController beginEdit];
+        } else {
+            [self.pasterController endEdit];
+        }
+    }
     [self subviewsHiddenWithEditStatus:_editStatus];
 }
 -(void)removeFromSuperview{
@@ -160,10 +181,9 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
     self.pasterTextView.text = _text;
 }
 
-#pragma mark - UI init -
-
-- (void)addSubviewsWithController:(AliyunPasterController *)pasterController
+- (void)addSubviewsWithCaptionController:(AliyunCaptionStickerController *)pasterController
 {
+    
     CGRect pasterRect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
     
     self.borderView = [[UIView alloc] initWithFrame:pasterRect];
@@ -174,7 +194,6 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
     self.borderView.layer.borderWidth = 1.5;
     self.borderView.layer.cornerRadius = 4.0;
     
-    if (_type == AliyunPasterEffectTypeSubtitle) {
         self.pasterTextView = [[AliyunPasterTextView alloc] initWithFrame:pasterRect];
         self.pasterTextView.text = self.text;
         [self addSubview:self.pasterTextView];
@@ -184,51 +203,54 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
         tap.numberOfTapsRequired = 2;
         [self addGestureRecognizer:tap];
         
-    } else if (_type == AliyunPasterEffectTypeNormal) {
+    self.closeButton.bounds = CGRectMake(0, 0, 40, 40);
+    [self addSubview:self.closeButton];
+    self.closeButton.center = CGPointMake(0, 0);
+    self.closeButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
+    
+    self.scaleButton.bounds = CGRectMake(0, 0, 40, 40);
+    [self addSubview:self.scaleButton];
+    self.scaleButton.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    self.scaleButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
+    
+ 
+    [self subviewsHiddenWithEditStatus:self.editStatus];
+}
+
+
+
+
+
+- (void)addSubviewsWithGifController:(AliyunGifStickerController *)pasterController
+{
+    CGRect pasterRect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    
+    
+    AliyunGifSticker *model = pasterController.model;
+    self.borderView = [[UIView alloc] initWithFrame:pasterRect];
+    [self addSubview:self.borderView];
+    self.borderView.autoresizingMask = 0b111111;
+    self.borderView.layer.masksToBounds = YES;
+    self.borderView.layer.borderColor = [UIColor colorWithRed:239.0 / 255 green:75.0 / 255 blue:129.0 / 255 alpha:1].CGColor;
+    self.borderView.layer.borderWidth = 1.5;
+    self.borderView.layer.cornerRadius = 4.0;
+    
+    
         self.pasterAnimationView = [[AliyunPaseterAnimationView alloc] initWithFrame:pasterRect];
         self.pasterAnimationView.userInteractionEnabled = YES;
         [self addSubview:self.pasterAnimationView];
         self.pasterAnimationView.autoresizingMask = 0b111111;
         NSMutableArray *picPaths = [[NSMutableArray alloc] init];
-        NSArray *frames = pasterController.frames;
+        NSArray *frames = model.frameItems;
         
         for (int idx = 0; idx < frames.count; idx++) {
             AliyunEffectPasterFrameItem *frameItem = [frames objectAtIndex:idx];
             [picPaths addObject:frameItem.picPath];
         }
-        [self.pasterAnimationView setupImages:picPaths duration:pasterController.originDuration];
+        [self.pasterAnimationView setupImages:picPaths duration:model.originDuration];
         [self.pasterAnimationView run];
         
-    } else {
-        self.pasterAnimationView = [[AliyunPaseterAnimationView alloc] initWithFrame:pasterRect];
-        self.pasterAnimationView.userInteractionEnabled = YES;
-        [self addSubview:self.pasterAnimationView];
-        self.pasterAnimationView.autoresizingMask = 0b111111;
-        NSMutableArray *picPaths = [[NSMutableArray alloc] init];
-        NSArray *frames = pasterController.frames;
-        
-        for (int idx = 0; idx < frames.count; idx++) {
-            AliyunEffectPasterFrameItem *frameItem = [frames objectAtIndex:idx];
-            [picPaths addObject:frameItem.picPath];
-        }
-        
-        self.pasterTextView = [[AliyunPasterTextView alloc] initWithFrame:pasterController.subtitleFrame];
-        [self addSubview:self.pasterTextView];
-        self.pasterTextView.text = self.text;
-        self.pasterTextView.hidden = YES;
-        
-        __weak typeof(self) weakSelf = self;
-        self.pasterAnimationView.textAppearanceBlock = ^(BOOL isAppear) {
-            weakSelf.pasterTextView.hidden = !isAppear;
-        };
-       
-        [self.pasterAnimationView setupImages:picPaths duration:pasterController.originDuration textBeginTime:pasterController.originTextBeginTime textDuration:pasterController.originTextDuration];
-        [self.pasterAnimationView run];
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneClick:)];
-        tap.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:tap];
-    }
+    
     
     self.closeButton.bounds = CGRectMake(0, 0, 40, 40);
     [self addSubview:self.closeButton];
@@ -335,6 +357,12 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
         np.y = box.bottom;
     }
     self.center = np;
+    
+  
+    AliyunCaptionSticker *caption = self.pasterController.model;
+    if ([caption isKindOfClass:[AliyunCaptionSticker class]]) {
+        caption.center = self.center;
+    }
 }
 
 - (void)rotate:(CGPoint)fp to:(CGPoint)tp
@@ -362,6 +390,23 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
     self.bounds = newRect;
     CGAffineTransform transfrom = CGAffineTransformMakeRotation(angle);
     self.transform = transfrom;
+    
+
+    CGFloat radians = atan2f(self.transform.b, self.transform.a); //warning: 底层接口逆时针旋转为正 顺时针旋转为负
+    
+    if ([self.pasterController isKindOfClass:AliyunCaptionStickerController.class]) {
+        
+        AliyunCaptionSticker *model = self.pasterController.model;
+
+        if (model.size.height > 0 && !isnan(radians)) {
+            CGFloat scale = self.bounds.size.height/model.size.height;
+            CGFloat rotation = -radians;
+            model.rotation = rotation;
+            model.scale *= scale;
+        }
+    }
+
+
 }
 
 - (void)calculateRotateButtonAngle
@@ -471,16 +516,19 @@ CG_INLINE Box AliyunBoxMake(CGFloat left, CGFloat right, CGFloat top, CGFloat bo
 
 - (void)touchEnd {
     self.pasterActionType = AliyunPasterActionTypeNone;
-    CGFloat radians = atan2f(self.transform.b, self.transform.a); //warning: 底层接口逆时针旋转为正 顺时针旋转为负
-    [self.pasterTextView setNeedsDisplay];
-    [self.delegate eventBoundsDidChanged:self.bounds];
-    [self.delegate eventCenterDidChanged:self.center];
-    [self.delegate eventRotateDidChanged:-radians];
-    [self.delegate eventMirrorChanged:self.mirror];
+  
     
-    if (self.type == AliyunPasterEffectTypeCaption) {
-        [self.delegate eventTextBoundsDidChanged:self.pasterTextView.bounds];
-        [self.delegate eventTextCenterDidChanged:self.pasterTextView.center];
+    if ([self.pasterController isKindOfClass:[AliyunGifStickerController class]]) {
+        
+        
+        AliyunGifSticker *model = self.pasterController.model;
+
+        CGFloat radians = atan2f(self.transform.b, self.transform.a); //warning: 底层接口逆时针旋转为正 顺时针旋转为负
+        
+        model.size = self.bounds.size;
+        model.center = self.center;
+        model.rotation = -radians;
+        model.isMirror = self.mirror;
     }
 }
 

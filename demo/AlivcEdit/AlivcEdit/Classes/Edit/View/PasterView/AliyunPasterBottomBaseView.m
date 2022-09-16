@@ -12,8 +12,7 @@
 #import "AliyunPasterGroupCollectionViewCell.h"
 
 @interface AliyunPasterBottomBaseView()
-@property (nonatomic, strong) UIView *timeLinePalletView;//timeLine占位View
-@property (nonatomic, strong) UIView *bottomBar;//底部操作View
+
 
 @property (nonatomic, assign) CGFloat headerViewHeight;
 @property (nonatomic, assign) CGSize  timeLineSize;
@@ -91,21 +90,22 @@
     if (!_bottomBar) {
         _bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame) - self.bottomBarHeight-SafeBottom, CGRectGetWidth(self.bounds), self.bottomBarHeight)];
         _bottomBar.backgroundColor = AlivcOxRGBA(0xffffff, 0.1);
+        
+        UICollectionViewFlowLayout *followLayout = [[UICollectionViewFlowLayout alloc] init];
+        followLayout.itemSize = CGSizeMake(self.bottomBarHeight+20, self.bottomBarHeight);
+        followLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        followLayout.minimumLineSpacing = 0;
+        followLayout.minimumInteritemSpacing = 0;
+        
+        self.tabbarCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bottomBar.bounds), self.bottomBarHeight) collectionViewLayout:followLayout];
+        self.tabbarCollectionView.backgroundColor =[UIColor clearColor];
+        self.tabbarCollectionView.showsHorizontalScrollIndicator = NO;
+        self.tabbarCollectionView.delegate = (id)self;
+        self.tabbarCollectionView.dataSource = (id)self;
+        //    self.tabbarCollectionView.pagingEnabled = YES;
+        [_bottomBar addSubview: self.tabbarCollectionView];
     }
     
-    UICollectionViewFlowLayout *followLayout = [[UICollectionViewFlowLayout alloc] init];
-    followLayout.itemSize = CGSizeMake(self.bottomBarHeight+20, self.bottomBarHeight);
-    followLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    followLayout.minimumLineSpacing = 0;
-    followLayout.minimumInteritemSpacing = 0;
-    
-    self.tabbarCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bottomBar.bounds), self.bottomBarHeight) collectionViewLayout:followLayout];
-    self.tabbarCollectionView.backgroundColor =[UIColor clearColor];
-    self.tabbarCollectionView.showsHorizontalScrollIndicator = NO;
-    self.tabbarCollectionView.delegate = (id)self;
-    self.tabbarCollectionView.dataSource = (id)self;
-//    self.tabbarCollectionView.pagingEnabled = YES;
-    [_bottomBar addSubview: self.tabbarCollectionView];
     return _bottomBar;
 }
 

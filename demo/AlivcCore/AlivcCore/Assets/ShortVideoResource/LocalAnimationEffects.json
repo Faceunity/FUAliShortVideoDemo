@@ -1,41 +1,79 @@
- [
-  {
-  "eid":12000,
-  "name":"抖动",
-  "effectType":7,
-  "resourcePath":"Animation_Effects/抖动",
-  "icon":"icon"
-  },
-  
-  {
-  "eid":12001,
-  "name":"幻影",
-  "effectType":7,
-  "resourcePath":"Animation_Effects/幻影",
-  "icon":"icon"
-  },
-
-  {
-  "eid":12002,
-  "name":"科幻",
-  "effectType":7,
-  "resourcePath":"Animation_Effects/科幻",
-  "icon":"icon"
-  },
-  
-  {
-  "eid":12003,
-  "name":"重影",
-  "effectType":7,
-  "resourcePath":"Animation_Effects/重影",
-  "icon":"icon"
-  },
-  
-  {
-  "eid":12004,
-  "name":"朦胧",
-  "effectType":7,
-  "resourcePath":"Animation_Effects/朦胧",
-  "icon":"icon"
-  }
-  ]
+[
+    {
+        "eid": 0,
+        "name": "抖动",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/0-默认/抖动",
+        "icon": "icon"
+    },
+    {
+        "eid": 0,
+        "name": "幻影",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/0-默认/幻影",
+        "icon": "icon"
+    },
+    {
+        "eid": 0,
+        "name": "科幻",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/0-默认/科幻",
+        "icon": "icon"
+    },
+    {
+        "eid": 0,
+        "name": "重影",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/0-默认/重影",
+        "icon": "icon"
+    },
+    {
+        "eid": 0,
+        "name": "朦胧",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/0-默认/朦胧",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "跑马灯",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_9_marquee",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "九屏",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_9",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "六屏",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_6",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "四屏",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_4",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "三屏",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_3",
+        "icon": "icon"
+    },
+    {
+        "eid": 1,
+        "name": "两屏",
+        "effectType": 7,
+        "resourcePath": "Animation_Effects/1-分屏/split_screen_2",
+        "icon": "icon"
+    }
+]

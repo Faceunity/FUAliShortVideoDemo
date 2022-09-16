@@ -22,6 +22,10 @@
 @property (nonatomic, assign) CGFloat sG;//边框color G
 @property (nonatomic, assign) CGFloat sB;//边框color B
 @property (nonatomic, assign) BOOL isStroke;//是否有边框
+@property (nonatomic, assign) BOOL isBgColor;//是否有背景色
+@property (nonatomic, assign) BOOL sA;//color R
+
+
 
 /**
  初始化一个AliyunColor从一个dic

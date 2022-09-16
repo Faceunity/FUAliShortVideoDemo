@@ -20,18 +20,31 @@ static CGFloat secondPerText = 0.16;
     return [AlivcImage imageNamed:@"avcPromptSuccess"];
 }
 
-+ (void)showMessage:(NSString *)message image:(UIImage *)image inView:(UIView *)view{
+- (void)replaceMessage:(NSString *)msg image:(UIImage *)image {
+    self.mode = MBProgressHUDModeCustomView;
+    self.customView = [[UIImageView alloc]initWithImage:image];
+    self.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+    self.bezelView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.contentColor = [UIColor whiteColor];
+    self.label.numberOfLines = 5;
+    self.label.text = msg;
+    self.userInteractionEnabled = NO;
+}
+
+- (void)replaceSuccessMessage:(NSString *)message {
+    [self replaceMessage:message image:self.class.sucessImage];
+}
+
+- (void)replaceWarningMessage:(NSString *)message {
+    [self replaceMessage:message image:self.class.warningImage];
+}
+
++ (MBProgressHUD *)showMessage:(NSString *)message image:(UIImage *)image inView:(UIView *)view{
     
     MBProgressHUD  *hud =[MBProgressHUD showHUDAddedTo:view animated:true];
-    hud.mode = MBProgressHUDModeCustomView;
-    hud.customView = [[UIImageView alloc]initWithImage:image];
-    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    hud.bezelView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
-    hud.contentColor = [UIColor whiteColor];
-    hud.label.numberOfLines = 5;
-    hud.label.text = message;
-    hud.userInteractionEnabled = NO;
+    [hud replaceMessage:message image:image];
     [hud hideAnimated:true afterDelay:[MBProgressHUD showTimeWithMessage:message]];
+    return hud;
 }
 
 + (CGFloat )showTimeWithMessage:(NSString *)message{

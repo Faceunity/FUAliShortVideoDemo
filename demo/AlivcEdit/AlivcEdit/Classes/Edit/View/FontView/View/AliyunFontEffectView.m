@@ -40,6 +40,18 @@
 {
     [self.actions removeAllObjects];
     
+    
+//    TextActionTypePrinter,//打字机
+//    TextActionTypeClock,//钟摆
+//    TextActionTypeBrush,//雨刷
+//    TextActionTypeSet_1,//组合动画1
+//    TextActionTypeSet_2,//组合动画2
+//    TextActionTypeWave,//波浪
+//    TextActionTypeScrewUp,//螺旋上升
+//    TextActionTypeHeart,//心跳
+//    TextActionTypeCircularScan,//圆形扫描
+//    TextActionTypeWaveIn,//波浪弹入
+    
     NSArray *icons = @[@"transition_null_Nor",
                        @"transition_up_Nor",
                        @"transition_down_Nor",
@@ -47,12 +59,39 @@
                        @"transition_right_Nor",
                        @"transition_lineswipe_Nor",
                        @"transition_fade_Nor",
-                       @"transition_scale_Nor"];
-    NSArray *titles = @[[@"无" localString], [@"向上移动" localString],[@"向下移动" localString], [@"向左移动" localString], [@"向右移动" localString],[@"线性擦除" localString], [@"淡入淡出" localString],[@"缩放" localString] ];
+                       @"transition_scale_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor",
+                       @"transition_lineswipe_Nor"];
+    
+    NSArray *titles = @[[@"无" localString], [@"向上移动" localString],[@"向下移动" localString], [@"向左移动" localString], [@"向右移动" localString],[@"线性擦除" localString], [@"淡入淡出" localString],[@"缩放" localString],
+    
+                        [@"打字机" localString], [@"钟摆" localString],[@"雨刷" localString], [@"组合动画1" localString], [@"组合动画2" localString],[@"波浪" localString], [@"螺旋上升" localString],[@"心跳" localString],[@"圆形扫描" localString],[@"波浪弹入" localString]];
+    
     NSArray *types = @[@(TextActionTypeClear),@(TextActionTypeMoveTop),
                        @(TextActionTypeMoveDown),@(TextActionTypeMoveLeft) ,
                        @(TextActionTypeMoveRight),@(TextActionTypeLinerWipe),
-                       @(TextActionTypeFade), @(TextActionTypeScale)];
+                       @(TextActionTypeFade), @(TextActionTypeScale),
+                       
+                       @(TextActionTypePrinter),
+                       @(TextActionTypeClock),
+                       @(TextActionTypeBrush),
+                       @(TextActionTypeSet_1),
+                       @(TextActionTypeSet_2),
+                       @(TextActionTypeWave),
+                       @(TextActionTypeScrewUp),
+                       @(TextActionTypeHeart),
+                       @(TextActionTypeCircularScan),
+                       @(TextActionTypeWaveIn)
+    
+    ];
     
     for (int idx = 0; idx < [icons count]; idx++) {
         AliyunSubtitleActionItem *actionItem = [[AliyunSubtitleActionItem alloc] init];
@@ -86,9 +125,9 @@
         layout.itemSize = CGSizeMake(w, h);
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 20;
-        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
         
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMidY(self.bounds)-h/2, CGRectGetWidth(self.frame), h) collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), self.bounds.size.height) collectionViewLayout:layout];
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.backgroundColor = [UIColor clearColor];
@@ -115,6 +154,9 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.selectIndex == indexPath.row) {
+        return;
+    }
     AliyunSubtitleActionItem *actionItem = [self.actions objectAtIndex:indexPath.row];
     self.selectIndex = indexPath.row;
     if (self.delegate && [self.delegate respondsToSelector:@selector(onSelectActionType:)]) {
@@ -124,8 +166,8 @@
 
 
 -(void)setDefaultSelectItem:(TextActionType)actionType{
-    self.selectIndex = actionType -1;
-    if (self.selectIndex>0) {
+    self.selectIndex = actionType;
+    if (self.selectIndex>=0) {
         [self.collectionView reloadData];
         [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:self.selectIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
     }
