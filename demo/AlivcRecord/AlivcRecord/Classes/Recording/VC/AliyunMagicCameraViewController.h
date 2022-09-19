@@ -42,6 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 //完成按钮enable的条件 是否是录制时间大于等于最短时间
 - (CGFloat)finishButtonEnabledMinDuration;
 
+#if SDK_VERSION == SDK_VERSION_CUSTOM
+-(CVPixelBufferRef)faceunityRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+#endif
 
 @end
 

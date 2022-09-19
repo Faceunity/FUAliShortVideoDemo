@@ -159,6 +159,10 @@
     }
 }
 
++ (NSArray *) CachesRemoteMusicList {
+    return [NSKeyedUnarchiver unarchiveObjectWithFile:tmpMusicPath];
+}
+
 /**
  还原历史数据
  */
@@ -312,43 +316,51 @@
     __weak typeof(self) weakSelf = self;
     NSMutableArray *tmpMusic = [self musics];
     [AliyunResourceRequestManager fetchMusicWithPage:weakSelf.page success:^(NSArray<AliyunMusicPickModel *> *musicList) {
-        [tmpMusic addObjectsFromArray:musicList];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [tmpMusic addObjectsFromArray:musicList];
+        });
         //查询数据库
         [weakSelf.dbHelper queryMusicResourceWithEffecInfoType:AliyunEffectTypeMusic success:^(NSArray *infoModelArray) {
-            for (AliyunEffectResourceModel *resourceModel in infoModelArray) {
-                
-                NSString *name = [NSString stringWithFormat:@"%ld-%@", (long)resourceModel.eid, resourceModel.name];
-                NSString *path = [[[resourceModel storageFullPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", name]] stringByAppendingPathComponent:[resourceModel.url.lastPathComponent componentsSeparatedByString:@"?"][0]];
-                AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:path]];
-                for (AliyunMusicPickModel *musicModel in tmpMusic) {
-                    if ([musicModel.name isEqualToString: resourceModel.name] && [musicModel.artist isEqualToString:resourceModel.cnName]) {
-                        musicModel.name = resourceModel.name;
-                        musicModel.artist = resourceModel.cnName;
-                        musicModel.path = path;
-                        musicModel.downloadProgress = 1;
-                        musicModel.duration = [asset avAssetVideoTrackDuration];
-                        if (musicModel.duration < 0) {
-                            musicModel.isDBContain = NO;//异常的数据，重新下载
-                        }else{
-                            musicModel.isDBContain = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                for (AliyunEffectResourceModel *resourceModel in infoModelArray) {
+                    
+                    NSString *name = [NSString stringWithFormat:@"%ld-%@", (long)resourceModel.eid, resourceModel.name];
+                    NSString *path = [[[resourceModel storageFullPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", name]] stringByAppendingPathComponent:[resourceModel.url.lastPathComponent componentsSeparatedByString:@"?"][0]];
+                    AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:path]];
+                    for (AliyunMusicPickModel *musicModel in tmpMusic) {
+                        if ([musicModel.name isEqualToString: resourceModel.name] && [musicModel.artist isEqualToString:resourceModel.cnName]) {
+                            musicModel.name = resourceModel.name;
+                            musicModel.artist = resourceModel.cnName;
+                            musicModel.path = path;
+                            musicModel.downloadProgress = 1;
+                            musicModel.duration = [asset avAssetVideoTrackDuration];
+                            if (musicModel.duration < 0) {
+                                musicModel.isDBContain = NO;//异常的数据，重新下载
+                            }else{
+                                musicModel.isDBContain = YES;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
-            }
-            //播放上次选中的歌曲
-            [weakSelf.tableView reloadData];
-            weakSelf.isLoading = NO;
-            [weakSelf.indicatorView stopAnimating];
-            
+                //播放上次选中的歌曲
+                [weakSelf.tableView reloadData];
+                weakSelf.isLoading = NO;
+                [weakSelf.indicatorView stopAnimating];
+            });
+
         } failure:^(NSError *error) {
-            weakSelf.isLoading = NO;
-            [weakSelf.indicatorView stopAnimating];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.isLoading = NO;
+                [weakSelf.indicatorView stopAnimating];
+            });
         }];
     } failure:^(NSString *errorStr) {
-        [MBProgressHUD showMessage:[@"aliyun_network_not_connect" localString] inView:weakSelf.view];
-        weakSelf.isLoading = NO;
-        [weakSelf.indicatorView stopAnimating];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD showMessage:[@"aliyun_network_not_connect" localString] inView:weakSelf.view];
+            weakSelf.isLoading = NO;
+            [weakSelf.indicatorView stopAnimating];
+        });
     }];
 }
 
@@ -446,17 +458,17 @@
                 NSURL *toURL = [NSURL fileURLWithPath:toString];
                 AliyunLibraryMusicImport* import = [[AliyunLibraryMusicImport alloc] init];
                 [import importAsset:url toURL:toURL completionBlock:^(AliyunLibraryMusicImport* import) {
-                    
-                    
-                    //不支持的音乐不添加
-                    AliyunNativeParser *parser = [[AliyunNativeParser alloc] initWithPath:toString];
-                    NSString *codec = [parser getAudioCodec];
-                    //codec 返回值是unknown的情况
-                    if (codec && [codec hasSuffix:@"unk"]) {
-                        return;
-                    }
-                    [weakSelf.iTunesMusics addObject:model];
-                    dispatch_group_leave(group);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //不支持的音乐不添加
+                        AliyunNativeParser *parser = [[AliyunNativeParser alloc] initWithPath:toString];
+                        NSString *codec = [parser getAudioCodec];
+                        //codec 返回值是unknown的情况
+                        if (codec && [codec hasSuffix:@"unk"]) {
+                            return;
+                        }
+                        [weakSelf.iTunesMusics addObject:model];
+                        dispatch_group_leave(group);
+                    });
                 }];
             }
         }

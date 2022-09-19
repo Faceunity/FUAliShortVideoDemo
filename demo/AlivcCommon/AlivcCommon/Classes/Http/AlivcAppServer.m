@@ -60,7 +60,7 @@
         string= [NSMutableString stringWithString:urlString];
     }
     
-    [[self manager] GET:string parameters:@{} headers:@{} progress:^(NSProgress * _Nonnull downloadProgress) {
+    [[self manager] GET:string parameters:@{} progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -78,7 +78,7 @@
 #warning 尊敬的客户，此Server服务只用于demo演示使用，我们不建议您将此演示接口用作线上环境，请自行搭建自己的Server服务，如何集成自己的Server服务详见文档：https://help.aliyun.com/document_detail/108783.html?spm=a2c4g.11186623.6.1075.a70a3a4895Qysq。
     NSMutableDictionary *mutableParaDic = [[NSMutableDictionary alloc]initWithDictionary:parametersDic];
     
-    [[self manager] POST:urlString parameters:mutableParaDic headers:@{} progress:^(NSProgress * _Nonnull uploadProgress) {
+    [[self manager] POST:urlString parameters:mutableParaDic progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -116,11 +116,7 @@
     NSString *urlString = [NSString stringWithFormat:@"%@/demo/getSts",kAlivcQuUrlString];
     
     AFHTTPSessionManager *manager = [self manager];
-    
-    [manager GET:urlString parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    [manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *resultDic = responseObject[@"data"];
         NSLog(@"%@",resultDic);
         //AccessKeyId

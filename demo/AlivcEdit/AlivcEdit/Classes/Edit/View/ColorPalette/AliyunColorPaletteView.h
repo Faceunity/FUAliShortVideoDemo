@@ -19,12 +19,10 @@
 
  @param color 选择的颜色
  */
-- (void)textColorChanged:(AliyunColor *)color;
+- (void)colorPaletteViewTextColorChanged:(AliyunColor *)color;
 
-/**
- 清除边框颜色
- */
-- (void)clearStrokeColor;
+- (void)colorPaletteViewtextStrokeWidthChanged:(CGFloat)width;
+
 
 @end
 

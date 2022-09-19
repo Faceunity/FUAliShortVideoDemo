@@ -10,13 +10,17 @@
 #import <objc/runtime.h>
 @implementation AliyunMusicPickModel
 
++ (NSInteger) KeyIdFromMusicId:(NSString *)musicId {
+    return [[musicId substringFromIndex:musicId.length - 3] intValue];
+}
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary{
     self = [super init];
     if (self) {
         //musicId
         self.musicId = dictionary[@"musicId"];
         //获取keyId
-        self.keyId = [[self.musicId substringFromIndex:self.musicId.length - 3] intValue];
+        self.keyId = [AliyunMusicPickModel KeyIdFromMusicId:self.musicId];
 //        self.keyId = dictionary[@"musicId"];
         //title
         self.name = dictionary[@"title"];

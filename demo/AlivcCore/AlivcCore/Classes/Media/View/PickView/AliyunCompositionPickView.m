@@ -11,6 +11,8 @@
 #import "LXReorderableCollectionViewFlowLayout.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 
+#define kMaxTimeLeght  60 * 60
+
 @interface AliyunCompositionPickView () <UICollectionViewDelegate, UICollectionViewDataSource, AliyunCompositionPickCellDelegate>
 @property (nonatomic, strong) UIButton *buttonNext;
 @property (nonatomic, strong) UILabel *labelDuration;
@@ -161,7 +163,7 @@
 
 - (void)finishButtonClicked {
     if (!_assets.count) return;
-    if ([self durationWithCurrentAssets] > 300) {
+    if ([self durationWithCurrentAssets] > kMaxTimeLeght) {
         [self showHUD:NSLocalizedString(@"视频总时长不超过5分钟，请裁剪后继续！", nil)];
     }else if ([self videoCounnts] > 5) {
         [self showHUD:NSLocalizedString(@"最多5个视频", nil)];

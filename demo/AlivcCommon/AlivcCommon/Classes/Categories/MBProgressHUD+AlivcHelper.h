@@ -12,20 +12,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MBProgressHUD (AlivcHelper)
 
-///**
-// 警告图片
-//
-// @return 警告图片
-// */
-//+ (UIImage *)warningImage;
-//
-//
-///**
-// 成功图片
-//
-// @return 成功图片
-// */
-//+ (UIImage *)sucessImage;
+/**
+ 警告图片
+
+ @return 警告图片
+ */
++ (UIImage *)warningImage;
+
+
+/**
+ 成功图片
+
+ @return 成功图片
+ */
++ (UIImage *)sucessImage;
 
 
 /**
@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)showWarningMessage:(NSString *)message inView:(UIView *)view;
 
+- (void)replaceSuccessMessage:(NSString *)message;
+- (void)replaceWarningMessage:(NSString *)message;
 
 /**
  展示信息
@@ -53,6 +55,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param view 展示view所在的视图
  */
 + (void)showMessage:(NSString *)message inView:(UIView *)view;
+
++ (MBProgressHUD *)showMessage:(NSString *)message image:(UIImage *)image inView:(UIView *)view;
 
 /**
  一直展示信息

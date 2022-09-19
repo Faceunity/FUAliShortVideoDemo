@@ -42,7 +42,7 @@
 - (NSDictionary *)textAttribute
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.alignment = NSTextAlignmentLeft;
     UIFont *font = [UIFont fontWithName:self.mfontName size:self.mfontSize];
     if (!font) {
         font = [UIFont fontWithName:@"Helvetica" size:self.mfontSize];

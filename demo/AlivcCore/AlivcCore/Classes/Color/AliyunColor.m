@@ -20,6 +20,8 @@
         self.sG = [[dict objectForKey:@"sG"] floatValue];
         self.sB = [[dict objectForKey:@"sB"] floatValue];
         self.isStroke = [[dict objectForKey:@"isStroke"] boolValue];
+        self.sA = 1;
+
     }
     return self;
 }
@@ -40,6 +42,7 @@
         self.sR = strokeColorComponents[0];
         self.sG = strokeColorComponents[1];
         self.sB = strokeColorComponents[2];
+        self.sA = 1;
     }
     return self;
 }

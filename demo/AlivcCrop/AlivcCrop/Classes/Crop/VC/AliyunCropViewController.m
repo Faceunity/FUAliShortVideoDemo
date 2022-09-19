@@ -20,6 +20,7 @@
 #import "AVC_ShortVideo_Config.h"
 #import "MBProgressHUD+AlivcHelper.h"
 #import "NSString+AlivcHelper.h"
+#import "ElapsedTimeMeasurer.h"
 
 static NSString *const PlayerItemStatus = @"_playerItem.status";
 
@@ -32,6 +33,7 @@ typedef NS_ENUM(NSInteger, AliyunCropPlayerStatus) {
 
 @interface AliyunCropViewController ()<UIScrollViewDelegate, AliyunCropDelegate>
 
+@property (nonatomic, strong) ElapsedTimeMeasurer *elapsedTimeMeasurer;
 @property (nonatomic, strong) UIScrollView *previewScrollView;
 @property (nonatomic, strong) AliyunCropThumbnailView *thumbnailView;
 @property (nonatomic, strong) AliyunCropViewBottomView *bottomView;
@@ -72,6 +74,8 @@ typedef NS_ENUM(NSInteger, AliyunCropPlayerStatus) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _elapsedTimeMeasurer = [ElapsedTimeMeasurer new];
     _cutMode = _cutInfo.cutMode;
     //默认未添加KVO监听
     _KVOHasRemoved = YES;
@@ -326,6 +330,7 @@ typedef NS_ENUM(NSInteger, AliyunCropPlayerStatus) {
 //}
 
 - (void)cropTaskOnComplete {
+    [_elapsedTimeMeasurer endShowToast];
     NSLog(@"TestLog, %@:%@", @"log_crop_complete_time", @([NSDate date].timeIntervalSince1970));
     self.progressView.progress = 0;
     if (_isCancel) {
@@ -435,6 +440,7 @@ typedef NS_ENUM(NSInteger, AliyunCropPlayerStatus) {
             
             NSLog(@"TestLog, %@:%@", @"log_crop_start_time", @([NSDate date].timeIntervalSince1970));
             
+            [_elapsedTimeMeasurer begin];
             int res =[_cutPanel startCrop];
             if (res == ALIVC_SVIDEO_ERROR_MEDIA_NOT_SUPPORTED_VIDEO){
                 dispatch_async(dispatch_get_main_queue(), ^{

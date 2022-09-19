@@ -1,0 +1,20 @@
+{
+  "name": "三屏",
+  "module": "ALIVC_GECF",
+  "version":1,
+  "type": 1,
+  "nodeTree": [
+      {
+          "nodeId": 0,
+          "name": "split_screen_3",
+          "fragment": "precision highp float;\n uniform sampler2D RACE_Tex0;\n varying highp vec2 textureCoordinate;\n \n void main() {\n     vec2 uv = textureCoordinate.xy;\n     if (uv.y < 1.0/3.0) {\n         uv.y = uv.y + 1.0/3.0;\n     } else if (uv.y > 2.0/3.0){\n         uv.y = uv.y - 1.0/3.0;\n     }\n     gl_FragColor = texture2D(RACE_Tex0, uv);\n }",
+          "textures": [
+              {
+                  "name": "RACE_Tex0",
+                  "srcType": "INPUT_NODE",
+                  "nodeId": 0
+              }
+          ]
+      }
+  ]
+}

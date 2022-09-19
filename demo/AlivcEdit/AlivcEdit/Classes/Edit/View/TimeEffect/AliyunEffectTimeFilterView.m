@@ -107,6 +107,23 @@
     return self;
 }
 
+- (void)selectRepeat
+{
+    [self buttonSelected:_repeatButton];
+}
+- (void)selectMomentSlow
+{
+    [self buttonSelected:_slowButton];
+}
+- (void)selectMomentFast
+{
+    [self buttonSelected:_fastButton];
+}
+- (void)selectInvert
+{
+    [self buttonSelected:_backRunButton];
+}
+
 /**
  添加子控件
  */

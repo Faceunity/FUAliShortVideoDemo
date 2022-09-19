@@ -10,15 +10,24 @@
 #import "AVC_ShortVideo_Config.h"
 #import "AliyunCoverPickViewController.h"
 #import "AliyunPublishProgressView.h"
+#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
 #import <AliyunVideoSDKPro/AliyunVodPublishManager.h>
 #import "AliyunPublishTopView.h"
 #import "AliyunUploadViewController.h"
 #import "QUProgressView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "NSString+AlivcHelper.h"
+#import "AlivcTemplateResourceManager.h"
+#import "AlivcTemplateBuilderViewController.h"
+#import "ElapsedTimeMeasurer.h"
+#import "AliyunSVideoApi.h"
+#import "AliVideoClientUser.h"
+#import "MBProgressHUD+AlivcHelper.h"
+#import <VODUpload/VODUploadClient.h>
 
 @interface AlivcExportViewController () <
-AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
+AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback, UploadStreamFileInfoDelegate, AliyunPublishProgressViewDelegate, UITextFieldDelegate>
+@property(nonatomic, strong) ElapsedTimeMeasurer *elapsedTimeMeasurer;
 @property(nonatomic, strong) UIView *containerView;
 @property(nonatomic, strong) AliyunPublishTopView *topView;
 @property(nonatomic, strong) UITextField *titleView;
@@ -27,13 +36,18 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
 @property(nonatomic, strong) UIButton *pickButton;
 @property(nonatomic, strong) UIProgressView *progressView;
 @property(nonatomic, strong) AliyunPublishProgressView *publishProgressView;
+@property(nonatomic, strong) UIButton *templateBuildButton;
 
 @property(nonatomic, assign) BOOL finished;
 @property(nonatomic, assign) BOOL failed;
-@property(nonatomic, strong) UIImage *image;
 
+@property(nonatomic, weak) MBProgressHUD *coverUploading;
 @property(nonatomic, strong) AliyunVodPublishManager *publishManager;
-
+@property(nonatomic, strong) UploadStreamFileInfo *streamFileInfo;
+@property(nonatomic, copy) NSString *coverImageUrl;
+@property(nonatomic, copy) NSString *coverImageUploadAuth;
+@property(nonatomic, copy) NSString *coverImageUploadAddress;
+@property(nonatomic, copy) NSString *videoId;
 /**
  能否显示错误：YES：能， NO：不能
  因为退后台之后，重新进来，此时报错是第一次合成报错，u退后台导致的错误那就不显示错误，
@@ -52,15 +66,17 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
     [super viewDidLoad];
     [self addNotifications];
     [self setupSubviews];
+    _titleView.text = _draft.title;
     _canPopError = YES;
     _errorReExportCount = 0;
-    [self exportVideo];
+    _elapsedTimeMeasurer = [ElapsedTimeMeasurer new];
 }
 
 - (AliyunVodPublishManager *)publishManager{
     if (!_publishManager) {
         _publishManager =[[AliyunVodPublishManager alloc]init];
         _publishManager.exportCallback = self;
+        _publishManager.uploadCallback = self;
     }
     return _publishManager;
 }
@@ -75,16 +91,17 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
 
 //开始合成
 - (void)exportVideo{
-   int result = [self.publishManager exportWithTaskPath:_taskPath outputPath:_config.outputPath];
+    [_elapsedTimeMeasurer begin];
+   int result = [self.publishManager exportWithTaskPath:_taskPath outputPath:_outputPath];
     if (result != 0) {
-        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请先检查手机空间或返回重试" localString]];
+        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请返回重试" localString]];
     }
 }
 //继续合成
 - (void)resumeExportVideo{
     int result = [self.publishManager resumeExport];
     if (result != 0) {
-        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,合成失败,请先检查手机空间或返回重试" localString]];
+        [self showAlertWithTitle:[@"合成失败" localString] message:[@"合成失败,请返回重试" localString]];
     }
 }
 
@@ -154,6 +171,7 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
                            initWithFrame:CGRectMake(0, 0, coverWidth, coverHeight)];
     self.coverImageView.center = CGPointMake(ScreenWidth / 2, ScreenWidth / 2);
     self.coverImageView.userInteractionEnabled = YES;
+    self.coverImageView.image = self.coverImage;
     [effectView.contentView addSubview:self.coverImageView];
     
     self.pickButton =
@@ -189,6 +207,7 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
     // progress
     self.publishProgressView = [[AliyunPublishProgressView alloc]
                                 initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenWidth)];
+    self.publishProgressView.delegate = self;
     [effectView.contentView addSubview:self.publishProgressView];
     self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 4)];
     self.progressView.backgroundColor = rgba(0, 0, 0, 0.6);
@@ -226,6 +245,18 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
     label.text = [@"countoflimit" localString];
     label.font = [UIFont systemFontOfSize:10];
     [self.containerView addSubview:label];
+    
+    
+    UIButton *templateBuildButton = [[UIButton alloc] initWithFrame:CGRectMake((ScreenWidth - 100) / 2.0, CGRectGetMaxY(label.frame) + 44, 100, 32)];
+    [templateBuildButton setTitle:@"保存为模板" forState:UIControlStateNormal];
+    [templateBuildButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    templateBuildButton.backgroundColor = [UIColor systemPinkColor];
+    templateBuildButton.layer.cornerRadius = 6;
+    templateBuildButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [templateBuildButton addTarget:self action:@selector(onTemplateBuildButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    self.templateBuildButton = templateBuildButton;
+    self.templateBuildButton.hidden = YES;
+    [self.containerView addSubview:templateBuildButton];
     
     // vc
     self.view.backgroundColor = [AliyunIConfig config].backgroundColor;
@@ -288,15 +319,33 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
     [_titleView resignFirstResponder];
 }
 
+- (void) updateCoverImageFileIfNeed {
+    NSString *coverImgPath = self.coverPath;
+    if (![NSFileManager.defaultManager fileExistsAtPath:coverImgPath] || !_coverImage) {
+        return;
+    }
+    NSData *data = UIImagePNGRepresentation(_coverImage);
+    [data writeToFile:coverImgPath atomically:YES];
+}
+
+- (void) uploadCoverImageIfNeed {
+    if (self.coverImageUrl.length > 0) {
+        [self startUploadCover];
+    }
+}
+
 - (void)pickButtonClicked {
     __weak typeof(self)weakSelf = self;
     AliyunCoverPickViewController *vc = [AliyunCoverPickViewController new];
     vc.outputSize = _outputSize;
-    vc.videoPath = _config.outputPath;
+    vc.videoPath = _outputPath;
     vc.finishHandler = ^(UIImage *image) {
-        weakSelf.image = image;
+        weakSelf.coverImage = image;
+        [weakSelf updateCoverImageFileIfNeed];
+        [weakSelf uploadCoverImageIfNeed];
         weakSelf.coverImageView.image = image;
         weakSelf.backgroundView.image = image;
+        [weakSelf.draft updateCover:image];
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -344,27 +393,68 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
     }
 }
 
+- (NSString *) videoTitle {
+    NSString *title = _titleView.text;
+    if (title.length == 0) {
+        title = @"未命名";
+    }
+    if (title.length > 20) {
+        title = [title substringToIndex:20];
+    }
+    return title;
+}
+
+- (NSString *) coverPath {
+    return [_taskPath stringByAppendingPathComponent:@"cover.png"];
+}
+
 //发布
 - (void)finishButtonClicked {
     if (!_finished) {
-
         [self showAlertWithTitle:[@"提示" localString] message:[@"请等待合成完成" localString]];
         return;
     }
-    if (_titleView.text.length > 20) {
-        [self showAlertWithTitle:[@"提示" localString] message:[@"视频描述太长" localString]];
+    
+    NSString *coverPath = self.coverPath;
+    NSData *data = UIImagePNGRepresentation(_coverImage);
+    [data writeToFile:coverPath atomically:YES];
+    
+    AliyunUploadViewController *vc = [[AliyunUploadViewController alloc] init];
+    vc.videoPath = _outputPath;
+    vc.coverImagePath = coverPath;
+    vc.videoSize = self.outputSize;
+    vc.videoTitle = self.videoTitle;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)onTemplateBuildButtonClicked:(UIButton *)sender {
+    
+    NSString *taskPath = [[AlivcTemplateResourceManager builtTemplatePath] stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+    AliyunTemplateBuilder *builder = [AliyunTemplateBuilder build:taskPath editorTaskPath:_taskPath];
+    if (builder) {
+        // update title
+        [builder updateTitle:_titleView.text];
+        
+        // update cover url
+        NSString *coverPath = [_taskPath stringByAppendingPathComponent:@"template_cover.png"];
+        NSData *data = UIImagePNGRepresentation(_coverImage);
+        [data writeToFile:coverPath atomically:YES];
+        [builder updateCover:coverPath];
+        
+        // update preview with remote url
+        [builder updatePreviewVideo:_outputPath];
+        
+        // save all
+        [builder save];
+        
+        AlivcTemplateBuilderViewController *vc = [[AlivcTemplateBuilderViewController alloc] initWithEditorTaskPath:taskPath isOpen:YES];
+        [self.navigationController pushViewController:vc animated:YES];
+        
         return;
     }
     
-    NSString *coverPath = [_taskPath stringByAppendingPathComponent:@"cover.png"];
-    NSData *data = UIImagePNGRepresentation(_image);
-    [data writeToFile:coverPath atomically:YES];
-    AliyunUploadViewController *vc = [[AliyunUploadViewController alloc] init];
-    vc.videoPath = _config.outputPath;
-    vc.coverImagePath = coverPath;
-    vc.videoSize = _outputSize;
-    vc.videoTitle = _titleView.text;
-    [self.navigationController pushViewController:vc animated:YES];
+    [self showAlertWithTitle:@"" message:@"保存失败"];
+
 }
 
 #pragma mark - export callback
@@ -407,34 +497,46 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
 - (void)showExportError:(int)errorCode {
     //正常合成失败
     _failed = YES;
-    [self.publishProgressView markAsFailed];
+    [self.publishProgressView markAsExportFailed];
 
     [self showAlertWithTitle:[@"合成失败" localString] message:[NSString stringWithFormat:@"Error Code:%d",
                                                   errorCode]];
 }
 
-- (void)exporterDidEnd:(NSString *)outputPath {
-    _finished = YES;
+- (void) onFinish {
     _progressView.hidden = YES;
     _topView.finishButton.enabled = YES;
-    _image = [self thumbnailWithVideoPath:_config.outputPath
-                               outputSize:_outputSize];
-    [_publishProgressView markAsFinihed];
+    
+    if (_coverImage == nil) {
+        _coverImage = [self thumbnailWithVideoPath:_outputPath outputSize:_outputSize];
+    }
+    
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:_config.outputPath] completionBlock:^(NSURL *assetURL, NSError *error) {
-         NSLog(@"视频已保存到相册");
-     }];
+    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:_outputPath] completionBlock:^(NSURL *assetURL, NSError *error) {
+        NSLog(@"视频已保存到相册");
+    }];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
-                       self->_coverImageView.image = _image;
-                       self->_backgroundView.image = _image;
-                       self->_coverImageView.hidden = NO;
-                       self->_publishProgressView.hidden = YES;
-                   });
+        self->_coverImageView.image = _coverImage;
+        self->_backgroundView.image = _coverImage;
+        self->_coverImageView.hidden = NO;
+        self->_publishProgressView.hidden = YES;
+    });
     if (self.finishBlock) {
-        self.finishBlock(outputPath);
+        self.finishBlock(_outputPath);
     }
+    self.templateBuildButton.hidden = NO;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+- (void)exporterDidEnd:(NSString *)outputPath {
+    [_elapsedTimeMeasurer endShowToast];
+    NSAssert([outputPath isEqualToString:_outputPath], @"export to wrong output path!");
+    _finished = YES;
+    [_publishProgressView markAsExportFinihed];
+    if (!_publishProgressView.exportAndUpload) {
+        [self onFinish];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -449,6 +551,211 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, UITextFieldDelegate>
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)refreshVideo{
+    __weak AlivcExportViewController *weakSelf = self;
+    [AliyunSVideoApi refreshVideoUploadAuthWithToken:[AliVideoClientUser shared].token videoId:self.videoId handler:^(NSString *uploadAddress, NSString *uploadAuth, NSError *error) {
+        [weakSelf runInMainThread:^(AlivcExportViewController *strongSelf) {
+            if (error) {
+                [strongSelf showAlertWithTitle:@"更新视频授权失败" message:error.description];
+                strongSelf.publishProgressView.exportAndUpload = NO;
+                [strongSelf exportVideo];
+                return;
+            }
+            
+            [strongSelf.publishManager refreshWithUploadAuth:uploadAuth];
+        }];
+    }];
+}
+
+- (void) runInMainThread:(void(^)(AlivcExportViewController *strongSelf))cb {
+    __weak AlivcExportViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AlivcExportViewController *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        if (cb) {
+            cb(strongSelf);
+        }
+    });
+}
+
+// MARK: - UploadStreamFileInfoDelegate
+- (void) onUploadStreamFileInfo:(UploadStreamFileInfo *)fileInfo sizeChange:(NSUInteger)size {
+    [self runInMainThread:^(AlivcExportViewController *strongSelf) {
+        strongSelf.publishProgressView.totalSize = size;
+    }];
+}
+
+- (void) onUploadStreamFileInfo:(UploadStreamFileInfo *)fileInfo uploadProgress:(NSUInteger)uploadSize {
+    [self runInMainThread:^(AlivcExportViewController *strongSelf) {
+        strongSelf.publishProgressView.uploadedSize = uploadSize;
+    }];
+}
+
+- (void) onUploadFinish:(BOOL)isSuccess errMsg:(NSString *)errMsg {
+    if (_publishProgressView.exportAndUpload) {
+        if (isSuccess) {
+            [_publishProgressView markAsUploadFinished];
+            if (self.coverImageUrl.length > 0) {
+                [self startUploadCover];
+            }
+        } else {
+            [_publishProgressView markAsUploadFail];
+            self.coverImageUrl = nil;
+            self.coverImageUploadAuth = nil;
+            self.coverImageUploadAddress = nil;
+            self.videoId = nil;
+            [self showAlertWithTitle:@"合成时上传失败" message:errMsg];
+        }
+        
+        if (_finished) {
+            [self onFinish];
+        } else {
+            _publishProgressView.exportAndUpload = NO;
+        }
+    }
+}
+
+// MARK: - AliyunIVodUploadCallback
+- (void)publishManagerUploadSuccess:(AliyunVodPublishManager *)manager {
+    [self runInMainThread:^(AlivcExportViewController *strongSelf) {
+        if (strongSelf.publishManager.uploadState == AliyunVodUploadImage) {
+            [strongSelf.coverUploading replaceSuccessMessage:@"上传封面成功"];
+            [strongSelf.coverUploading hideAnimated:YES afterDelay:2.0];
+            strongSelf.coverUploading = nil;
+            return;
+        }
+        
+        [strongSelf onUploadFinish:YES errMsg:nil];
+    }];
+}
+
+- (void)publishManager:(AliyunVodPublishManager *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message {
+    [self runInMainThread:^(AlivcExportViewController *strongSelf) {
+        if (strongSelf.publishManager.uploadState == AliyunVodUploadImage) {
+            [strongSelf.coverUploading replaceWarningMessage:@"上传封面失败"];
+            [strongSelf.coverUploading hideAnimated:YES afterDelay:3.0];
+            strongSelf.coverUploading = nil;
+            return;
+        }
+        
+        [strongSelf onUploadFinish:NO errMsg:message];
+    }];
+}
+
+- (void)publishManager:(AliyunVodPublishManager *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize {}
+
+- (void)publishManagerUploadTokenExpired:(AliyunVodPublishManager *)manager {
+    [self runInMainThread:^(AlivcExportViewController *strongSelf) {
+        if (manager.uploadState == AliyunVodUploadImage) {
+            [strongSelf.coverUploading replaceWarningMessage:@"封面授权过期，上传封面失败"];
+            [strongSelf.coverUploading hideAnimated:YES afterDelay:3];
+            strongSelf.coverUploading = nil;
+        } else {
+            if (strongSelf.videoId) {
+                [strongSelf refreshVideo];
+            } else {
+                [strongSelf startUploadVideo];
+            }
+        }
+    }];
+}
+
+- (void)publishManagerUploadRetry:(AliyunVodPublishManager *)manager {
+    NSLog(@"上传重试");
+}
+
+- (void)publishManagerUploadRetryResume:(AliyunVodPublishManager *)manager {
+    NSLog(@"上传继续重试");
+}
+
+// MARK: - AliyunPublishProgressViewDelegate
+- (void) onAliyunPublishProgressViewDidExport:(AliyunPublishProgressView *)view {
+    [self exportVideo];
+    view.exportAndUpload = NO;
+}
+
+- (void) onAliyunPublishProgressViewDidExportAndUpload:(AliyunPublishProgressView *)view {
+    NSError *error = nil;
+    UploadStreamFileInfo *info = [self.publishManager exportToStreamFileWithTaskPath:_taskPath outputPath:_outputPath error:&error];
+    if (error) {
+        [self showAlertWithTitle:@"导出失败" message:[NSString stringWithFormat:@"错误码：%ld", error.code]];
+        return;
+    }
+    self.streamFileInfo = info;
+    self.streamFileInfo.delegate = self;
+    view.exportAndUpload = YES;
+    [self fetchVideoAuthAndUpload];
+}
+
+- (void) fetchVideoAuthAndUpload {
+    NSString *coverPath = self.coverPath;
+    __weak AlivcExportViewController *weakSelf = self;
+    [AliyunSVideoApi getImageUploadAuthWithToken:AliVideoClientUser.shared.token
+                                           title:self.videoTitle
+                                        filePath:coverPath
+                                            tags:nil
+                                         handler:^(NSString *imgUploadAddress, NSString *imgUploadAuth, NSString *imageURL, NSString *imageId, NSError *error) {
+        if (error) {
+            [weakSelf runInMainThread:^(AlivcExportViewController *strongSelf) {
+                [strongSelf onUploadFinish:NO errMsg:@"获取封面上传凭证失败，请稍后再发布"];
+            }];
+            return;
+        }
+        
+        [weakSelf runInMainThread:^(AlivcExportViewController *strongSelf) {
+            strongSelf.coverImageUrl = imageURL;
+            strongSelf.coverImageUploadAuth = imgUploadAuth;
+            strongSelf.coverImageUploadAddress = imgUploadAddress;
+            [strongSelf startUploadVideo];
+        }];
+    }];
+}
+
+- (void) startUploadCover {
+    NSString *coverUrl = self.coverImageUrl;
+    if (coverUrl.length == 0) {
+        [self showAlertWithTitle:@"上传封面失败" message:@"没有视频关联的封面凭证，请重新发布视频"];
+        return;
+    }
+    
+    if (!_coverUploading) {
+        _coverUploading = [MBProgressHUD showMessage:@"封面上传中..." alwaysInView:self.view];
+    }
+    
+    NSString *coverPath = self.coverPath;
+    if (![NSFileManager.defaultManager fileExistsAtPath:coverPath]) {
+        NSData *data = UIImagePNGRepresentation(_coverImage);
+        [data writeToFile:coverPath atomically:YES];
+    }
+    
+    [self.publishManager uploadImageWithPath:coverPath uploadAddress:self.coverImageUploadAddress uploadAuth:self.coverImageUploadAuth];
+}
+
+- (void) startUploadVideo {
+    __weak AlivcExportViewController *weakSelf = self;
+    [AliyunSVideoApi getVideoUploadAuthWithWithToken:AliVideoClientUser.shared.token
+                                               title:self.videoTitle
+                                            filePath:_outputPath
+                                            coverURL:self.coverImageUrl
+                                                desc:nil
+                                                tags:nil
+                                             handler:^(NSString *uploadAddress, NSString *uploadAuth, NSString *videoId, NSError *error) {
+        [weakSelf runInMainThread:^(AlivcExportViewController *strongSelf) {
+            if (error) {
+                [strongSelf onUploadFinish:NO errMsg:@"获取视频上传凭证失败，请稍后再发布"];
+                return;
+            }
+            
+            strongSelf.videoId = videoId;
+            [strongSelf.publishManager uploadStreamFile:strongSelf.streamFileInfo
+                                          uploadAddress:uploadAddress
+                                             uploadAuth:uploadAuth];
+        }];
+    }];
 }
 
 @end

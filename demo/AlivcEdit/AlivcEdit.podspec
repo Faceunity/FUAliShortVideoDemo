@@ -39,6 +39,9 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'FURenderKit', '~> 8.3.0'
   s.dependency 'AlivcCore'
+  s.dependency 'AlivcDraft'
+  s.dependency 'AlivcPhotoPicker'
   
 end

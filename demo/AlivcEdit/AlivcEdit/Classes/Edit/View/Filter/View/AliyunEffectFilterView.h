@@ -46,4 +46,6 @@
  @param filter 滤镜名称
  */
 - (void)updateSelectedFilter:(AliyunEffectInfo *)filter;
+
+- (void) updateSelectedFilterWithResource:(NSString *)resourcePath;
 @end

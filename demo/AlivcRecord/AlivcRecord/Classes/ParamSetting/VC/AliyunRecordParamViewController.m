@@ -161,11 +161,11 @@
         return 0;
     }else if ([model.reuseId isEqualToString:@"cellInput"]) {
         return 95;
-    }else if([model.reuseId isEqualToString:@"switch"]){
+    }else if([model.reuseId isEqualToString:@"switch"] || [model.reuseId isEqualToString:@"switch_subtitle"]){
         return 60;
     }else{
         if (indexPath.row == 4 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 9 || indexPath.row == 10
-            ||indexPath.row == 11) {
+            ||indexPath.row == 11 ||indexPath.row == 12) {
             return 82;
         }
         else{
@@ -280,23 +280,61 @@
     
     AliyunRecordParamCellModel *cellModel8 = [[AliyunRecordParamCellModel alloc] init];
     cellModel8.title = NSLocalizedString(@"拍摄方式", nil);
-    cellModel8.buttonTitleArray = @[NSLocalizedString(@"普通", nil),NSLocalizedString(@"合拍", nil)];
+    cellModel8.buttonTitleArray = @[NSLocalizedString(@"普通", nil),NSLocalizedString(@"合拍", nil),NSLocalizedString(@"多源", nil)];
     cellModel8.placeHolder = NSLocalizedString(@"普通", nil);
     cellModel8.reuseId = @"cellSilder";
     cellModel8.recodeTypeBlock = ^(AlivcRecordType recordType) {
         weakSelf.recordType = recordType;
         AliyunRecordParamCellModel *cellModel8_1 = weakSelf.dataArray[8];
-        AliyunRecordParamCellModel *cellModel8_2 = weakSelf.dataArray[9];
-        AliyunRecordParamCellModel *cellModel8_3 = weakSelf.dataArray[10];
-        if(recordType==AlivcRecordTypeMerge){
-            cellModel8_1.btnEnable = 2;
-            cellModel8_2.btnEnable = 2;
-            cellModel8_3.btnEnable = 2;
-        }else{
+        AliyunRecordParamCellModel *cellModel8_5 = weakSelf.dataArray[9];
+        AliyunRecordParamCellModel *cellModel8_2 = weakSelf.dataArray[10];
+        AliyunRecordParamCellModel *cellModel8_3 = weakSelf.dataArray[11];
+        if (recordType == AlivcRecordTypeNormal){
             cellModel8_1.btnEnable = 1;
+            cellModel8_5.btnEnable = 1;
             cellModel8_2.btnEnable = 1;
             cellModel8_3.btnEnable = 1;
+        } else if(recordType==AlivcRecordTypeMerge){
+            cellModel8_1.btnEnable = 2;
+            cellModel8_5.btnEnable = 2;
+            cellModel8_2.btnEnable = 2;
+            cellModel8_3.btnEnable = 2;
+        } else {
+            cellModel8_1.btnEnable = 1;
+            cellModel8_5.btnEnable = 1;
+            cellModel8_2.btnEnable = 2;
+            cellModel8_3.btnEnable = 2;
         }
+        
+#if SDK_VERSION == SDK_VERSION_CUSTOM
+        AliyunRecordParamCellModel *cellModel9_3 = weakSelf.dataArray[13];
+        AliyunRecordParamCellModel *cellModel9_2 = weakSelf.dataArray[14];
+        AliyunRecordParamCellModel *cellModel9_4 = weakSelf.dataArray[15];
+        AliyunRecordParamCellModel *cellModel9_5 = weakSelf.dataArray[16];
+        AliyunRecordParamCellModel *cellModel9_6 = weakSelf.dataArray[17];
+        if (recordType == AlivcRecordTypeNormal) {
+            cellModel9_2.btnEnable = 1;
+            cellModel9_3.btnEnable = 1;
+            cellModel9_4.btnEnable = 1;
+            cellModel9_5.btnEnable = 1;
+            cellModel9_6.btnEnable = 1;
+
+        } else if (recordType == AlivcRecordTypeMerge) {
+            cellModel9_2.btnEnable = 2;
+            cellModel9_3.btnEnable = 2;
+            cellModel9_4.btnEnable = 2;
+            cellModel9_5.btnEnable = 1;
+            cellModel9_6.btnEnable = 1;
+
+        } else {
+            cellModel9_2.btnEnable = 2;
+            cellModel9_3.btnEnable = 1;
+            cellModel9_4.btnEnable = 1;
+            cellModel9_5.btnEnable = 2;
+            cellModel9_6.btnEnable = 2;
+        }
+#endif
+        
         [weakSelf.tableView reloadData];
     };
     
@@ -308,6 +346,16 @@
     cellModel8_1.btnEnable = 1;
     cellModel8_1.mixAudioSourceBlock = ^(int recordType) {
         weakSelf.quVideo.mixAudioType = recordType;
+    };
+    
+    AliyunRecordParamCellModel *cellModel8_5 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel8_5.title = NSLocalizedString(@"合拍回声消除", nil);
+    cellModel8_5.buttonTitleArray = @[NSLocalizedString(@"不设置", nil), NSLocalizedString(@"硬件回声消除", nil), NSLocalizedString(@"3A回声消除", nil)];
+    cellModel8_5.placeHolder = NSLocalizedString(@"不设置", nil);
+    cellModel8_5.reuseId = @"cellSilder";
+    cellModel8_5.btnEnable = 1;
+    cellModel8_5.mixAECTypeBlock = ^(int aecType) {
+        weakSelf.quVideo.mixAECType = aecType;
     };
     
     AliyunRecordParamCellModel *cellModel8_2 = [[AliyunRecordParamCellModel alloc] init];
@@ -328,7 +376,7 @@
     cellModel8_3.btnEnable = 1;
     cellModel8_3.mixBgImgBlock = ^(int type) {
         weakSelf.quVideo.mixbgImgType = type;
-        AliyunRecordParamCellModel *cellModel8_4 = weakSelf.dataArray[11];
+        AliyunRecordParamCellModel *cellModel8_4 = weakSelf.dataArray[12];
         if (type==0) {
             cellModel8_4.btnEnable = 1;
         }else{
@@ -346,19 +394,19 @@
     cellModel8_4.mixBgImgScaleBlock = ^(int type) {
         weakSelf.quVideo.mixbgImgScaleType = type;
     };
-
+    
     AliyunRecordParamCellModel *cellModel9 = [[AliyunRecordParamCellModel alloc] init];
-    cellModel9.title = NSLocalizedString(@"镜像输出", nil);
+    cellModel9.title = NSLocalizedString(@"退出删除录制片段", nil);
     cellModel9.reuseId = @"switch";
     cellModel9.switchBlock = ^(BOOL open){
-        weakSelf.quVideo.videoFlipH = open;
+        weakSelf.quVideo.deleteVideoClipOnExit = open;
     };
-    
-    AliyunRecordParamCellModel *cellModel9_1 = [[AliyunRecordParamCellModel alloc] init];
-    cellModel9_1.title = NSLocalizedString(@"硬件回声消除", nil);
-    cellModel9_1.reuseId = @"switch";
-    cellModel9_1.switchBlock = ^(BOOL open){
-        weakSelf.quVideo.mixAECType = open;
+
+    AliyunRecordParamCellModel *cellModel9_0 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel9_0.title = NSLocalizedString(@"镜像输出", nil);
+    cellModel9_0.reuseId = @"switch";
+    cellModel9_0.switchBlock = ^(BOOL open){
+        weakSelf.quVideo.videoFlipH = open;
     };
     
     AliyunRecordParamCellModel *cellModel9_2 = [[AliyunRecordParamCellModel alloc] init];
@@ -375,15 +423,39 @@
         weakSelf.quVideo.isMixVideoTopLayer = open;
     };
     
+    
+    AliyunRecordParamCellModel *cellModel9_4 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel9_4.title = NSLocalizedString(@"转码", nil);
+    cellModel9_4.reuseId = @"switch_subtitle";
+    cellModel9_4.btnEnable = 1;
+    cellModel9_4.placeHolder = @"当视频大于540p时，转码到540p下";//1080p的一半
+    cellModel9_4.switchBlock = ^(BOOL open){
+        weakSelf.quVideo.needTransCode = open;
+    };
+    
+    AliyunRecordParamCellModel *cellModel9_5 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel9_5.title = NSLocalizedString(@"合拍视频", nil);
+    cellModel9_5.reuseId = @"switch";
+    cellModel9_5.switchBlock = ^(BOOL open){
+        weakSelf.quVideo.needMixVideo = open;
+    };
+    
+    AliyunRecordParamCellModel *cellModel9_6 = [[AliyunRecordParamCellModel alloc] init];
+    cellModel9_6.title = NSLocalizedString(@"回声消除", nil);
+    cellModel9_6.reuseId = @"switch";
+    cellModel9_6.switchBlock = ^(BOOL open){
+        weakSelf.quVideo.mixAECType = open;
+    };
+
     AliyunRecordParamCellModel *cellModel10 = [[AliyunRecordParamCellModel alloc] init];
     cellModel10.title = NSLocalizedString(@"高级美颜", nil);
     if (isRace) {
-         cellModel10.buttonTitleArray = @[NSLocalizedString(@"Race", nil)];
+         cellModel10.buttonTitleArray = @[NSLocalizedString(@"Queen", nil)];
     }else {
-        cellModel10.buttonTitleArray = @[NSLocalizedString(@"Race", nil),NSLocalizedString(@"FaceUnity", nil)];
+        cellModel10.buttonTitleArray = @[NSLocalizedString(@"Queen", nil),NSLocalizedString(@"FaceUnity", nil)];
     }
     
-    cellModel10.placeHolder = NSLocalizedString(@"Race", nil);
+    cellModel10.placeHolder = NSLocalizedString(@"Queen", nil);
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"AlivcBeautyType_cell"];
     cellModel10.reuseId = @"cellSilder";
     cellModel10.beautyTypeBlock = ^(NSInteger beautyType) {
@@ -396,11 +468,11 @@
     };
 
 #if SDK_VERSION == SDK_VERSION_CUSTOM
-    _dataArray = @[cellModel1,cellModel2,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7,cellModel8,cellModel8_1,cellModel8_2,cellModel8_3,cellModel8_4,cellModel9_3,cellModel9_2,cellModel9_1,cellModel9,cellModel10];
+    _dataArray = @[cellModel1,cellModel2,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7,cellModel8,cellModel8_1,cellModel8_5,cellModel8_2,cellModel8_3,cellModel8_4,cellModel9_3,cellModel9_2,cellModel9_4,cellModel9_5,cellModel9_6,cellModel9_0,cellModel9,cellModel10];
 #else
     [[NSUserDefaults standardUserDefaults] setObject:@"FaceUnity" forKey:@"AlivcBeautyType_cell"];
     self.quVideo.beautyType = AlivcBeautyTypeFaceUnity;
-    _dataArray = @[cellModel1,cellModel2,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7,cellModel8,cellModel8_1,cellModel8_2,cellModel8_3,cellModel8_4,cellModel9_1];
+    _dataArray = @[cellModel1,cellModel2,cellModel3,cellModel4,cellModel5,cellModel6,cellModel7,cellModel8,cellModel8_1,cellModel8_5,cellModel8_2,cellModel8_3,cellModel8_4];
 #endif
     
     
@@ -464,17 +536,32 @@
             [[AlivcShortVideoRoute shared]registerMediaConfig:weakSelf.quVideo];
             UIViewController *record = [[AlivcShortVideoRoute shared] alivcViewControllerWithType:AlivcViewControlRecord];
             [weakSelf.navigationController pushViewController:record animated:YES];
-        }else {
+        }else if (weakSelf.recordType == AlivcRecordTypeMerge) {
             //合拍
             AliyunCompositionViewController *targetVC = [[AliyunCompositionViewController alloc]init];
             
-            self->_quVideo.videoOnly = YES;
+            weakSelf.quVideo.videoOnly = YES;
             //        _quVideo.minDuration = 2;
-            self->_quVideo.maxDuration = 31;
+            weakSelf.quVideo.maxDuration = 31;
             targetVC.compositionConfig = weakSelf.quVideo;
             targetVC.controllerType = AlivcCompositionViewControllerTypeVideoMix;
             
             [weakSelf.navigationController pushViewController:targetVC animated:YES];
+        }else if (weakSelf.recordType == AlivcRecordTypeMultiSource) {
+            // 多源录制
+            if (weakSelf.quVideo.needMixVideo) {
+                AliyunCompositionViewController *targetVC = [[AliyunCompositionViewController alloc]init];
+                weakSelf.quVideo.videoOnly = YES;
+                weakSelf.quVideo.minDuration = 2;
+                weakSelf.quVideo.maxDuration = 31;
+                targetVC.compositionConfig = weakSelf.quVideo;
+                targetVC.controllerType = AlivcCompositionViewControllerTypeVideoMultiRec;
+                [weakSelf.navigationController pushViewController:targetVC animated:YES];
+            } else {
+                [[AlivcShortVideoRoute shared] registerMediaConfig:weakSelf.quVideo];
+                UIViewController *record = [AlivcShortVideoRoute.shared alivcViewControllerWithType:AlivcViewControlMultiSourceRecord];
+                [weakSelf.navigationController pushViewController:record animated:YES];
+            }
         }
     }];
     
@@ -534,7 +621,7 @@
 #pragma mark - setter & getter
 - (void)setRecordType:(AlivcRecordType)recordType {
     _recordType = recordType;
-    if (recordType == AlivcRecordTypeNormal) {
+    if (recordType == AlivcRecordTypeNormal || recordType == AlivcRecordTypeMultiSource) {
         [self.recordButton setTitle:NSLocalizedString(@"开启录制界面", nil) forState:0];
     } else {
         [self.recordButton setTitle:NSLocalizedString(@"选择合拍视频", nil) forState:0];

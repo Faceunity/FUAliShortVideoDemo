@@ -96,6 +96,14 @@
     
 }
 
+//滤镜
+- (void)lutFilterButtonClicked:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(lutFilterButtonClicked:)]) {
+        [self.delegate lutFilterButtonClicked:AliyunEditMaterialTypeFilter];
+    }
+    
+}
+
 //音乐
 - (void)musicButtonClicked:(id)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(musicButtonClicked)]) {

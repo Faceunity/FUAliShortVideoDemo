@@ -243,6 +243,11 @@ typedef NS_ENUM(NSInteger, AlivcBeautyType) {
 @property (nonatomic, assign) int mixAECType;
 
 /**
+ 录制退出的时候删除所有片段资源
+ */
+@property (nonatomic, assign) BOOL deleteVideoClipOnExit;
+
+/**
  视频带边框
  */
 @property (nonatomic, assign) BOOL hasVideoBorder;
@@ -254,9 +259,19 @@ typedef NS_ENUM(NSInteger, AlivcBeautyType) {
 
 
 /**
+ 导入时是否需要转码
+ */
+@property (nonatomic, assign) BOOL needTransCode;
+
+/**
+ 是否包含合拍视频
+ */
+@property (nonatomic, assign) BOOL needMixVideo;
+
+/**
  获取一个裁剪配置信息类
 
- @param outputPath 输出路径
+ @param outputPath 输出路floralia径
  @param outputSize 输出大小
  @param minDuration 最小裁剪时长
  @param maxDuration 最大裁剪时长

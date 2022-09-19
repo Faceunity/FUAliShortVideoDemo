@@ -1,1 +1,0 @@
-../../../../AlivcRecord/AlivcRecord/Classes/Recording/Utilities/ResourceManager/AliyunResourceManager.h

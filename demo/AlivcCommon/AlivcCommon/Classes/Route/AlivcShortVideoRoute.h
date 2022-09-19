@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  - AlivcViewControlCropParam:        短视频裁剪参数配置页
  - AlivcViewControlCropVideoSelect:  短视频裁剪视频选择页
  - AlivcViewControlCrop:             短视频裁剪页
+ - AlivcViewControlMultiSourceRecord:  短视频多源录制页
  */
 typedef NS_ENUM(NSInteger, AlivcViewControlType){
     AlivcViewControlEditParam = 0,
@@ -40,7 +41,8 @@ typedef NS_ENUM(NSInteger, AlivcViewControlType){
     AlivcViewControlRecordBasicParam,
     AlivcViewControlRaceBeauty,
     AlivcViewControlFaceDetect,
-    AlivcViewControlMetalPreview
+    AlivcViewControlMetalPreview,
+    AlivcViewControlMultiSourceRecord
 };
 
 #pragma mark - FinishBlock Define - 最终输出以block参数的形式给出

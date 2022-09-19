@@ -51,6 +51,9 @@
 //原有的内置特效
 @property (nonatomic, strong) NSMutableArray *defaultFilerData;
 
+//原有的内置分屏特效
+@property (nonatomic, strong) NSMutableArray *defaultSplitScreenFilerData;
+
 /**
  FMDB的封装类
  */
@@ -403,6 +406,7 @@
 - (void)fetchEffectGroupDataWithCurrentShowGroup:(AliyunEffectInfo *)group{
     [self.groupSelector.groupData removeAllObjects];
     [self.defaultFilerData removeAllObjects];
+    [self.defaultSplitScreenFilerData removeAllObjects];
     
     //添加默认特效滤镜
     AliyunEffectInfo *orginEffect = [[AliyunEffectInfo alloc] init];
@@ -410,6 +414,12 @@
     orginEffect.effectType = AliyunEffectTypeSpecialFilter;
     orginEffect.eid = 0;
     [self.groupSelector.groupData addObject:orginEffect];
+    
+    AliyunEffectInfo *splitScreenEffect = [[AliyunEffectInfo alloc] init];
+    splitScreenEffect.name = [@"分屏" localString];
+    splitScreenEffect.effectType = AliyunEffectTypeSpecialFilter;
+    splitScreenEffect.eid = 1;
+    [self.groupSelector.groupData addObject:splitScreenEffect];
     
     [self.groupSelector.groupData addObject:@"shortVideo_paster_more"];
     if (group) {
@@ -422,12 +432,18 @@
             AliyunEffectInfo *info = infoModelArray[index];
             
             //判断是否是内置资源包中的
-            if ([info.icon isEqualToString:@"icon"]) {
+            if (info.eid == 0) {
                 info.groupId = -1;
                 [self.defaultFilerData addObject:info];
                 continue;
             }
             
+            if (info.eid == 1) {
+                info.groupId = -1;
+                [self.defaultSplitScreenFilerData addObject:info];
+                continue;
+            }
+
             if (!group && self.groupSelector.selectTitle) {//普通刷新
                 if ([info.name isEqualToString:self.groupSelector.selectTitle]) {
                     [weakSelf fetchDataByGroup:info];
@@ -446,7 +462,7 @@
             [weakSelf.groupSelector.groupData insertObject:info atIndex:0];
         }
         //  当前没有任何下载group时，刷新collectionView
-        if (weakSelf.groupSelector.groupData.count <= 2) {
+        if (weakSelf.groupSelector.groupData.count <= 3) {
             [weakSelf fetchDataByGroup:nil];
         }
         
@@ -475,6 +491,8 @@
     if (group.eid == 0) {
         //加载原有内置的特效
         [self.dataArray addObjectsFromArray:self.defaultFilerData];
+    } else if (group.eid == 1) {
+        [self.dataArray addObjectsFromArray:self.defaultSplitScreenFilerData];
     }else{
         //加载下载的特效
          NSString *dirPath = [NSHomeDirectory() stringByAppendingPathComponent:group.resourcePath];
@@ -678,6 +696,13 @@
         _defaultFilerData = [[NSMutableArray alloc] init];
     }
     return _defaultFilerData;
+}
+
+- (NSMutableArray *)defaultSplitScreenFilerData {
+    if (!_defaultSplitScreenFilerData) {
+        _defaultSplitScreenFilerData = @[].mutableCopy;
+    }
+    return _defaultSplitScreenFilerData;
 }
 
 @end

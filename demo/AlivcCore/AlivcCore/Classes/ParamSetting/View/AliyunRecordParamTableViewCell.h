@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(NSUInteger, AlivcRecordType) {
     AlivcRecordTypeNormal,
-    AlivcRecordTypeMerge
+    AlivcRecordTypeMerge,
+    AlivcRecordTypeMultiSource,
 };
 
 @class AliyunRecordParamCellModel;
@@ -67,6 +68,7 @@ typedef NS_ENUM(NSUInteger, AlivcRecordType) {
 @property (nonatomic, copy) void(^ratioBack)(CGFloat videoRatio);
 @property (nonatomic, copy) void(^recodeTypeBlock)(AlivcRecordType recordType);
 @property (nonatomic, copy) void(^mixAudioSourceBlock)(int type);
+@property (nonatomic, copy) void(^mixAECTypeBlock)(int type);
 @property (nonatomic, copy) void(^mixBgColorBlock)(int type);
 @property (nonatomic, copy) void(^mixBgImgBlock)(int type);
 @property (nonatomic, copy) void(^mixBgImgScaleBlock)(int type);

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "D6326487-05B5-4FD7-A7B7-5A23075AA778"
+   uuid = "E038CB20-E959-4733-912A-5E872EE0D188"
    type = "0"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "36D6D65F-374B-4BFB-B8ED-AAB845D73C48"
+            uuid = "5430082A-0FD4-475C-AEFA-543863ED5960"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            breakpointStackSelectionBehavior = "1"
-            scope = "1"
-            stopOnStyle = "0">
+            filePath = "AlivcRecord/AlivcRecord/Classes/Recording/VC/AliyunMultiSourceRecordViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1144"
+            endingLineNumber = "1144"
+            landmarkName = "-alivcRecordNavigationBarButtonActionType:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

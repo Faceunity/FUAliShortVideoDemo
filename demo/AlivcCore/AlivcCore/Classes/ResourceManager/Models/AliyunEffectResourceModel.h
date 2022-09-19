@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, AliyunEffectType){
     AliyunEffectTypeCaption = 6,
     AliyunEffectTypeSpecialFilter = 7,
     AliyunEffectTypeTransition = 8,
+    AliyunEffectTypeTransitionLutFilter = 9,
 };
 
 

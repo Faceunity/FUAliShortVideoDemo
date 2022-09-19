@@ -1,1 +1,0 @@
-../../../../AlivcCrop/AlivcCrop/Classes/MediaPick/VC/AliyunPhotoViewController.h

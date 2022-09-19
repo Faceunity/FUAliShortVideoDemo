@@ -40,9 +40,9 @@
  */
 + (NSString *)quRelativeRootPath;
 
++ (NSError *)makeDirExist:(NSString *)dirPath;
 
 + (void)clearDir:(NSString *)dirPath;
-
 
 + (NSString *)createRecrodDir;
 

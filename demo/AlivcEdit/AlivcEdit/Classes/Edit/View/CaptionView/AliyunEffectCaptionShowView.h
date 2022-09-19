@@ -19,7 +19,7 @@
 
  @param font 字幕信息
  */
-- (void)onClickFontWithFontInfo:(AliyunEffectFontInfo *)font;
+- (void)captionShowViewonClickAddNew;
 
 @end
 
@@ -31,13 +31,5 @@
  
  */
 @property (nonatomic, weak) id<AliyunEffectCaptionShowViewDelegate> fontDelegate;
-
-
-/**
- 刷新展示区UI
-
- @param group tabbar选中分组的数据
- */
-- (void)fetchCaptionGroupDataWithCurrentShowGroup:(AliyunEffectCaptionGroup *)group;
 
 @end

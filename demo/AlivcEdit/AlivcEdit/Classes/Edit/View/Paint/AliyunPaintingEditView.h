@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AliyunPaintingWidthView.h"
 
 @protocol AliyunPaintingEditViewDelegate <NSObject>
 
@@ -58,13 +59,15 @@
 @interface AliyunPaintingEditView : UIView
 @property (nonatomic, weak) id<AliyunPaintingEditViewDelegate> delegate;
 
+@property(nonatomic, strong, readonly)AliyunPaintingWidthView *widthSelectView;
+
 /**
  显示View到指定View上
  
  @param superView 目标View
  @param animation 是否以动画方式显示
  */
--(void)showInView:(UIView *)superView animation:(BOOL)animation;
+-(void)showInView:(UIView *)superView animation:(BOOL)animation completion:(void(^)(void))completion;
 
 /**
  隐藏View

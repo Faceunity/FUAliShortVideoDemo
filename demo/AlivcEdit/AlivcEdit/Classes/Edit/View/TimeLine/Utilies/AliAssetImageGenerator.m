@@ -156,8 +156,10 @@
         _generator = [[AVAssetImageGenerator alloc]initWithAsset:asset];
         _generator.maximumSize = outputSize;
         _generator.appliesPreferredTrackTransform = YES;
-//        _generator.requestedTimeToleranceAfter = kCMTimeZero;
-//        _generator.requestedTimeToleranceBefore = kCMTimeZero;
+        
+        //设置差值0.5s
+        _generator.requestedTimeToleranceAfter = CMTimeMake(500, 1000);
+        _generator.requestedTimeToleranceBefore = CMTimeMake(500, 1000);
     }
     if (atTime < 0) {
         atTime = 0;

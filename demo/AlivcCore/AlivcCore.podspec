@@ -62,20 +62,15 @@ TODO: Add long description of the pod here.
   #  s.dependency  'SDWebImage'
 
 
-
-   #柯南SDK-短视频SDK依赖的数据埋点
-   s.dependency 'AlivcConan', '1.0.3'
-
 #   s.dependency 'AliyunVideoCore','3.17.0.13297788'
 
    #短视频SDK
-   s.dependency 'AliyunVideoSDKPro', '3.21.0'
+   s.dependency 'AliyunVideoSDKPro', '3.32.0'
 
+   s.dependency 'AliyunOSSiOS'
 
    #三方库ffmpeg
-   s.dependency 'QuCore-ThirdParty', '3.15.0'
-
-   s.dependency 'VODUpload'
+   s.dependency 'QuCore-ThirdParty'
 
    s.dependency 'AlivcCommon'
 

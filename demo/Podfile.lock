@@ -1,67 +1,64 @@
 PODS:
-  - AFNetworking (4.0.1):
-    - AFNetworking/NSURLSession (= 4.0.1)
-    - AFNetworking/Reachability (= 4.0.1)
-    - AFNetworking/Security (= 4.0.1)
-    - AFNetworking/Serialization (= 4.0.1)
-    - AFNetworking/UIKit (= 4.0.1)
-  - AFNetworking/NSURLSession (4.0.1):
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (4.0.1)
-  - AFNetworking/Security (4.0.1)
-  - AFNetworking/Serialization (4.0.1)
-  - AFNetworking/UIKit (4.0.1):
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - AlivcCommon (0.1.0):
-    - AFNetworking
+    - AFNetworking (~> 3.2.0)
     - FMDB
     - JSONModel
     - MBProgressHUD
     - SDWebImage (~> 5.8.1)
-    - ZipArchive
-  - AlivcConan (1.0.3):
-    - AlivcConan/AlivcConan (= 1.0.3)
-  - AlivcConan/AlivcConan (1.0.3)
+    - ZipArchive (~> 1.4.0)
   - AlivcCore (0.1.0):
     - AlivcCommon
-    - AlivcConan (= 1.0.3)
-    - AliyunVideoSDKPro (= 3.21.0)
-    - QuCore-ThirdParty (= 3.15.0)
-    - VODUpload
+    - AliyunOSSiOS
+    - AliyunVideoSDKPro (= 3.32.0)
+    - QuCore-ThirdParty
   - AlivcCrop (0.1.0):
+    - AlivcCore
+  - AlivcDraft (0.1.0):
     - AlivcCore
   - AlivcEdit (0.1.0):
     - AlivcCore
-  - AlivcRace (0.1.0):
-    - AlivcCommon
-    - AliyunRace
+    - AlivcDraft
+    - AlivcPhotoPicker
+    - FURenderKit (~> 8.3.0)
+  - AlivcPhotoPicker (0.0.1):
+    - AlivcCore
+    - MBProgressHUD
   - AlivcRecord (0.1.0):
     - AlivcCore
-    - AliyunRace (= 1.2.0)
-    - FURenderKit (~> 8.0.2)
-    - Masonry
-    - SVProgressHUD
-  - AliyunOSSiOS (2.10.9)
-  - AliyunRace (1.2.0)
-  - AliyunVideoSDKPro (3.21.0)
+    - FURenderKit (~> 8.3.0)
+  - AliyunOSSiOS (2.10.15)
+  - AliyunVideoSDKPro (3.32.0):
+    - QuCore-ThirdParty (~> 4.3.2)
+    - VODUpload (~> 1.6.6)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - FURenderKit (8.0.2)
+  - FURenderKit (8.3.0)
   - JSONModel (1.8.0)
-  - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
-  - QuCore-ThirdParty (3.15.0)
+  - QuCore-ThirdParty (4.3.2.1)
   - SDWebImage (5.8.4):
     - SDWebImage/Core (= 5.8.4)
   - SDWebImage/Core (5.8.4)
-  - SVProgressHUD (2.2.5)
   - UMCAnalytics (6.0.1):
     - UMCCommon
   - UMCCommon (2.0.0)
-  - VODUpload (1.6.1):
+  - VODUpload (1.6.6):
     - AliyunOSSiOS
   - ZipArchive (1.4.0)
 
@@ -69,27 +66,24 @@ DEPENDENCIES:
   - AlivcCommon (from `AlivcCommon/`)
   - AlivcCore (from `AlivcCore/`)
   - AlivcCrop (from `AlivcCrop/`)
+  - AlivcDraft (from `AlivcDraft/`)
   - AlivcEdit (from `AlivcEdit/`)
-  - AlivcRace (from `AlivcRace/`)
+  - AlivcPhotoPicker (from `AlivcPhotoPicker/`)
   - AlivcRecord (from `AlivcRecord/`)
   - UMCAnalytics (= 6.0.1)
   - UMCCommon (= 2.0.0)
 
 SPEC REPOS:
-  trunk:
+  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
     - AFNetworking
-    - AlivcConan
     - AliyunOSSiOS
-    - AliyunRace
     - AliyunVideoSDKPro
     - FMDB
     - FURenderKit
     - JSONModel
-    - Masonry
     - MBProgressHUD
     - QuCore-ThirdParty
     - SDWebImage
-    - SVProgressHUD
     - UMCAnalytics
     - UMCCommon
     - VODUpload
@@ -102,38 +96,37 @@ EXTERNAL SOURCES:
     :path: AlivcCore/
   AlivcCrop:
     :path: AlivcCrop/
+  AlivcDraft:
+    :path: AlivcDraft/
   AlivcEdit:
     :path: AlivcEdit/
-  AlivcRace:
-    :path: AlivcRace/
+  AlivcPhotoPicker:
+    :path: AlivcPhotoPicker/
   AlivcRecord:
     :path: AlivcRecord/
 
 SPEC CHECKSUMS:
-  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  AlivcCommon: ee94a312a6e68389127836d9e7a1da5adef4b9f6
-  AlivcConan: afb3f657f23ae8476789deca6f14236f4cdd5d54
-  AlivcCore: ab24ea88e0e449c1d7316e3aba4ade9b6eaf90bd
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  AlivcCommon: e7b1492b5af5cc9f8bfbf38dca3696bbf70781cb
+  AlivcCore: e2d7530dab991cb6b8ffccd4014d1565463295a7
   AlivcCrop: 146d4248ec3bc8572e898fde3c4d958b07bc7a70
-  AlivcEdit: a9eb549aa4748290fb5e609b4c1531b12a6a2e77
-  AlivcRace: adbff7a281251960121a4e98bda240fd07739d88
-  AlivcRecord: 24d873882cfa8fe138f673e2f40d9d0f6c2e7d35
-  AliyunOSSiOS: 13173e9eaf05d3816315319876025de3028ea31d
-  AliyunRace: 200096bf41861945efac646402fac8359d5f4ee5
-  AliyunVideoSDKPro: 135bdf317ebdb49059daecfe9ea5767901eb84b2
+  AlivcDraft: b0c522cb6144b5548eb2ecc19e130f1c5a6b71d7
+  AlivcEdit: 7d49093646f08e7e6ca19578078c43ae1d23ceb1
+  AlivcPhotoPicker: 5d0a9f223643871ff8c47900655584ed34a7add6
+  AlivcRecord: fdebd0416e3494a88902dbcbdce4474cafb9ae13
+  AliyunOSSiOS: 5d7c50ce7b39b2b0b10f603a5971cccb0f25eee2
+  AliyunVideoSDKPro: 11c0153c2dd5215a55fba902b9bf8766ac041598
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  FURenderKit: 8897d9168a598daf283e07aefbc8fc4b880ab9d8
+  FURenderKit: 3cd05abd03134d287a1d63cbaaeb95d304ba6bd6
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  QuCore-ThirdParty: f3c49341745bd366e8557a8994407cbbda5c1c44
+  QuCore-ThirdParty: c94982b619c63f68c05b7778c5deb03127b4f954
   SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
-  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   UMCAnalytics: c267acd9bb4a87e5f01735c158b63a617908f92e
   UMCCommon: 79b5a614c958db367113eed5740109d9a98e1223
-  VODUpload: 2c8ac654ceda839dda97a92023a270041dd9901e
+  VODUpload: 57651539af6a40a5d74c3e1b26165251b670a388
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
 
-PODFILE CHECKSUM: 7e641e23eafa40a556eee9be908dcbe1e3ebf69e
+PODFILE CHECKSUM: 66bcb74e4a8bc5d1cca02e34f46a80f91a53acf2
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

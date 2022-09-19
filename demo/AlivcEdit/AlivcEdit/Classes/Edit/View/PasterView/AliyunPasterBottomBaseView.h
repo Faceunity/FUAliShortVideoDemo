@@ -102,6 +102,9 @@
 @property (nonatomic, strong) AlivcEditBottomHeaderView *headerView;//顶部headerView
 @property (nonatomic, strong) AliyunTimelineView *timeLineView;
 
+@property (nonatomic, strong) UIView *timeLinePalletView;//timeLine占位View
+@property (nonatomic, strong) UIView *bottomBar;//底部操作View
+
 
 
 /**

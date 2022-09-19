@@ -64,6 +64,9 @@
             [self setupInputView];
         }else if([reuseIdentifier isEqualToString:@"switch"]){
             [self setupSwitchView];
+        }else if([reuseIdentifier isEqualToString:@"switch_subtitle"]){
+            [self setupSwitchView];
+            [self setupInfoLabel];
         }else {
             [self setupButtonView];
         }
@@ -175,10 +178,13 @@
     } else if ([_cellModel.title isEqualToString:NSLocalizedString(@"视频编码方式", nil)]){
         _cellModel.encodeModelBlock(clickButton.tag);
     }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"拍摄方式", nil) ]){
-        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"普通", nil)]) {
+        NSString *text = clickButton.titleLabel.text;
+        if ([text isEqualToString:NSLocalizedString(@"普通", nil)]) {
              _cellModel.recodeTypeBlock(AlivcRecordTypeNormal);
-        }else {
+        }else if([text isEqualToString:NSLocalizedString(@"合拍", nil)]) {
             _cellModel.recodeTypeBlock(AlivcRecordTypeMerge);
+        }else {
+            _cellModel.recodeTypeBlock(AlivcRecordTypeMultiSource); // 多源录制
         }
     }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍音频类型", nil) ]){
         if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"视频原音", nil)]) {
@@ -190,6 +196,14 @@
        }else {
             _cellModel.mixAudioSourceBlock(2);
         }
+    }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍回声消除", nil) ]){
+        if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"硬件回声消除", nil)]) {
+             _cellModel.mixAECTypeBlock(1);
+        }else if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"3A回声消除", nil)]) {
+            _cellModel.mixAECTypeBlock(2);
+       }else {
+            _cellModel.mixAECTypeBlock(0);
+       }
     }else if ([_cellModel.title isEqualToString: NSLocalizedString(@"合拍背景颜色", nil) ]){
         if ([clickButton.titleLabel.text isEqualToString:NSLocalizedString(@"不设置", nil)]) {
              _cellModel.mixBgColorBlock(0);
@@ -253,6 +267,15 @@
     
 }
 
+- (void)setupInfoLabel{
+    _infoLabel = [[UILabel alloc] init];
+    _infoLabel.font = [UIFont systemFontOfSize:11];
+    _infoLabel.textColor = [UIColor whiteColor];
+    _infoLabel.textAlignment = NSTextAlignmentLeft;
+    [self.contentView addSubview:_infoLabel];
+
+}
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -264,6 +287,10 @@
     }else if ([self.reuseIdentifier isEqualToString:@"switch"]){
         _switcher.frame = CGRectMake(CGRectGetMaxX(_titleLabel.frame) + 20, 25, 54, 20);
         _titleLabel.frame = CGRectMake(30, 30, 120, 20);
+    }else if ([self.reuseIdentifier isEqualToString:@"switch_subtitle"]){
+        _titleLabel.frame = CGRectMake(30, 30, 40, 20);
+        _switcher.frame = CGRectMake(CGRectGetMaxX(_titleLabel.frame) + 20, 25, 54, 20);
+        _infoLabel.frame = CGRectMake(CGRectGetMaxX(_switcher.frame) + 10, 30, self.contentView.bounds.size.width - CGRectGetMaxX(_switcher.frame) - 10, 20);
     }else {
         _infoLabel.frame = CGRectMake(width - 70, midY - 10, 70, 20);
     }
@@ -281,6 +308,8 @@
         
         _inputView.attributedPlaceholder = [[NSAttributedString alloc]initWithString:cellModel.placeHolder attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14],NSParagraphStyleAttributeName:style,NSForegroundColorAttributeName:AlivcOxRGB(0xc3c5c6)}];
     }else if ([cellModel.reuseId isEqualToString:@"switch"]) {
+        _switcher.on = (_cellModel.value == 1) ? YES : NO;
+    }else if ([self.reuseIdentifier isEqualToString:@"switch_subtitle"]){
         _switcher.on = (_cellModel.value == 1) ? YES : NO;
     }else{
          [self setupButtonView];
@@ -313,11 +342,14 @@
 {
     UISwitch *switchButton = (UISwitch*)sender;
     BOOL isButtonOn = [switchButton isOn];
-    if (isButtonOn) {
-        _infoLabel.text = @"";
-    }else {
-        _infoLabel.text = @"";
+    if (![self.cellModel.reuseId isEqualToString: @"switch_subtitle"] ) {
+        if (isButtonOn) {
+            _infoLabel.text = @"";
+        }else {
+            _infoLabel.text = @"";
+        }
     }
+  
     _cellModel.value = isButtonOn ? 1 : 0;
     _cellModel.switchBlock(isButtonOn);
 }

@@ -31,6 +31,8 @@
 
 @interface AliyunMusicPickViewController : AlivcBaseViewController
 
++ (NSArray *) CachesRemoteMusicList;
+
 /**
  代理
  */

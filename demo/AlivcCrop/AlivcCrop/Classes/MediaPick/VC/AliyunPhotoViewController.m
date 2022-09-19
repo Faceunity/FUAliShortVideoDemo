@@ -9,7 +9,6 @@
 #import "AliyunPhotoViewController.h"
 #import "AliyunPhotoLibraryManager.h"
 #import "AliyunPhotoListViewCell.h"
-#import "AliyunPhotoAssetSelectedView.h"
 #import "AliyunAlbumViewController.h"
 #import "AliyunCropViewController.h"
 #import "AliyunIConfig.h"

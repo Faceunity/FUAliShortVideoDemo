@@ -43,13 +43,13 @@ TODO: Add long description of the pod here.
 
    s.static_framework = true
 
-   s.dependency 'AFNetworking'
+   s.dependency 'AFNetworking', '~>3.2.0'
 
    s.dependency 'FMDB'
 
    s.dependency 'JSONModel'
 
-   s.dependency  'ZipArchive'
+   s.dependency  'ZipArchive', '~>1.4.0'
 
    s.dependency  'MBProgressHUD'
 

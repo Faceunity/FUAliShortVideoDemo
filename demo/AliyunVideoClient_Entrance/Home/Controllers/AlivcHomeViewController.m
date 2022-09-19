@@ -11,15 +11,19 @@
 #import "AVC_ET_ModuleItemCCell.h"
 #import "AVC_ET_ModuleDefine.h"
 #import "ELCVFlowLayout.h"
+#import "MBProgressHUD+AlivcHelper.h"
 
 #import "AlivcMacro.h"
 #import "AlivcShortVideoRoute.h"
+#import "AVC_ShortVideo_Config.h"
 
 #import "AlivcAppInfoViewController.h"
+#import "AliyunIConfig.h"
+#import "AliyunVideoConfig.h"
 
 #if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
 #import <AliyunVideoSDKPro/AliyunVideoSDKInfo.h>
-#endif 
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -86,7 +90,6 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
 
 @implementation AlivcHomeViewController
 
-
 #pragma mark - System & Init
 
 - (void)viewDidLoad {
@@ -104,8 +107,8 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     // 开启短视频log
 #if __has_include(<AliyunVideoSDKPro/AliyunVideoSDKInfo.h>)
     [AliyunVideoSDKInfo setLogLevel:kAlivcLogLevel];
-#endif
     
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -313,9 +316,9 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     NSMutableArray *mArray = [[NSMutableArray alloc]init];
     
     //功能配置
-    NSInteger shouldAddValue = 0b0010000000000111;
+    NSInteger shouldAddValue = 0b110000000000000000111;
     
-    for (int i = 0; i < 19; i ++) {
+    for (int i = 0; i < 21; i ++) {
         int typeValue = 1 << i;
         if (shouldAddValue & typeValue) {
             AVC_ET_ModuleType type = (AVC_ET_ModuleType)typeValue;
@@ -445,8 +448,37 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
     self.isChangedRow = false;
 }
 
+- (void) showConfirmAlertWithTitle:(NSString *)title message:(NSString *)message confirmHandler:(void(^)(void))handler {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定".localString style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        if (handler) {
+            handler();
+        }
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消".localString style:UIAlertActionStyleDefault handler:nil];
+    [alertVC addAction:confirm];
+    [alertVC addAction:cancel];
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+    NSAssert(AliyunVideoConfig.IsSetupFinish, @"Setup In didFinishLaunchingWithOptions:");
+    NSString *errMsg = @"";
+    if (![AliyunVideoConfig CheckLicense:&errMsg]) {
+        [self showConfirmAlertWithTitle:@"短视频授权失败，是否更新？" message:errMsg confirmHandler:^{
+            MBProgressHUD *loading = [MBProgressHUD showMessage:@"授权更新中..." alwaysInView:self.view];
+            [AliyunVideoConfig RefreshLicense:^(BOOL isSuccess, NSString * _Nonnull errMsg) {
+                if (isSuccess) {
+                    [loading replaceSuccessMessage:@"更新成功"];
+                } else {
+                    [loading replaceWarningMessage:errMsg];
+                }
+                [loading hideAnimated:YES afterDelay:3];
+            }];
+        }];
+        return;
+    }
+
     if (self.isChangedRow == NO) {
         self.isChangedRow = YES;
         
@@ -457,6 +489,25 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
             AVC_ET_ModuleDefine *module = self.dataArray[indexPath.row];
 //            [self configImageBundleWithType:module.type];
             switch (module.type) {
+                    // 剪同款
+                case AVC_ET_ModuleType_Template:
+                {
+                    [AliyunIConfig setConfig:[[AliyunIConfig alloc]init]];
+                    Class vcClass = NSClassFromString(@"AlivcTemplateListViewController");
+                    UIViewController *vc = [vcClass new];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                    break;
+                    // 草稿
+                case AVC_ET_ModuleType_Draft:
+                {
+                    Class vcClass = NSClassFromString(@"AliyunDraftViewController");
+                    UIViewController *vc = [vcClass new];
+                    [self.navigationController setNavigationBarHidden:YES];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                    break;
                     // 视频拍摄
                 case AVC_ET_ModuleType_VideoShooting:
                 {
@@ -530,7 +581,6 @@ static CGFloat lableDevideToTop = 44; //阿里云视频label距离顶部的距�
                     [self.navigationController pushViewController:cropBasicParam animated:YES];
                 }
                     break;
-                    
                     // 互动直播
                 case AVC_ET_ModuleType_VideoLive:[self pushTargetVCWithClassString:@"AlivcCombinationListViewController"];break;
                     

@@ -56,4 +56,6 @@
  @param eType eType MV的类型，查询类别type 1: 字体 2: 动图 3:mv 4:滤镜 5:音乐 6:字幕 7：特效
  */
 - (void)reloadDataWithEffectTypeWithDelete:(NSInteger)eType;
+
+- (AliyunEffectMvGroup *) upateSelectedWithResource:(NSString *)resourcePath;
 @end

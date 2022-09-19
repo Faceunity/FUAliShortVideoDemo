@@ -1,0 +1,20 @@
+{
+  "name": "两屏",
+  "module": "ALIVC_GECF",
+  "version":1,
+  "type": 1,
+  "nodeTree": [
+      {
+          "nodeId": 0,
+          "name": "split_screen_2",
+          "fragment": "// 精度\n precision highp float;\n // 通过uniform传递过来的纹理\n uniform sampler2D RACE_Tex0;\n // 纹理坐标\n varying highp vec2 textureCoordinate;\n \n void main() {\n \n     vec2 uv = textureCoordinate.xy;\n     float y;\n     // 0.0～0.5 范围内显示0.25～0.75范围的像素\n     if (uv.y >= 0.0 && uv.y <= 0.5) {\n         y = uv.y + 0.25;\n     }else {\n         // 0.5～1.0范围内显示 0.25～0.75范围的像素\n         y = uv.y - 0.25;\n     }\n \n     // 获取纹理像素，用于显示\n     gl_FragColor = texture2D(RACE_Tex0, vec2(uv.x, y));\n }\n ",
+          "textures": [
+              {
+                  "name": "RACE_Tex0",
+                  "srcType": "INPUT_NODE",
+                  "nodeId": 0
+              }
+          ]
+      }
+  ]
+}

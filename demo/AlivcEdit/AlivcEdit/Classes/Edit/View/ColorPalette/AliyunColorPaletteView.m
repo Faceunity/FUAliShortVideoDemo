@@ -8,6 +8,8 @@
 
 #import "AliyunColorPaletteView.h"
 #import "AliyunColorPaletteItemCell.h"
+#import "UIView+OPLayout.h"
+
 
 #define colorPaletteView_btn_tag  1000
 
@@ -15,6 +17,7 @@
 @property (nonatomic, strong)UICollectionView *contentCollectView;
 @property (nonatomic, strong)NSMutableArray *dataSource;
 @property (nonatomic, strong)UIButton *selectBtn;
+@property (nonatomic, strong)UISlider *slider;
 @end
 
 @implementation AliyunColorPaletteView
@@ -25,16 +28,36 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self steupSubview_s];
-        [self setupDataIsBorder:NO];
+        [self setupDataIsBorder:NO isBgColor:NO];
     }
     return self;
+}
+
+- (UISlider *)slider
+{
+    if (!_slider) {
+        _slider = [[UISlider alloc] initWithFrame:CGRectMake(20, 0, ScreenWidth - 40, 20)];
+        _slider.minimumValue = 0;
+        _slider.maximumValue = 20;
+        _slider.value = 0;
+        [_slider addTarget:self action:@selector(onStrokeSliderChanged:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _slider;
+    
+}
+
+- (void)onStrokeSliderChanged:(UISlider *)slider
+{
+    if ([self.delegate respondsToSelector:@selector(colorPaletteViewtextStrokeWidthChanged:)]) {
+        [self.delegate colorPaletteViewtextStrokeWidthChanged:slider.value];
+    }
 }
 
 #pragma mark - Subviews
 -(void)steupSubview_s{
     [self.contentView addSubview:self.contentCollectView];
     self.contentCollectView.center = self.contentView.center;
-    NSArray *arr = @[NSLocalizedString(@"填充",nil),NSLocalizedString(@"描边",nil)];
+    NSArray *arr = @[NSLocalizedString(@"填充",nil),NSLocalizedString(@"描边",nil),NSLocalizedString(@"背景色",nil)];
     CGFloat width = 70;
 //    UIButton *lastBtn;
     for (int i =0; i<arr.count; i++) {
@@ -54,6 +77,9 @@
 //        lastBtn = btn;
     }
     
+    [self.contentView addSubview:self.slider];
+    
+    self.slider.op_bottom = self.contentView.op_height - 6.f;
 }
 
 #pragma mark - Functions
@@ -69,9 +95,11 @@
         btn.backgroundColor = [UIColor blackColor];
     }
     if ([btn.currentTitle isEqualToString:NSLocalizedString(@"填充",nil)]) {
-        [self setupDataIsBorder:NO];
+        [self setupDataIsBorder:NO isBgColor:NO];
     }else if ([btn.currentTitle isEqualToString:NSLocalizedString(@"描边",nil)]){
-        [self setupDataIsBorder:YES];
+        [self setupDataIsBorder:YES isBgColor:NO];
+    }else if ([btn.currentTitle isEqualToString:NSLocalizedString(@"背景色",nil)]){
+        [self setupDataIsBorder:NO isBgColor:YES];
     }
     self.selectBtn = btn;
 }
@@ -136,16 +164,23 @@
     NSArray *colors = [self.dataSource objectAtIndex:indexPath.section];
     AliyunColor *color = [colors objectAtIndex:indexPath.row];
     if (color.isStroke && indexPath.section + indexPath.row == 0) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(clearStrokeColor)]) {
-            [self.delegate clearStrokeColor];
+        if (self.delegate) {
+            color.sA = 0;
+            [self.delegate colorPaletteViewTextColorChanged:color];
         }
-    }else{
-        [self.delegate textColorChanged:color];
+    } else  if (color.isBgColor && indexPath.section + indexPath.row == 0) {
+        if (self.delegate) {
+            color.sA = 0;
+            [self.delegate colorPaletteViewTextColorChanged:color];
+        }
+    }
+    else{
+        [self.delegate colorPaletteViewTextColorChanged:color];
     }
     
 }
 
-- (void)setupDataIsBorder:(BOOL)isBorder
+- (void)setupDataIsBorder:(BOOL)isBorder isBgColor:(BOOL)isBgColor
 {
     [self.dataSource removeAllObjects];
     NSArray *configColors = [self configColorsIsBorder:isBorder];
@@ -153,10 +188,13 @@
         NSMutableArray *marray = [[NSMutableArray alloc] init];
         for (NSDictionary *dict in array) {
             AliyunColor *color = [[AliyunColor alloc] initWithDict:dict];
+            color.isBgColor = isBgColor;
             [marray addObject:color];
         }
         [self.dataSource addObject:marray];
     }
+    
+    self.slider.hidden = !isBorder;
     
     [self.contentCollectView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 }

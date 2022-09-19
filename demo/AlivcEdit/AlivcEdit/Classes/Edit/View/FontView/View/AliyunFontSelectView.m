@@ -12,12 +12,20 @@
 #import "AliyunDBHelper.h"
 #import "NSString+AlivcHelper.h"
 #import "AlivcDefine.h"
-#define fontSelectView_btn_tag  2000
+#import "AliyunCaptionCollectionViewCell.h"
+#import "UIView+OPLayout.h"
 
-@interface AliyunFontSelectView()<UIPickerViewDelegate,UIPickerViewDataSource>
-@property(nonatomic, strong)UIPickerView *pickView;
+
+
+@interface AliyunFontSelectView()<UICollectionViewDelegate,UICollectionViewDataSource>
+@property(nonatomic, strong)UICollectionView *collectionView;
 @property(nonatomic, strong)NSMutableArray *dataSource;
-@property (nonatomic, assign) CGFloat selectedIndex;
+@property(nonatomic, assign)int faceType;
+@property(nonatomic, strong) AliyunDBHelper *helper;
+@property(nonatomic, assign) NSInteger seletedIndex;
+
+
+
 @end
 
 @implementation AliyunFontSelectView
@@ -25,37 +33,55 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-//        _isFirst = YES;
         [self setupSubviews_s];
         [self setupData];
     }
     return self;
 }
--(void)showInView:(UIView *)superView animation:(BOOL)animation completion:(void (^)(BOOL))completion{
-    [super showInView:superView animation:animation completion:completion];
-    [self changeSpearatorLineColor];
-    NSString *fontName = [[NSUserDefaults standardUserDefaults] objectForKey:AlivcEditPlayerPasterFontName];
-    for(int i = 0; i < self.dataSource.count; i++) {
-         AliyunEffectFontInfo *font = self.dataSource[i];
-        if ([fontName isEqualToString:font.fontName]) {
-                [self.pickView selectRow:i inComponent:0 animated:YES];
-                [self pickerView:self.pickView didSelectRow:i inComponent:0];
-            break;
-        }
+
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+        layout.itemSize = CGSizeMake(80, 80);
+        layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = 10;
+        
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:self.contentView.bounds collectionViewLayout:layout];
+        
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        
+        [_collectionView registerClass:[AliyunCaptionCollectionViewCell class] forCellWithReuseIdentifier:@"AliyunCaptionCollectionViewCell"];
     }
+    
+    return _collectionView;
 }
+
+
+- (AliyunEffectFontInfo *)systemFont
+{
+    AliyunEffectFontInfo *model = [[AliyunEffectFontInfo alloc] init];
+    return model;
+}
+
 -(void)setupData{
     if (self.dataSource.count >0) {
         [self.dataSource removeAllObjects];
     }
     // 获取字体
     AliyunDBHelper *helper = [[AliyunDBHelper alloc] init];
+    self.helper = helper;
     __weak typeof(self)weakSelf = self;
     [helper queryResourceWithEffecInfoType:1 success:^(NSArray *infoModelArray) {
         for (AliyunEffectFontInfo *info in infoModelArray) {
             // 检测字体是否注册
             if (info.eid == -2) {//系统字体不用检测
-                [self.dataSource addObject:info];
+                info.fontName = nil;
+                [weakSelf.dataSource addObject:info];
             }else{
                 UIFont* aFont = [UIFont fontWithName:info.fontName size:14.0];
                 BOOL isRegister = (aFont && ([aFont.fontName compare:info.fontName] == NSOrderedSame || [aFont.familyName compare:info.fontName] == NSOrderedSame));
@@ -63,120 +89,116 @@
                     NSString *fontPath = [[[NSHomeDirectory() stringByAppendingPathComponent:info.resourcePath] stringByAppendingPathComponent:@"font"] stringByAppendingPathExtension:@"ttf"];
                     NSString *registeredName = [[AliyunEffectFontManager manager] registerFontWithFontPath:fontPath];
                     if (registeredName) {
-                        [self.dataSource addObject:info];
+                        info.fontName = registeredName;
+                        [weakSelf.dataSource addObject:info];
                     }
                 } else {
-                    [self.dataSource addObject:info];
+                    [weakSelf.dataSource addObject:info];
+                }
+                if (weakSelf.dataSource.count > 0) {
+                    [weakSelf.dataSource insertObject:[self systemFont] atIndex:0];
                 }
             }
         }
-        [weakSelf.pickView performSelectorOnMainThread:@selector(reloadAllComponents) withObject:nil waitUntilDone:NO];
-        [self.pickView selectRow:0 inComponent:0 animated:NO];
+        
+        weakSelf.seletedIndex = 0;
+        [weakSelf.collectionView reloadData];
     } failure:^(NSError *error) {
-        [weakSelf.pickView performSelectorOnMainThread:@selector(reloadAllComponents) withObject:nil waitUntilDone:NO];
+        [weakSelf.collectionView reloadData];
     }];
 }
 -(void)setupSubviews_s{
-    [self.contentView addSubview:self.pickView];
-    [self drawBottomButtons];
+    
+    self.contentView.op_height -= SafeBottom;
+    self.bootomView.op_bottom -= SafeBottom;
+    self.bootomLine.hidden = YES;
+    [self.contentView addSubview:self.collectionView];
+    [self addBomUI];
+    
+ 
 }
 
--(void)drawBottomButtons{
-    NSArray *arr = @[[@"简约" localString], [@"手写" localString]];
+-(void)addBomUI{
+    
+    
+    NSArray *arr = @[@"粗体",@"斜体"];
     CGFloat width = 70;
     UIButton *lastBtn;
     for (int i =0; i<arr.count; i++) {
-        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(width*i, 0, width, CGRectGetHeight(self.bootomView.bounds))];
+        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(width *i, 0, width, CGRectGetHeight(self.bootomView.bounds))];
         [btn setTitle:arr[i] forState:UIControlStateNormal];
-        btn.tag = fontSelectView_btn_tag+i;
-        if (i==0) {
-            btn.backgroundColor = [UIColor blackColor];
-        }else{
-            btn.backgroundColor = [UIColor clearColor];
-        }
-        btn.titleLabel.textColor = [UIColor whiteColor];
+        btn.tag = i;
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+
         btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        [btn addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(onBtnAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.bootomView addSubview:btn];
         lastBtn = btn;
     }
-    
-    UIView *moreView = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(lastBtn.frame), 0, width, CGRectGetHeight(self.bootomView.bounds))];
-    moreView.backgroundColor = [UIColor clearColor];
-    [self.bootomView addSubview:moreView];
-    
-    UIButton *addBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMidX(moreView.bounds)-30/2, CGRectGetMidY(moreView.bounds)-30/2, 30, 30)];
-    [addBtn setBackgroundImage:[AlivcImage imageNamed:@"shortVideo_tab_caption_add"] forState:UIControlStateNormal];
-    [moreView addSubview:addBtn];
-    
 }
 
--(void)btnAction:(UIButton *)btn{
-    if ([btn.currentTitle isEqualToString:[@"简约" localString]]) {
-        
-    }else if ([btn.currentTitle isEqualToString:[@"手写" localString]]){
-        
+- (void)onBtnAction:(UIButton *)button
+{
+  
+    button.selected = !button.selected;
+    if (button.selected) {
+        self.faceType |= (1<<button.tag);
+    } else {
+        self.faceType &= ~(1<<button.tag);
     }
+    
+    if (self.dataSource.count > self.seletedIndex) {
+        AliyunEffectFontInfo *info = self.dataSource[self.seletedIndex];
+        if ([self.delegate respondsToSelector:@selector(onSelectFontWithFontInfo:faceType:)]) {
+            [self.delegate onSelectFontWithFontInfo:info faceType:self.faceType];
+        }
+    }
+ 
 }
 
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return 1;
-}
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return self.dataSource.count;
 }
--(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component{
-    return CGRectGetWidth(self.contentView.bounds);
-}
--(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
-    return 50;
-}
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    self.selectedIndex = row;
-    [self.pickView reloadAllComponents];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onSelectFontWithFontInfo:)]) {
-        AliyunEffectFontInfo *font = self.dataSource[row];
-        [[NSUserDefaults standardUserDefaults] setObject:font.fontName forKey:AlivcEditPlayerPasterFontName];
-        [self.delegate onSelectFontWithFontInfo:font];
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    AliyunCaptionCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AliyunCaptionCollectionViewCell" forIndexPath:indexPath];
+    cell.isFont = YES;
+    cell.contentView.backgroundColor = [UIColor cyanColor];
+    AliyunEffectFontInfo *info = self.dataSource[indexPath.row];
+    
+    if (indexPath.row == 0) {
+        cell.showImageView.image = [UIImage imageNamed:@"avc_sys"];
+    } else {
+        
+        NSString *iconPath = [[[NSHomeDirectory() stringByAppendingPathComponent:info.resourcePath] stringByAppendingPathComponent:@"icon"] stringByAppendingPathExtension:@"png"];
+        cell.showImageView.image = [UIImage imageWithContentsOfFile:iconPath];
     }
 
+    cell.selected = indexPath.row == self.seletedIndex;
+    
+    return cell;
 }
--(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    [self changeSpearatorLineColor];
-    UILabel *lab = [[UILabel alloc]init];
-    lab.textAlignment = NSTextAlignmentCenter;
-    AliyunEffectFontInfo *font = self.dataSource[row];
-    lab.text = font.name;
-    if (self.selectedIndex == row) {
-        lab.textColor = AlivcOxRGB(0x00C1DE);
-        lab.font = [UIFont systemFontOfSize:22];
-    }else{
-        lab.font = [UIFont systemFontOfSize:18];
-        lab.textColor = [UIColor whiteColor];
-    }
-    return lab;
-}
-#pragma mark - 改变分割线的颜色
-- (void)changeSpearatorLineColor
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    for(UIView *speartorView in self.pickView.subviews)
-    {
-        if (speartorView.frame.size.height < 1)//取出分割线view
-        {
-            speartorView.backgroundColor = AlivcOxRGBA(0x00C1DE,0.7);//改变分割线颜色
-        }
+
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.seletedIndex inSection:0]];
+    cell.selected = NO;
+    
+    self.seletedIndex = indexPath.row;
+    AliyunEffectFontInfo *info = self.dataSource[indexPath.row];
+
+    if ([self.delegate respondsToSelector:@selector(onSelectFontWithFontInfo:faceType:)]) {
+        [self.delegate onSelectFontWithFontInfo:info faceType:self.faceType];
     }
 }
 
 #pragma mark - Get
--(UIPickerView *)pickView{
-    if (!_pickView) {
-        _pickView = [[UIPickerView alloc]initWithFrame:self.contentView.bounds];
-        _pickView.delegate = self;
-        _pickView.dataSource = self;
-    }
-    return _pickView;
-}
+
 
 -(NSMutableArray *)dataSource{
     if (!_dataSource) {
@@ -184,5 +206,22 @@
     }
     return _dataSource;
 }
+
+
+-(void)showInView:(UIView *)superView animation:(BOOL)animation completion:(void (^ __nullable)(BOOL finished))completion
+{
+    [super showInView:superView animation:animation
+           completion:completion];
+}
+
+- (void)willMoveToWindow:(UIWindow *)newWindow
+{
+    [super willMoveToWindow:newWindow];
+    
+    if (newWindow) {
+        [self setupData];
+    }
+}
+
 
 @end

@@ -16,11 +16,7 @@
 @implementation AlivcEditItemManager
 + (NSArray <AlivcEditItemModel*>*)defaultModelsWithUIConfig:(AlivcEditUIConfig *)uiConfig{
     NSMutableArray *resultArray = [[NSMutableArray alloc]init];
-    NSInteger defaultAllValue = 12;
-    AlivcOutputProductType productType = kAlivcProductType;
-    if (productType == AlivcOutputProductTypeSmartVideo) {
-        defaultAllValue = 13;
-    }
+    NSInteger defaultAllValue = 14;
     for (NSInteger i = 0; i < defaultAllValue; i++) {
         AlivcEditItemModel *model =[AlivcEditItemManager configModelsWithIndex:i withUIConfig:uiConfig];
         if (model) {
@@ -40,6 +36,13 @@
             model.title = [@"滤镜" localString];
             model.showImage = uiConfig.filterImage;
             model.selString = @"filterButtonClicked:";
+        }
+            break;
+        case AliyunEditSouceClickTypeLutFilter:
+        {
+            model.title = [@"Lut滤镜" localString];
+            model.showImage = uiConfig.filterImage;
+            model.selString = @"lutFilterButtonClicked:";
         }
             break;
         case AliyunEditSouceClickTypeMusic:

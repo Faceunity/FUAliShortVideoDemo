@@ -1,1 +1,0 @@
-../../../../AlivcRace/AlivcRace/Classes/View/BeatyView/AlivcRaceLiveBeautifyNavigationView.h

@@ -83,6 +83,10 @@
             return [@"播放列表" localString];
         case AVC_ET_ModuleType_VideoPlayShift:
             return [@"直播时移" localString];
+        case AVC_ET_ModuleType_Draft:
+            return [@"草稿" localString];
+        case AVC_ET_ModuleType_Template:
+            return [@"剪同款" localString];
     }
 }
 
@@ -142,30 +146,12 @@
             return [UIImage imageNamed:@"avc_home_videoPlay"];
         case AVC_ET_ModuleType_VideoPlayShift:
             return [UIImage imageNamed:@"avc_home_videoPlay"];
+        case AVC_ET_ModuleType_Draft:
+            return [UIImage imageNamed:@"avc_home_shortVideo"];
+        case AVC_ET_ModuleType_Template:
+            return [UIImage imageNamed:@"avc_home_shortVideo"];
     }
 
-}
-
-
-+ (NSArray <AVC_ET_ModuleDefine *>*)allModules{
-    NSMutableArray *mArray = [[NSMutableArray alloc]init];
-    for (int i = 0; i < 7; i ++) {
-        AVC_ET_ModuleType type = (AVC_ET_ModuleType)i;
-        AVC_ET_ModuleDefine *module = [[AVC_ET_ModuleDefine alloc]initWithModuleType:type];
-        [mArray addObject:module];
-    }
-    return (NSArray *)mArray;
-}
-
-
-+ (NSArray <AVC_ET_ModuleDefine *>*)allDemos{
-    NSMutableArray *mArray = [[NSMutableArray alloc]init];
-    for (int i = 7; i < 15; i ++) {
-        AVC_ET_ModuleType type = (AVC_ET_ModuleType)i;
-        AVC_ET_ModuleDefine *module = [[AVC_ET_ModuleDefine alloc]initWithModuleType:type];
-        [mArray addObject:module];
-    }
-    return (NSArray *)mArray;
 }
 
 @end

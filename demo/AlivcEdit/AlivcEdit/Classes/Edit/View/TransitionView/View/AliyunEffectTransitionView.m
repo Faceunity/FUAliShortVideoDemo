@@ -23,6 +23,7 @@
 #import "AliyunEffectFilterInfo.h"
 #import "AlivcRegulatorView.h"
 #import <AliyunVideoSDKPro/AliyunTransitionEffect.h>
+#import <AliyunVideoSDKPro/AEPVideoTrackClip.h>
 
 @interface AliyunEffectTransitionView()<AlivcGroupSelectorDelegate>
 
@@ -48,9 +49,6 @@
 @end
 
 @implementation AliyunEffectTransitionView
-{
-    AliyunTransitionIcon *_selectedIcon;//当前选中的动画
-}
 
 - (id)initWithFrame:(CGRect)frame delegate:(id<AliyunEffectTransitionViewDelegate>)delegate
 {
@@ -216,6 +214,136 @@
         return cell;
     }
     return nil;
+}
+
+static TransitionType s_defaultIconTypeForEffect(AEPTransitionEffect *effect)
+{
+    if ([effect isKindOfClass:AEPTransitionShufferEffect.class]) {
+        return TransitionTypeShuffer;
+    }
+    if ([effect isKindOfClass:AEPTransitionStarEffect.class]) {
+        return TransitionTypeStar;
+    }
+    if ([effect isKindOfClass:AEPTransitionCircleEffect.class]) {
+        return TransitionTypeCircle;
+    }
+    if ([effect isKindOfClass:AEPTransitionFadeEffect.class]) {
+        return TransitionTypeFade;
+    }
+    if (![effect isKindOfClass:AEPTransitionTranslateEffect.class]) {
+        return TransitionTypeNull;
+    }
+    
+    AEPTransitionTranslateEffect *translate = (AEPTransitionTranslateEffect *)effect;
+    switch (translate.direction) {
+        case DIRECTION_LEFT: return TransitionTypeMoveLeft;
+        case DIRECTION_RIGHT: return TransitionTypeMoveRight;
+        case DIRECTION_TOP: return TransitionTypeMoveUp;
+        case DIRECTION_BOTTOM: return TransitionTypeMoveDown;
+    }
+    
+    return TransitionTypeNull;
+}
+
+- (AliyunTransitionIcon *) defaultIconWithType:(TransitionType)type
+{
+    for (AliyunTransitionIcon *icon in _icons) {
+        if (icon.type == type) {
+            return icon;
+        }
+    }
+    return nil;
+}
+
+- (AliyunTransitionIcon *) iconForEffect:(AEPTransitionEffect *)effect
+{
+    if (![effect isKindOfClass:AEPTransitionCustomEffect.class]) {
+        return [self defaultIconWithType:s_defaultIconTypeForEffect(effect)];
+    }
+    
+    AEPTransitionCustomEffect *custom = (AEPTransitionCustomEffect *)effect;
+    for (AliyunTransitionIcon *icon in _icons) {
+        if (icon.resoucePath.length == 0) {
+            if (custom.source.path == 0) {
+                return icon;
+            }
+            continue;
+        }
+
+        if ([custom.source.path containsString:icon.resoucePath]) {
+            return icon;
+        }
+    }
+    return nil;
+}
+
+- (AliyunEffectInfo *) findGroupForEffect:(AEPTransitionEffect *)effect
+{
+    BOOL isDefault = (![effect isKindOfClass:AEPTransitionCustomEffect.class]);
+    AEPTransitionCustomEffect *customEffect = (AEPTransitionCustomEffect *)effect;
+    for (AliyunEffectInfo *info in self.groupSelector.groupData) {
+        if (![info isKindOfClass:AliyunEffectInfo.class]) {
+            continue;
+        }
+        
+        if (isDefault) {
+            if (info.eid == 0) {
+                return info;
+            }
+        } else if (info.resourcePath && [customEffect.source.path containsString:info.resourcePath]) {
+            return info;
+        }
+    }
+    return nil;
+}
+
+- (void) reloadSelectedForClips:(NSArray<AEPVideoTrackClip *> *)clips {
+    int count = (int)_covers.count;
+    if (count < 2) {
+        return;
+    }
+
+    AEPTransitionEffect *lastEffect = nil;
+    for (int i = count - 1; i >= 0; --i) {
+        AliyunTransitionCover *cover = _covers[i];
+        if (!cover.isTransitionIdx) {
+            continue;
+        }
+
+        int clipIdx = cover.transitionIdx + 1;
+        if (clips.count <= clipIdx) {
+            continue;
+        }
+        
+        _selectedCover.isSelect = NO;
+        _selectedCover = cover;
+        _selectedCover.isSelect = YES;
+
+        AEPVideoTrackClip *clip = clips[clipIdx];
+        AEPTransitionEffect *transition = clip.transitionEffect;
+        lastEffect = transition;
+        if (transition == nil) {
+            continue;
+        }
+        
+        AliyunEffectInfo *group = [self findGroupForEffect:transition];
+        if (group == nil) {
+            continue;
+        }
+        [self fetchEffectGroupDataWithCurrentShowGroup:group];
+        AliyunTransitionIcon *icon = [self iconForEffect:transition];
+        if (icon) {
+            [self transitionIconCellStatusChange:icon];
+        }
+    }
+    
+    [self.coverTableView.tableView reloadData];
+    [self.transitionTableView.tableView reloadData];
+    
+    if (lastEffect) {
+        NSArray *paramList = [AlivcRegulatorView getSliderParams:lastEffect.editorEffect.effectConfig];
+        [self showRegulatorView:lastEffect.editorEffect paramList:paramList index:_selectedCover.transitionIdx];
+    }
 }
 
 - (void)tableView:(PTEHorizontalTableView *)horizontalTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -406,6 +534,8 @@
         //  当前没有任何下载group时，刷新collectionView
         if (weakSelf.groupSelector.groupData.count <= 2) {
             [weakSelf fetchDataByGroup:nil];
+        } else if (group.eid == 0) {
+            [weakSelf fetchDataByGroup:orginEffect];
         }
         
         [weakSelf.groupSelector refreshData];
@@ -438,10 +568,6 @@
         //加载下载的特效
          NSString *dirPath = [NSHomeDirectory() stringByAppendingPathComponent:group.resourcePath];
         [self loadLocalEffects:dirPath isDestDir:NO];
-    }
-    
-    if (!_selectedIcon) {
-        _selectedIcon = [self.icons firstObject];
     }
     
     [self.transitionTableView.tableView reloadData];

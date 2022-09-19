@@ -215,7 +215,7 @@ static const CGFloat AlivcLiveButtonWidth = 45.0f;
         
         
         if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
-            NSString *beautyTitle = @"#由race提供";
+            NSString *beautyTitle = @"#由queen提供";
             beautyTitle = [beautyTitle stringByReplacingOccurrencesOfString:@"#" withString:preStr];
             beautyTitle = [beautyTitle localString];
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:beautyTitle attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:12]}];

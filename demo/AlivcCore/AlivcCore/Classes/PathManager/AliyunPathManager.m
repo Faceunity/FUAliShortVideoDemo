@@ -41,6 +41,16 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
++ (NSError *)makeDirExist:(NSString *)dirPath {
+    NSError *error = nil;
+    BOOL isDir = NO;
+    if ([NSFileManager.defaultManager fileExistsAtPath:dirPath isDirectory:&isDir] && isDir) {
+        return error;
+    }
+    [NSFileManager.defaultManager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
+    return error;
+}
+
 + (NSString*)randomString {
     CFUUIDRef puuid = CFUUIDCreate(nil);
     CFStringRef uuidString = CFUUIDCreateString(nil, puuid);

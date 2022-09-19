@@ -171,8 +171,8 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
         case 1:
         {
             params.beautyWhite = 20;
-            params.beautyBuffing = 10;
-            params.beautyRuddy = 20;
+            params.beautyBuffing = 20;
+            params.beautyRuddy = 0;
             params.beautyCheekPink = 20;
             params.beautySlimFace = 20;
             params.beautyShortenFace = 20;
@@ -182,8 +182,8 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
         case 2:
         {
             params.beautyWhite = 40;
-            params.beautyBuffing = 30;
-            params.beautyRuddy = 40;
+            params.beautyBuffing = 40;
+            params.beautyRuddy = 0;
             params.beautyCheekPink = 40;
             params.beautySlimFace = 40;
             params.beautyShortenFace = 40;
@@ -194,7 +194,7 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
         {
             params.beautyWhite = 60;
             params.beautyBuffing = 60;
-            params.beautyRuddy = 60;
+            params.beautyRuddy = 10;
             params.beautyCheekPink = 60;
             params.beautySlimFace = 60;
             params.beautyShortenFace = 60;
@@ -204,8 +204,8 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
         case 4:
         {
             params.beautyWhite = 80;
-            params.beautyBuffing = 85;
-            params.beautyRuddy = 80;
+            params.beautyBuffing = 80;
+            params.beautyRuddy = 10;
             params.beautyCheekPink = 80;
             params.beautySlimFace = 80;
             params.beautyShortenFace = 80;
@@ -216,7 +216,7 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
         {
             params.beautyWhite = 100;
             params.beautyBuffing = 100;
-            params.beautyRuddy = 100;
+            params.beautyRuddy = 10;
             params.beautyCheekPink = 100;
             params.beautySlimFace = 100;
             params.beautyShortenFace = 100;
@@ -279,15 +279,15 @@ NSString * const AlivcBeautyParamsTypeShortVideo_BeautyShape = @"AlivcBeautyPara
 - (AlivcPushBeautyParams *)paramsWithValueArray:(NSArray <NSNumber *>*)valueArray{
     AlivcPushBeautyParams *params = [[AlivcPushBeautyParams alloc] init];
     if (valueArray.count == 9) {
-        params.beautyBigEye = valueArray[0].intValue/3;
-        params.longFace = valueArray[1].intValue/3;
-        params.cutFace = valueArray[2].intValue/3;
-        params.beautySlimFace = valueArray[3].intValue/3;
-        params.lowerJaw = valueArray[4].intValue/3;
-        params.mouthWidth = valueArray[5].intValue/3;
-        params.thinNose = valueArray[6].intValue/3;
-        params.thinMandible = valueArray[7].intValue/3;
-        params.cutCheek = valueArray[8].intValue/3;
+        params.beautyBigEye = valueArray[0].intValue;
+        params.longFace = valueArray[1].intValue;
+        params.cutFace = valueArray[2].intValue;
+        params.beautySlimFace = valueArray[3].intValue;
+        params.lowerJaw = valueArray[4].intValue;
+        params.mouthWidth = valueArray[5].intValue;
+        params.thinNose = valueArray[6].intValue;
+        params.thinMandible = valueArray[7].intValue;
+        params.cutCheek = valueArray[8].intValue;
     }
     return params;
 }

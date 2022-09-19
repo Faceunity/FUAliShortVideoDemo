@@ -1,1 +1,0 @@
-../../../../AlivcRecord/AlivcRecord/Classes/Recording/View/BeatyView/AlivcRecordBeautyView.h

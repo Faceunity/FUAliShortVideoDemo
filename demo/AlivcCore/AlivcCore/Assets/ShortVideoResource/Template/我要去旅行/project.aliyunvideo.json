@@ -1,0 +1,259 @@
+{
+  "Template" : {
+    "SourceId" : "",
+    "URL" : ""
+  },
+  "Info" : "",
+  "ResourceSize" : 5807,
+  "Version" : 1,
+  "Timeline" : {
+    "EffectTracks" : [
+      {
+        "Source" : {
+          "SourceId" : "",
+          "URL" : "alivc_resource:\/\/app?type=filter&id=%E6%B5%B7%E8%93%9D"
+        },
+        "Type" : "filter",
+        "TimelineOut" : 0,
+        "TimelineIn" : 0
+      }
+    ],
+    "GlobalTracks" : [
+      {
+        "Source" : {
+          "SourceId" : "",
+          "URL" : "https://alivc-demo-vod.aliyuncs.com/image/default/CD17E4D4AD9A471F8DBD94558CC50233-6-2.png"
+        },
+        "Height" : 0.0234375,
+        "Actions" : [
+
+        ],
+        "Type" : "watermark",
+        "X" : 0.048490338027477264,
+        "Width" : 0.05833333358168602,
+        "Y" : 0.0998883917927742
+      }
+    ],
+    "VideoTracks" : [
+      {
+        "ClipList" : [
+          {
+            "TimelineOut" : 10.319999694824219,
+            "BrightnessValue" : 0.5,
+            "VignetteValue" : 0,
+            "ClassType" : "main",
+            "SharpnessValue" : 0,
+            "Actions" : [
+
+            ],
+            "Type" : 0,
+            "TimelineIn" : 0,
+            "Rotation" : 0,
+            "Height" : 960,
+            "DisplayMode" : 0,
+            "Duration" : 10.319999694824219,
+            "Width" : 720,
+            "MixWeight" : 100,
+            "Out" : 10.319999694824219,
+            "SaturationValue" : 0.5,
+            "NodeKey" : "1",
+            "Source" : {
+              "SourceId" : "",
+              "URL" : "https://alivc-demo-vod.aliyuncs.com/sv/3c6544e-17d7e2b3713/3c6544e-17d7e2b3713.mp4"
+            },
+            "Effects" : [
+
+            ],
+            "In" : 0,
+            "ContrastValue" : 0.25,
+            "DenoiseWeight" : 0
+          },
+          {
+            "TimelineOut" : 19.680000305175781,
+            "BrightnessValue" : 0.5,
+            "VignetteValue" : 0,
+            "ClassType" : "main",
+            "SharpnessValue" : 0,
+            "Actions" : [
+
+            ],
+            "Type" : 0,
+            "TimelineIn" : 9.3199996948242188,
+            "Rotation" : 0,
+            "Height" : 960,
+            "DisplayMode" : 0,
+            "Duration" : 10.359999656677246,
+            "Width" : 720,
+            "MixWeight" : 100,
+            "Out" : 10.359999656677246,
+            "SaturationValue" : 0.5,
+            "NodeKey" : "2",
+            "Source" : {
+              "SourceId" : "",
+              "URL" : "https://alivc-demo-vod.aliyuncs.com/sv/8888b14-17d7e2b371d/8888b14-17d7e2b371d.mp4"
+            },
+            "Effects" : [
+              {
+                "Type" : "transition",
+                "Direction" : 2,
+                "OverlapDuration" : 1,
+                "TransitionType" : 1
+              }
+            ],
+            "In" : 0,
+            "ContrastValue" : 0.25,
+            "DenoiseWeight" : 0
+          }
+        ],
+        "Duration" : 19.680000305175781
+      }
+    ],
+    "AudioTracks" : [
+      {
+        "ClipList" : [
+          {
+            "Source" : {
+              "SourceId" : "",
+              "URL" : "alivc_resource:\/\/cloud?type=music&id=T10038932370&name=%E4%B8%8B%E4%B8%AA%EF%BC%8C%E8%B7%AF%E5%8F%A3%EF%BC%8C%E8%A7%81"
+            },
+            "In" : 0,
+            "Duration" : 20.679998397827148,
+            "TimelineOut" : 20.679998397827148,
+            "MixWeight" : 100,
+            "DenoiseWeight" : 0,
+            "Out" : 20.679998397827148,
+            "Type" : 0,
+            "TimelineIn" : 0,
+            "Effects" : [
+              {
+                "ShapeType" : 0,
+                "Type" : "audio_fade",
+                "FadeIn" : true,
+                "Duration" : 3
+              },
+              {
+                "ShapeType" : 0,
+                "Type" : "audio_fade",
+                "FadeIn" : false,
+                "Duration" : 3
+              }
+            ]
+          }
+        ],
+        "Duration" : 20.679998397827148
+      }
+    ],
+    "Duration" : 19.680000305175781,
+    "PasterTracks" : [
+      {
+        "X" : 0.5,
+        "TimelineOut" : 7.3133330345153809,
+        "Actions" : [
+
+        ],
+        "ApiVersion" : 0,
+        "Source" : {
+          "SourceId" : "",
+          "URL" : "alivc_resource:\/\/app?type=sticker&gid=151&id=908"
+        },
+        "Y" : 0.5,
+        "Height" : 0.263671875,
+        "Width" : 0.625,
+        "Mirror" : false,
+        "Type" : "gif",
+        "TimelineIn" : 0,
+        "Rotation" : 0
+      },
+      {
+        "ApiVersion" : 0,
+        "TimelineOut" : 11.919281959533691,
+        "OutlineColor" : -7270912,
+        "FontSize" : 0.070000000298023224,
+        "OutlineWidth" : 2,
+        "X" : 0.42154255509376526,
+        "FaceType" : 0,
+        "TextBgColor" : 0,
+        "Y" : 0.90419161319732666,
+        "Actions" : [
+
+        ],
+        "Type" : "caption",
+        "TimelineIn" : 8.8589258193969727,
+        "FontEffectSource" : {
+          "SourceId" : "",
+          "URL" : "alivc_resource:\/\/app?type=caption&id=effect6"
+        },
+        "Font" : {
+          "SourceId" : "",
+          "URL" : ""
+        },
+        "Height" : 0.13434001803398132,
+        "Rotation" : 0.0070629715919494629,
+        "Scale" : 2.1933062076568604,
+        "Text" : "起飞啦",
+        "Width" : 0.53096294403076172,
+        "Mirror" : false,
+        "NodeKey" : "3",
+        "TextColor" : -831433
+      },
+      {
+        "ApiVersion" : 0,
+        "TimelineOut" : 19.679996490478516,
+        "OutlineColor" : -5504769,
+        "FontSize" : 0.070000000298023224,
+        "OutlineWidth" : 4,
+        "X" : 0.60771274566650391,
+        "FaceType" : 0,
+        "TextBgColor" : 0,
+        "Y" : 0.33158683776855469,
+        "Actions" : [
+
+        ],
+        "Type" : "caption",
+        "TimelineIn" : 15.199282646179199,
+        "Font" : {
+          "SourceId" : "SentyMARUKO-Elementary",
+          "URL" : ""
+        },
+        "Height" : 0.27861326932907104,
+        "Rotation" : 0,
+        "Scale" : 1,
+        "Text" : "开心🥳",
+        "Width" : 0.59375,
+        "Mirror" : false,
+        "NodeKey" : "4",
+        "Source" : {
+          "SourceId" : "",
+          "URL" : "alivc_resource:\/\/cloud?type=bubble&gid=196&id=969"
+        },
+        "TextColor" : -1
+      }
+    ]
+  },
+  "Config" : {
+    "VideoCodec" : 0,
+    "BackgroundColor" : 0,
+    "FPS" : 30,
+    "VideoQuality" : 1,
+    "Mute" : false,
+    "Scale" : 1,
+    "CRF" : 23,
+    "Bitrate" : 0,
+    "OutputWidth" : 720,
+    "GOP" : 250,
+    "DisplayMode" : 1,
+    "Volume" : 100,
+    "OutputHeight" : 1280
+  },
+  "Duration" : 19.680000305175781,
+  "CreateTime" : "2021-12-03T09:25:20Z",
+  "Status" : "",
+  "ModifiedTime" : "2021-12-03T09:43:07Z",
+  "Title" : "2021-12-03 09:39:08",
+  "CustomCover" : false,
+  "Cover" : {
+    "SourceId" : "",
+    "URL" : "https://alivc-demo-vod.aliyuncs.com/image/default/83ADAF94B1A44A998AF4E5D441B3E981-6-2.jpg"
+  },
+  "ProjectId" : ""
+}

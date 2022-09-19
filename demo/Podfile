@@ -1,28 +1,34 @@
 #use_frameworks!
 install! 'cocoapods', :deterministic_uuids => false
-project './AliyunVideoClient_Entrance.xcodeproj'
 
 
+
+source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 
 
 platform :ios, '9.0'
 
-target 'AliyunVideoClient_Entrance' do
-    
+
+def aliyun_common_pods
     #友盟crash收集
     pod 'UMCCommon','2.0.0'
     pod 'UMCAnalytics','6.0.1'
     
 pod 'AlivcCommon', :path => 'AlivcCommon/' 
 pod 'AlivcCore', :path => 'AlivcCore/' 
+pod 'AlivcDraft', :path => 'AlivcDraft/' 
 pod 'AlivcCrop', :path => 'AlivcCrop/' 
 pod 'AlivcEdit', :path => 'AlivcEdit/' 
-pod 'AlivcRecord', :path => 'AlivcRecord/' 
-pod 'AlivcRace', :path => 'AlivcRace/' 
+pod 'AlivcPhotoPicker', :path => 'AlivcPhotoPicker/' 
 
 
+end
 
-# pod 'AliyunRace', :git => 'https://github.com/aliyunvideo/AliyunRace.git',:tag => '1.1.1'
 
- 
+target 'AliyunVideoClient_Entrance' do
+
+ aliyun_common_pods
+ pod 'AlivcRecord', :path => 'AlivcRecord/'
+
+
 end

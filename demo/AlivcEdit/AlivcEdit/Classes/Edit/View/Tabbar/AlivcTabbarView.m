@@ -67,7 +67,7 @@
     }
 }
 #pragma mark -Setter
--(void)setTabItems:(NSArray *)tabItems{
+-(void)isetTabItems:(NSArray *)tabItems{
     _tabItems = tabItems;
     [self.tabbar reloadData];
     [self.tabbar layoutSubviews];
@@ -92,9 +92,24 @@
                     [mutArr addObject:@{@"title":[@"键盘" localString],@"iconName":@"shortVideo_tab_caption_keybord"}];
                 }
                     break;
+                case TabBarItemTypeStyle:
+                {
+                    [mutArr addObject:@{@"title":@"样式",@"iconName":@"shortVideo_tab_caption_keybord"}];
+                }
+                    break;
                 case TabBarItemTypeColor:
                 {
                     [mutArr addObject:@{@"title":[@"颜色" localString],@"iconName":@"shortVideo_tab_caption_color"}];
+                }
+                    break;
+                case TabBarItemTypeFlower:
+                {
+                    [mutArr addObject:@{@"title":@"花字",@"iconName":@"shortVideo_tab_caption_color"}];
+                }
+                    break;
+                case TabBarItemTypeBubble:
+                {
+                    [mutArr addObject:@{@"title":@"气泡",@"iconName":@"shortVideo_tab_caption_color"}];
                 }
                     break;
                 case TabBarItemTypeFont:

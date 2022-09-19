@@ -11,6 +11,7 @@
 #import "AliyunColor.h"
 #import "AliyunSubtitleActionItem.h"
 #import "AlivcTabbarView.h"
+#import "AliyunPasterTextInputView.h"
 
 
 
@@ -19,50 +20,36 @@
 /**
  完成回调
  */
-- (void)completeButtonClicked;
-
-/// 动图动画完成回调
-- (void)pasterActionCompleteButtonClicked:(TextActionType)actionType;
-/**
- 键盘隐藏前回调
- */
-- (void)keyboardShouldHidden;
+- (void)tabControllerCompleteButtonClicked;
 
 /**
  取消回调
  */
-- (void)cancelButtonClicked;
+- (void)tabControllerCancelButtonClicked;
 
-/**
- 键盘显示前回调
- */
-- (void)keyboardShouldAppear;
+//切换非键盘tag
+- (void)tabControllerCaptionSeletedTabChanged:(int)seletedTab;
 
-/**
- 字体颜色改变回调
+//气泡
+- (void)tabControllerCaptionBubbleViewDidSeleted:(NSString *)path fontId:(NSInteger)fontId;
 
- @param color AliyunColor
- */
-- (void)textColorChanged:(AliyunColor *)color;
+//阴影
+- (void)tabControllerShadowColor:(UIColor *)color offset:(UIOffset)offset;
 
-/**
- 字体改变回调
+//字体
+- (void)tabControllerFontName:(NSString *)fontName faceType:(int)faceType;
 
- @param fontName 字体名称
- */
-- (void)textFontChanged:(NSString *)fontName;
+//颜色&描边
+- (void)tabControllerTextAndStrokeColor:(AliyunColor *)color;
+- (void)tabControllerStrokeWidth:(CGFloat)width;
 
-/**
- 字体动效选择回调
+//排版
+- (void)captionTextAlignmentSelected:(NSInteger)type;
 
- @param actionType 字体特效Type
- */
-- (void)textActionType:(TextActionType)actionType;
 
-/**
- 字体边框清除回调
- */
-- (void)textStrokeColorClear;
+//花字
+- (void)tabControllerFlowerDidSeleted:(NSString *)path;
+
 
 @end
 
@@ -72,6 +59,11 @@
 @interface AliyunTabController : NSObject
 
 @property (nonatomic, weak) id<AliyunTabControllerDelegate> delegate;
+
+@property (nonatomic, strong) AliyunPasterTextInputView * textInputView;
+
+@property (nonatomic, assign, readonly) TextActionType selectedActionType;//动画
+
 
 /**
  显示一个字幕编辑页面到某个view上
@@ -98,6 +90,10 @@
 -(void)setFontEffectDefault:(NSInteger)textEffectType;
 
 -(void)alivcTabbarViewDidSelectedType:(TabBarItemType)type;
+
+- (UIView *)containerView;
+
+- (instancetype)initWithSuperView:(UIView *)superView needInputView:(BOOL)needInputView;
 
 @end
 

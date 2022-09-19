@@ -10,6 +10,8 @@
 
 @interface AliyunMusicPickModel : NSObject <NSCoding,NSCopying>
 
++ (NSInteger) KeyIdFromMusicId:(NSString *)musicId;
+
 /**
  本地路径
  */
