@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AliyunVideoSDKPro/AliyunVodPublishManager.h>
+#import "AliyunVodPublishManager2.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

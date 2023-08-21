@@ -26,7 +26,7 @@
 @end
 
 static AlivcShortVideoUploadManager *_instance = nil;
-static AliyunVodPublishManager *_uploadManager = nil;
+static AliyunVodPublishManager2 *_uploadManager = nil;
 
 @implementation AlivcShortVideoUploadManager
 
@@ -36,7 +36,7 @@ static AliyunVodPublishManager *_uploadManager = nil;
     if (_instance == nil) {
         
         _instance = [[AlivcShortVideoUploadManager alloc]init];
-        _uploadManager = [[AliyunVodPublishManager alloc]init];
+        _uploadManager = [[AliyunVodPublishManager2 alloc]init];
     }
     
     return _instance;
@@ -225,7 +225,7 @@ static AliyunVodPublishManager *_uploadManager = nil;
 
 #pragma mark - AliyunIVodUploadCallback
 
-- (void)publishManagerUploadSuccess:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadSuccess:(AliyunVodPublishManager2 *)manager {
     NSLog(@"upload success");
     if (manager.uploadState == AliyunVodUploadImage) {
         [self startUploadVideo];
@@ -248,7 +248,7 @@ static AliyunVodPublishManager *_uploadManager = nil;
     }
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message {
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message {
     NSLog(@"upload failed code:%@, message:%@", code, message);
     dispatch_async(dispatch_get_main_queue(), ^{
         self->_newStatus = AlivcUploadStatusFailure;
@@ -261,7 +261,7 @@ static AliyunVodPublishManager *_uploadManager = nil;
     });
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize {
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize {
     if (manager.uploadState == AliyunVodUploadVideo) {
         if (totalSize) {
             if (_managerDelegate &&
@@ -274,7 +274,7 @@ static AliyunVodPublishManager *_uploadManager = nil;
     }
 }
 
-- (void)publishManagerUploadTokenExpired:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadTokenExpired:(AliyunVodPublishManager2 *)manager {
     if (manager.uploadState == AliyunVodUploadImage) {
         [self startUploadImage];
     } else {
@@ -287,11 +287,11 @@ static AliyunVodPublishManager *_uploadManager = nil;
     }
 }
 
-- (void)publishManagerUploadRetry:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadRetry:(AliyunVodPublishManager2 *)manager {
     NSLog(@"上传重试");
 }
 
-- (void)publishManagerUploadRetryResume:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadRetryResume:(AliyunVodPublishManager2 *)manager {
     NSLog(@"上传继续重试");
 }
 

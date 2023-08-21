@@ -65,7 +65,7 @@ TODO: Add long description of the pod here.
 #   s.dependency 'AliyunVideoCore','3.17.0.13297788'
 
    #短视频SDK
-   s.dependency 'AliyunVideoSDKPro', '3.32.0'
+   s.dependency 'AliyunVideoSDKPro', '3.34.0'
 
    s.dependency 'AliyunOSSiOS'
 

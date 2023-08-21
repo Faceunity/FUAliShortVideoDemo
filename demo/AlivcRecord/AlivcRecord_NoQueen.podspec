@@ -42,7 +42,7 @@ TODO: Add long description of the pod here.
   # s.dependency 'AFNetworking', '~> 2.3'
 
   #faceUnity 高级美颜
-  s.dependency 'FURenderKit', '~> 8.3.0'
+  s.dependency 'Nama-lite', '~> 5.9.0'
   
   s.dependency 'AlivcCore'
 

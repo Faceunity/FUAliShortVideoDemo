@@ -9,6 +9,7 @@
 #import "AliyunUploadViewController.h"
 #import "AVC_ShortVideo_Config.h"
 #import "AlivcShortVideoUploadManager.h"
+#import "AliyunPublishManager.h"
 #import "AliyunPublishTopView.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AFNetworking/AFNetworking.h>

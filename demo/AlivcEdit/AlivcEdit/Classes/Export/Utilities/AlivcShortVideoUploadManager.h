@@ -7,7 +7,7 @@
 //  上传管理器
 
 #import <Foundation/Foundation.h>
-#import <AliyunVideoSDKPro/AliyunPublishManager.h>
+#import "AliyunVodPublishManager2.h"
 
 @class AliyunUploadSVideoInfo;
 @class AlivcShortVideoUploadManager;

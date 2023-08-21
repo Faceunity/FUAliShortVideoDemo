@@ -79,7 +79,6 @@
 #import "AlivcCoverImageSelectedView.h"
 #import "AlivcSpecialEffectView.h"
 #import "AliyunCompressManager.h"
-#import "AliyunCustomFilter.h"
 #import "AliyunEffectFilterView.h"
 #import "AliyunEffectMVView.h"
 #import "AliyunEffectTimeFilterView.h"
@@ -89,6 +88,7 @@
 #import <AliyunVideoSDKPro/AliyunRollCaptionItemStyle.h>
 #import "AliyunVideoAugmentationView.h"
 #import "AliyunLutFilterView.h"
+#import "AliyunEditorCustomRender.h"
 
 //#import "AliyunPublishViewController.h"
 //#import "AlivcExportViewController.h"
@@ -104,13 +104,6 @@
 #import "UIView+OPLayout.h"
 #import "AliyunDraftConfig.h"
 #import <AliyunVideoSDKPro/AliyunEditor+Draft.h>
-#import <FURenderKit/FURenderKit.h>
-#import <FURenderKit/FUGLContext.h>
-#import <FURenderKit/FURenderer.h>
-#import "FUDemoManager.h"
-
-
-
 
 @class AliyunPasterBottomBaseView;
 
@@ -144,7 +137,7 @@ const CGFloat PASTER_MIN_DURANTION = 0.1; //动图最小持续时长
 AliyunIExporterCallback, AliyunIPlayerCallback, AliyunICanvasViewDelegate,
 AliyunPaintingEditViewDelegate, AliyunMusicPickViewControllerDelegate,
 AliyunPasterBottomBaseViewDelegate, AliyunEffectCaptionShowViewDelegate, AliyunVideoAugmentationViewDelegate,
-AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate,AlivcRollCaptionViewDelegate,AliyunLutFilterViewDelegate,AliyunIRenderCallback>
+AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEffectViewDelegate,AlivcCoverImageSelectedViewDelegate,AliyunEffectTimeFilterDelegate,AlivcRollCaptionViewDelegate,AliyunLutFilterViewDelegate>
 
 @property(nonatomic, strong) UIView *movieView;
 @property(nonatomic, strong) AliyunTimelineView *currentTimelineView;
@@ -196,8 +189,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 
 @property(nonatomic, strong) AlivcRollCaptionView *rollCaptionView;
 @property(nonatomic,assign) BOOL isRollCaptionType;
-
-@property(nonatomic, strong) FUDemoManager *demoManager;
 
 
 /**
@@ -291,7 +282,7 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 @property(nonatomic, assign) BOOL isEidtTuchAction;
 
 @property(nonatomic, assign) CGSize outputSize;
-@property(nonatomic, strong) AliyunCustomFilter *filter;
+@property(nonatomic, strong) AliyunEditorCustomRender *customRender;
 @property(nonatomic, strong) UIButton *staticImageButton;
 // 倒播相关
 @property(nonatomic, strong) AliyunNativeParser *parser;
@@ -365,16 +356,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     [super viewDidLoad];
     [self initBaseData];
     [self addSubviews];
-    
-//    CGFloat safeAreaBottom = 0;
-//    if (@available(iOS 11.0, *)) {
-//        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
-//    }
-//
-//    self.demoManager = [[FUDemoManager alloc] initWithTargetController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom - 180];
-    
-    
-    
     [self addNotificationBeforeSdk];
     [self initSDKAbout];
     [self addNotifications];
@@ -506,12 +487,12 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
  初始化sdk相关
  */
 - (void)initSDKAbout {
+    
     // editor
     self.editor = [[AliyunEditor alloc] initWithPath:_taskPath
                                              preview:self.movieView];
     self.editor.delegate = (id)self;
-    self.editor.renderCallback = self;
-    
+    self.editor.renderCallback = self.customRender;
     // player
     self.player = [self.editor getPlayer];
     // exporter
@@ -533,6 +514,13 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
 //    self.pasterManager.delegate = (id)self;
     //    [self.editor startEdit];
     //    [self play];
+}
+
+- (AliyunEditorCustomRender *)customRender {
+    if (!_customRender) {
+        _customRender = [AliyunEditorCustomRender new];
+    }
+    return _customRender;
 }
 
 /**
@@ -641,7 +629,6 @@ AliyunEffectTransitionViewDelegate, AlivcSpecialEffectViewDelegate ,AlivcAudioEf
     self.isAppear = NO;
     [self pause];
     _tryResumeWhenBack = YES;
-    self.filter = nil;
     if ([self.navigationController
          respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
@@ -2152,36 +2139,6 @@ static NSString * s_currentTime()
     if (errorCode == ALIVC_FRAMEWORK_MEDIA_POOL_CACHE_DATA_SIZE_OVERFLOW) {
         [self play];
     }
-}
-
-- (int)customRender:(int)srcTexture size:(CGSize)size {
-    // 自定义滤镜渲染
-    //    if (!self.filter) {
-    //        self.filter = [[AliyunCustomFilter alloc] initWithSize:size];
-    //    }
-    //    return [self.filter render:srcTexture size:size];
-    
-//    CVPixelBufferRef buffer = [[FURenderer shareRenderer] getPixelBufferFromTexture:srcTexture textureSize:size outputSize:size outputFormat:0];
-////
-    
-    if ([FUGLContext shareGLContext].currentGLContext != [EAGLContext currentContext]) {
-        [[FUGLContext shareGLContext] setCustomGLContext:[EAGLContext currentContext]];
-    }
-    FURenderInput *input = [[FURenderInput alloc] init];
-    // 处理效果对比问题
-    input.renderConfig.imageOrientation = FUImageOrientationDown;
-    FUTexture tex = {srcTexture, CGSizeMake(size.width, size.height)};
-    input.texture = tex;
-    input.pixelBuffer = nil;
-
-    //开启重力感应，内部会自动计算正确方向，设置fuSetDefaultRotationMode，无须外面设置
-    input.renderConfig.gravityEnable = YES;
-    input.renderConfig.textureTransform = CCROT0_FLIPVERTICAL;
-    FURenderOutput *outPut = [[FURenderKit shareRenderKit] renderWithInput:input];
-    if (outPut.texture.ID != 0) {
-        return outPut.texture.ID;
-    }
-    return srcTexture;
 }
 
 #pragma mark - AliyunIExporterCallback

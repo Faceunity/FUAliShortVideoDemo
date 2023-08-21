@@ -44,6 +44,8 @@ NSString *const FragmentShaderString = SHADER_STRING
  }
  );
 @implementation AliyunCustomFilter {
+    CGSize _textureSize;
+    
     GLuint _frameBuffer;
     GLuint _program;
     GLuint _positionSlot;
@@ -52,19 +54,26 @@ NSString *const FragmentShaderString = SHADER_STRING
     GLuint _outputTexture;
 }
 
+- (void)dealloc {
+    glDeleteFramebuffers(1, &_frameBuffer);
+    glDeleteTextures(1, &_outputTexture);
+    glDeleteProgram(_program);
+}
+
 -(instancetype)initWithSize:(CGSize)size {
     self = [super init];
     if (self) {
+        _textureSize = size;
         [self setupProgram];
         [self setupTextureWithSize:size];
     }
     return self;
 }
 
-- (int)render:(int)srcTexture size:(CGSize)size {
+- (int)render:(int)srcTexture {
     glUseProgram(_program);
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glViewport(0, 0, size.width, size.height);
+    glViewport(0, 0, _textureSize.width, _textureSize.height);
     glClearColor(0, 0, 1, 0);
     glClear(GL_COLOR_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
@@ -131,6 +140,9 @@ NSString *const FragmentShaderString = SHADER_STRING
     glAttachShader(_program, fragmentShader);
     
     glLinkProgram(_program);
+    
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
     
     // 检查错误
     GLint linked;

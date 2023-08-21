@@ -7,35 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A9423130D1BD7AD2708F9B0 /* libPods-AliyunVideoClient_Entrance_Simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D4FDBCC1F685A0B2F6DF47 /* libPods-AliyunVideoClient_Entrance_Simulator.a */; };
 		136CA218237E37B500312843 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 136CA217237E37B500312843 /* AppDelegate.m */; };
 		136CA223237E37B600312843 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 136CA222237E37B600312843 /* Assets.xcassets */; };
 		136CA229237E37B600312843 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 136CA228237E37B600312843 /* main.m */; };
-		2DBB3F43288E9A2F00F244FF /* FaceUnity.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F27288E9A2E00F244FF /* FaceUnity.strings */; };
-		2DBB3F44288E9A2F00F244FF /* oumei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2A288E9A2E00F244FF /* oumei.bundle */; };
-		2DBB3F45288E9A2F00F244FF /* Rose.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2B288E9A2E00F244FF /* Rose.bundle */; };
-		2DBB3F46288E9A2F00F244FF /* linjia.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2C288E9A2E00F244FF /* linjia.bundle */; };
-		2DBB3F47288E9A2F00F244FF /* yanshimao.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2D288E9A2E00F244FF /* yanshimao.bundle */; };
-		2DBB3F48288E9A2F00F244FF /* tianmei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2E288E9A2E00F244FF /* tianmei.bundle */; };
-		2DBB3F49288E9A2F00F244FF /* ziyun.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F2F288E9A2E00F244FF /* ziyun.bundle */; };
-		2DBB3F4A288E9A2F00F244FF /* chaomo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F30288E9A2E00F244FF /* chaomo.bundle */; };
-		2DBB3F4B288E9A2F00F244FF /* hongfeng.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F31288E9A2E00F244FF /* hongfeng.bundle */; };
-		2DBB3F4C288E9A2F00F244FF /* jianling.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F32288E9A2E00F244FF /* jianling.bundle */; };
-		2DBB3F4D288E9A2F00F244FF /* gangfeng.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F33288E9A2E00F244FF /* gangfeng.bundle */; };
-		2DBB3F4E288E9A2F00F244FF /* chuju.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F34288E9A2E00F244FF /* chuju.bundle */; };
-		2DBB3F4F288E9A2F00F244FF /* renyu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F35288E9A2E00F244FF /* renyu.bundle */; };
-		2DBB3F50288E9A2F00F244FF /* qianzhihe.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F36288E9A2F00F244FF /* qianzhihe.bundle */; };
-		2DBB3F51288E9A2F00F244FF /* wumei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F37288E9A2F00F244FF /* wumei.bundle */; };
-		2DBB3F52288E9A2F00F244FF /* shaonv.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F38288E9A2F00F244FF /* shaonv.bundle */; };
-		2DBB3F53288E9A2F00F244FF /* chuqiu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F39288E9A2F00F244FF /* chuqiu.bundle */; };
-		2DBB3F54288E9A2F00F244FF /* nuandong.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F3A288E9A2F00F244FF /* nuandong.bundle */; };
-		2DBB3F55288E9A2F00F244FF /* xinggan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F3B288E9A2F00F244FF /* xinggan.bundle */; };
-		2DBB3F56288E9A2F00F244FF /* FaceUnity.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F3D288E9A2F00F244FF /* FaceUnity.xcassets */; };
-		2DBB3F57288E9A2F00F244FF /* fashi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F3F288E9A2F00F244FF /* fashi.bundle */; };
-		2DBB3F58288E9A2F00F244FF /* sdlu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F40288E9A2F00F244FF /* sdlu.bundle */; };
-		2DBB3F59288E9A2F00F244FF /* xueqiu_lm_fu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F41288E9A2F00F244FF /* xueqiu_lm_fu.bundle */; };
-		2DBB3F5A288E9A2F00F244FF /* DaisyPig.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DBB3F42288E9A2F00F244FF /* DaisyPig.bundle */; };
+		2DCC7A742A662EE000565653 /* beauty_filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A512A662EE000565653 /* beauty_filter.json */; };
+		2DCC7A752A662EE000565653 /* beauty_shape.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A522A662EE000565653 /* beauty_shape.json */; };
+		2DCC7A762A662EE000565653 /* beauty_skin.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A532A662EE000565653 /* beauty_skin.json */; };
+		2DCC7A772A662EE000565653 /* FaceUnity.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A542A662EE000565653 /* FaceUnity.strings */; };
+		2DCC7A782A662EE000565653 /* oumei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A572A662EE000565653 /* oumei.bundle */; };
+		2DCC7A792A662EE000565653 /* rose.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A582A662EE000565653 /* rose.bundle */; };
+		2DCC7A7A2A662EE000565653 /* linjia.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A592A662EE000565653 /* linjia.bundle */; };
+		2DCC7A7B2A662EE000565653 /* yanshimao.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5A2A662EE000565653 /* yanshimao.bundle */; };
+		2DCC7A7C2A662EE000565653 /* tianmei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5B2A662EE000565653 /* tianmei.bundle */; };
+		2DCC7A7D2A662EE000565653 /* ziyun.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5C2A662EE000565653 /* ziyun.bundle */; };
+		2DCC7A7E2A662EE000565653 /* chaomo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5D2A662EE000565653 /* chaomo.bundle */; };
+		2DCC7A7F2A662EE000565653 /* hongfeng.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5E2A662EE000565653 /* hongfeng.bundle */; };
+		2DCC7A802A662EE000565653 /* jianling.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A5F2A662EE000565653 /* jianling.bundle */; };
+		2DCC7A812A662EE000565653 /* gangfeng.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A602A662EE000565653 /* gangfeng.bundle */; };
+		2DCC7A822A662EE000565653 /* combination_makeups.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A612A662EE000565653 /* combination_makeups.json */; };
+		2DCC7A832A662EE000565653 /* chuju.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A622A662EE000565653 /* chuju.bundle */; };
+		2DCC7A842A662EE000565653 /* renyu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A632A662EE000565653 /* renyu.bundle */; };
+		2DCC7A852A662EE000565653 /* qianzhihe.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A642A662EE000565653 /* qianzhihe.bundle */; };
+		2DCC7A862A662EE000565653 /* wumei.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A652A662EE000565653 /* wumei.bundle */; };
+		2DCC7A872A662EE000565653 /* shaonv.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A662A662EE000565653 /* shaonv.bundle */; };
+		2DCC7A882A662EE000565653 /* chuqiu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A672A662EE000565653 /* chuqiu.bundle */; };
+		2DCC7A892A662EE000565653 /* nuandong.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A682A662EE000565653 /* nuandong.bundle */; };
+		2DCC7A8A2A662EE000565653 /* xinggan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A692A662EE000565653 /* xinggan.bundle */; };
+		2DCC7A8B2A662EE000565653 /* FaceUnity.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A6B2A662EE000565653 /* FaceUnity.xcassets */; };
+		2DCC7A8C2A662EE000565653 /* body.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A6D2A662EE000565653 /* body.json */; };
+		2DCC7A8D2A662EE000565653 /* fashi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A6F2A662EE000565653 /* fashi.bundle */; };
+		2DCC7A8E2A662EE000565653 /* CatSparks.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A702A662EE000565653 /* CatSparks.bundle */; };
+		2DCC7A8F2A662EE000565653 /* stickers.json in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A712A662EE000565653 /* stickers.json */; };
+		2DCC7A902A662EE000565653 /* sdlu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A722A662EE000565653 /* sdlu.bundle */; };
+		2DCC7A912A662EE000565653 /* sdlr.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2DCC7A732A662EE000565653 /* sdlr.bundle */; };
 		611C65EB27EB6E0D00264E5A /* license.crt in Resources */ = {isa = PBXBuildFile; fileRef = 611C65EA27EB6E0D00264E5A /* license.crt */; };
+		611C65EC27EB6E0D00264E5A /* license.crt in Resources */ = {isa = PBXBuildFile; fileRef = 611C65EA27EB6E0D00264E5A /* license.crt */; };
 		61AA255027C72EDF00827D4F /* AliyunVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AA254F27C72EDF00827D4F /* AliyunVideoConfig.m */; };
+		61AA255127C72EDF00827D4F /* AliyunVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AA254F27C72EDF00827D4F /* AliyunVideoConfig.m */; };
 		D2AACFA323827D7F000A4156 /* AlivcHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACF9923827D7F000A4156 /* AlivcHomeViewController.m */; };
 		D2AACFA423827D7F000A4156 /* AVC_ET_ModuleItemCCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACF9C23827D7F000A4156 /* AVC_ET_ModuleItemCCell.m */; };
 		D2AACFA523827D7F000A4156 /* AVC_ET_ModuleItemCCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2AACF9D23827D7F000A4156 /* AVC_ET_ModuleItemCCell.xib */; };
@@ -49,10 +58,41 @@
 		EE1A352CE34111D789C08793 /* libPods-AliyunVideoClient_Entrance.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E1EEFCB19462AB4D372CB64 /* libPods-AliyunVideoClient_Entrance.a */; };
 		F302A21825C2A9AC00AAFAA2 /* mixbgimg2.png in Resources */ = {isa = PBXBuildFile; fileRef = F302A21625C2A9AB00AAFAA2 /* mixbgimg2.png */; };
 		F302A21925C2A9AC00AAFAA2 /* mixbgimg1.png in Resources */ = {isa = PBXBuildFile; fileRef = F302A21725C2A9AC00AAFAA2 /* mixbgimg1.png */; };
+		FD2BB8E2275E0FB2003605EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 136CA217237E37B500312843 /* AppDelegate.m */; };
+		FD2BB8E3275E0FB2003605EB /* AlivcAppInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACFAE238280ED000A4156 /* AlivcAppInfoViewController.m */; };
+		FD2BB8E4275E0FB2003605EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 136CA228237E37B600312843 /* main.m */; };
+		FD2BB8E5275E0FB2003605EB /* ELCVFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACFAC2382801B000A4156 /* ELCVFlowLayout.m */; };
+		FD2BB8E6275E0FB2003605EB /* AVC_ET_ModuleItemCCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACF9C23827D7F000A4156 /* AVC_ET_ModuleItemCCell.m */; };
+		FD2BB8E7275E0FB2003605EB /* AVC_ET_ModuleDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACFA023827D7F000A4156 /* AVC_ET_ModuleDefine.m */; };
+		FD2BB8E8275E0FB2003605EB /* AlivcHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AACF9923827D7F000A4156 /* AlivcHomeViewController.m */; };
+		FD2BB8EC275E0FB2003605EB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2AACFB2238289F2000A4156 /* Localizable.strings */; };
+		FD2BB8ED275E0FB2003605EB /* mixbgimg2.png in Resources */ = {isa = PBXBuildFile; fileRef = F302A21625C2A9AB00AAFAA2 /* mixbgimg2.png */; };
+		FD2BB8EE275E0FB2003605EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2AACFB4238289F2000A4156 /* InfoPlist.strings */; };
+		FD2BB8EF275E0FB2003605EB /* readMe_Resources.txt in Resources */ = {isa = PBXBuildFile; fileRef = D2AACFB7238289F2000A4156 /* readMe_Resources.txt */; };
+		FD2BB8F0275E0FB2003605EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AACFC3238291FE000A4156 /* LaunchScreen.storyboard */; };
+		FD2BB8F1275E0FB2003605EB /* LutFilter.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD9473FB274655B900866204 /* LutFilter.bundle */; };
+		FD2BB8F2275E0FB2003605EB /* FlowerFont.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD8B468E2664C12000B13ED6 /* FlowerFont.bundle */; };
+		FD2BB8F3275E0FB2003605EB /* AnimationFrag.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD69DB9C26DF84D000C5ACEB /* AnimationFrag.bundle */; };
+		FD2BB8F4275E0FB2003605EB /* mixbgimg1.png in Resources */ = {isa = PBXBuildFile; fileRef = F302A21725C2A9AC00AAFAA2 /* mixbgimg1.png */; };
+		FD2BB8F5275E0FB2003605EB /* AVC_ET_ModuleItemCCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2AACF9D23827D7F000A4156 /* AVC_ET_ModuleItemCCell.xib */; };
+		FD2BB8F6275E0FB2003605EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 136CA222237E37B600312843 /* Assets.xcassets */; };
 		FD69DB9D26DF84D000C5ACEB /* AnimationFrag.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD69DB9C26DF84D000C5ACEB /* AnimationFrag.bundle */; };
 		FD8B468F2664C12000B13ED6 /* FlowerFont.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD8B468E2664C12000B13ED6 /* FlowerFont.bundle */; };
 		FD9473FC274655B900866204 /* LutFilter.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD9473FB274655B900866204 /* LutFilter.bundle */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FD2BB8F7275E0FB2003605EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0E1EEFCB19462AB4D372CB64 /* libPods-AliyunVideoClient_Entrance.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AliyunVideoClient_Entrance.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,31 +101,37 @@
 		136CA217237E37B500312843 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		136CA222237E37B600312843 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		136CA228237E37B600312843 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2DBB3F28288E9A2E00F244FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FaceUnity.strings"; sourceTree = "<group>"; };
-		2DBB3F2A288E9A2E00F244FF /* oumei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = oumei.bundle; sourceTree = "<group>"; };
-		2DBB3F2B288E9A2E00F244FF /* Rose.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rose.bundle; sourceTree = "<group>"; };
-		2DBB3F2C288E9A2E00F244FF /* linjia.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = linjia.bundle; sourceTree = "<group>"; };
-		2DBB3F2D288E9A2E00F244FF /* yanshimao.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yanshimao.bundle; sourceTree = "<group>"; };
-		2DBB3F2E288E9A2E00F244FF /* tianmei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = tianmei.bundle; sourceTree = "<group>"; };
-		2DBB3F2F288E9A2E00F244FF /* ziyun.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ziyun.bundle; sourceTree = "<group>"; };
-		2DBB3F30288E9A2E00F244FF /* chaomo.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chaomo.bundle; sourceTree = "<group>"; };
-		2DBB3F31288E9A2E00F244FF /* hongfeng.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hongfeng.bundle; sourceTree = "<group>"; };
-		2DBB3F32288E9A2E00F244FF /* jianling.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = jianling.bundle; sourceTree = "<group>"; };
-		2DBB3F33288E9A2E00F244FF /* gangfeng.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = gangfeng.bundle; sourceTree = "<group>"; };
-		2DBB3F34288E9A2E00F244FF /* chuju.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chuju.bundle; sourceTree = "<group>"; };
-		2DBB3F35288E9A2E00F244FF /* renyu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = renyu.bundle; sourceTree = "<group>"; };
-		2DBB3F36288E9A2F00F244FF /* qianzhihe.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = qianzhihe.bundle; sourceTree = "<group>"; };
-		2DBB3F37288E9A2F00F244FF /* wumei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = wumei.bundle; sourceTree = "<group>"; };
-		2DBB3F38288E9A2F00F244FF /* shaonv.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = shaonv.bundle; sourceTree = "<group>"; };
-		2DBB3F39288E9A2F00F244FF /* chuqiu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chuqiu.bundle; sourceTree = "<group>"; };
-		2DBB3F3A288E9A2F00F244FF /* nuandong.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = nuandong.bundle; sourceTree = "<group>"; };
-		2DBB3F3B288E9A2F00F244FF /* xinggan.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = xinggan.bundle; sourceTree = "<group>"; };
-		2DBB3F3C288E9A2F00F244FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FaceUnity.strings; sourceTree = "<group>"; };
-		2DBB3F3D288E9A2F00F244FF /* FaceUnity.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = FaceUnity.xcassets; sourceTree = "<group>"; };
-		2DBB3F3F288E9A2F00F244FF /* fashi.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fashi.bundle; sourceTree = "<group>"; };
-		2DBB3F40288E9A2F00F244FF /* sdlu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = sdlu.bundle; sourceTree = "<group>"; };
-		2DBB3F41288E9A2F00F244FF /* xueqiu_lm_fu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = xueqiu_lm_fu.bundle; sourceTree = "<group>"; };
-		2DBB3F42288E9A2F00F244FF /* DaisyPig.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = DaisyPig.bundle; sourceTree = "<group>"; };
+		2DCC7A512A662EE000565653 /* beauty_filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beauty_filter.json; sourceTree = "<group>"; };
+		2DCC7A522A662EE000565653 /* beauty_shape.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beauty_shape.json; sourceTree = "<group>"; };
+		2DCC7A532A662EE000565653 /* beauty_skin.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beauty_skin.json; sourceTree = "<group>"; };
+		2DCC7A552A662EE000565653 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/FaceUnity.strings"; sourceTree = "<group>"; };
+		2DCC7A572A662EE000565653 /* oumei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = oumei.bundle; sourceTree = "<group>"; };
+		2DCC7A582A662EE000565653 /* rose.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = rose.bundle; sourceTree = "<group>"; };
+		2DCC7A592A662EE000565653 /* linjia.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = linjia.bundle; sourceTree = "<group>"; };
+		2DCC7A5A2A662EE000565653 /* yanshimao.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = yanshimao.bundle; sourceTree = "<group>"; };
+		2DCC7A5B2A662EE000565653 /* tianmei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = tianmei.bundle; sourceTree = "<group>"; };
+		2DCC7A5C2A662EE000565653 /* ziyun.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ziyun.bundle; sourceTree = "<group>"; };
+		2DCC7A5D2A662EE000565653 /* chaomo.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chaomo.bundle; sourceTree = "<group>"; };
+		2DCC7A5E2A662EE000565653 /* hongfeng.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hongfeng.bundle; sourceTree = "<group>"; };
+		2DCC7A5F2A662EE000565653 /* jianling.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = jianling.bundle; sourceTree = "<group>"; };
+		2DCC7A602A662EE000565653 /* gangfeng.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = gangfeng.bundle; sourceTree = "<group>"; };
+		2DCC7A612A662EE000565653 /* combination_makeups.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = combination_makeups.json; sourceTree = "<group>"; };
+		2DCC7A622A662EE000565653 /* chuju.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chuju.bundle; sourceTree = "<group>"; };
+		2DCC7A632A662EE000565653 /* renyu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = renyu.bundle; sourceTree = "<group>"; };
+		2DCC7A642A662EE000565653 /* qianzhihe.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = qianzhihe.bundle; sourceTree = "<group>"; };
+		2DCC7A652A662EE000565653 /* wumei.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = wumei.bundle; sourceTree = "<group>"; };
+		2DCC7A662A662EE000565653 /* shaonv.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = shaonv.bundle; sourceTree = "<group>"; };
+		2DCC7A672A662EE000565653 /* chuqiu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = chuqiu.bundle; sourceTree = "<group>"; };
+		2DCC7A682A662EE000565653 /* nuandong.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = nuandong.bundle; sourceTree = "<group>"; };
+		2DCC7A692A662EE000565653 /* xinggan.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = xinggan.bundle; sourceTree = "<group>"; };
+		2DCC7A6A2A662EE000565653 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FaceUnity.strings; sourceTree = "<group>"; };
+		2DCC7A6B2A662EE000565653 /* FaceUnity.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = FaceUnity.xcassets; sourceTree = "<group>"; };
+		2DCC7A6D2A662EE000565653 /* body.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = body.json; sourceTree = "<group>"; };
+		2DCC7A6F2A662EE000565653 /* fashi.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fashi.bundle; sourceTree = "<group>"; };
+		2DCC7A702A662EE000565653 /* CatSparks.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = CatSparks.bundle; sourceTree = "<group>"; };
+		2DCC7A712A662EE000565653 /* stickers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stickers.json; sourceTree = "<group>"; };
+		2DCC7A722A662EE000565653 /* sdlu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = sdlu.bundle; sourceTree = "<group>"; };
+		2DCC7A732A662EE000565653 /* sdlr.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = sdlr.bundle; sourceTree = "<group>"; };
 		611C65EA27EB6E0D00264E5A /* license.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.crt; sourceTree = "<group>"; };
 		61AA254E27C72EDF00827D4F /* AliyunVideoConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AliyunVideoConfig.h; sourceTree = "<group>"; };
 		61AA254F27C72EDF00827D4F /* AliyunVideoConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AliyunVideoConfig.m; sourceTree = "<group>"; };
@@ -114,6 +160,7 @@
 		F302A21625C2A9AB00AAFAA2 /* mixbgimg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mixbgimg2.png; sourceTree = "<group>"; };
 		F302A21725C2A9AC00AAFAA2 /* mixbgimg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mixbgimg1.png; sourceTree = "<group>"; };
 		FB21C99D07AE55E6B66EA728 /* Pods-AliyunVideoClient_Entrance_Simulator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AliyunVideoClient_Entrance_Simulator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AliyunVideoClient_Entrance_Simulator/Pods-AliyunVideoClient_Entrance_Simulator.debug.xcconfig"; sourceTree = "<group>"; };
+		FD2BB8FD275E0FB2003605EB /* AliyunVideoClient_Entrance_Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AliyunVideoClient_Entrance_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD2BB8FE275E0FB3003605EB /* AliyunVideoClient_Entrance_Simulator-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AliyunVideoClient_Entrance_Simulator-Info.plist"; path = "/Users/mengyehao/WorkPlace/AlivcEntrance_iOS/AlivcSolution/AliyunVideoClientProject/AliyunVideoClient_Entrance_Simulator-Info.plist"; sourceTree = "<absolute>"; };
 		FD69DB9C26DF84D000C5ACEB /* AnimationFrag.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AnimationFrag.bundle; sourceTree = "<group>"; };
 		FD8B468E2664C12000B13ED6 /* FlowerFont.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FlowerFont.bundle; sourceTree = "<group>"; };
@@ -126,6 +173,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE1A352CE34111D789C08793 /* libPods-AliyunVideoClient_Entrance.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD2BB8E9275E0FB2003605EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A9423130D1BD7AD2708F9B0 /* libPods-AliyunVideoClient_Entrance_Simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				136CA213237E37B500312843 /* AliyunVideoClient_Entrance.app */,
+				FD2BB8FD275E0FB2003605EB /* AliyunVideoClient_Entrance_Simulator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,7 +210,7 @@
 		136CA215237E37B500312843 /* AliyunVideoClient_Entrance */ = {
 			isa = PBXGroup;
 			children = (
-				2DBB3F26288E9A2E00F244FF /* Resource */,
+				2DCC7A4F2A662EE000565653 /* Resource */,
 				D2AACFB1238289F2000A4156 /* Resources */,
 				D2AACF9623827D2D000A4156 /* Home */,
 				136CA216237E37B500312843 /* AppDelegate.h */,
@@ -171,50 +227,72 @@
 			path = AliyunVideoClient_Entrance;
 			sourceTree = "<group>";
 		};
-		2DBB3F26288E9A2E00F244FF /* Resource */ = {
+		2DCC7A4F2A662EE000565653 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				2DBB3F27288E9A2E00F244FF /* FaceUnity.strings */,
-				2DBB3F29288E9A2E00F244FF /* 美妆 */,
-				2DBB3F3D288E9A2F00F244FF /* FaceUnity.xcassets */,
-				2DBB3F3E288E9A2F00F244FF /* 贴纸 */,
+				2DCC7A502A662EE000565653 /* 美颜 */,
+				2DCC7A542A662EE000565653 /* FaceUnity.strings */,
+				2DCC7A562A662EE000565653 /* 美妆 */,
+				2DCC7A6B2A662EE000565653 /* FaceUnity.xcassets */,
+				2DCC7A6C2A662EE000565653 /* 美体 */,
+				2DCC7A6E2A662EE000565653 /* 贴纸 */,
 			);
 			name = Resource;
-			path = AlivcRecord/AlivcRecord/Classes/Recording/Utilities/FaceUnity/Demo/Resource;
+			path = AlivcRecord/AlivcRecord/Classes/Recording/Utilities/RaceManager/FaceUnity/Demo/Resource;
 			sourceTree = SOURCE_ROOT;
 		};
-		2DBB3F29288E9A2E00F244FF /* 美妆 */ = {
+		2DCC7A502A662EE000565653 /* 美颜 */ = {
 			isa = PBXGroup;
 			children = (
-				2DBB3F2A288E9A2E00F244FF /* oumei.bundle */,
-				2DBB3F2B288E9A2E00F244FF /* Rose.bundle */,
-				2DBB3F2C288E9A2E00F244FF /* linjia.bundle */,
-				2DBB3F2D288E9A2E00F244FF /* yanshimao.bundle */,
-				2DBB3F2E288E9A2E00F244FF /* tianmei.bundle */,
-				2DBB3F2F288E9A2E00F244FF /* ziyun.bundle */,
-				2DBB3F30288E9A2E00F244FF /* chaomo.bundle */,
-				2DBB3F31288E9A2E00F244FF /* hongfeng.bundle */,
-				2DBB3F32288E9A2E00F244FF /* jianling.bundle */,
-				2DBB3F33288E9A2E00F244FF /* gangfeng.bundle */,
-				2DBB3F34288E9A2E00F244FF /* chuju.bundle */,
-				2DBB3F35288E9A2E00F244FF /* renyu.bundle */,
-				2DBB3F36288E9A2F00F244FF /* qianzhihe.bundle */,
-				2DBB3F37288E9A2F00F244FF /* wumei.bundle */,
-				2DBB3F38288E9A2F00F244FF /* shaonv.bundle */,
-				2DBB3F39288E9A2F00F244FF /* chuqiu.bundle */,
-				2DBB3F3A288E9A2F00F244FF /* nuandong.bundle */,
-				2DBB3F3B288E9A2F00F244FF /* xinggan.bundle */,
+				2DCC7A512A662EE000565653 /* beauty_filter.json */,
+				2DCC7A522A662EE000565653 /* beauty_shape.json */,
+				2DCC7A532A662EE000565653 /* beauty_skin.json */,
+			);
+			path = "美颜";
+			sourceTree = "<group>";
+		};
+		2DCC7A562A662EE000565653 /* 美妆 */ = {
+			isa = PBXGroup;
+			children = (
+				2DCC7A572A662EE000565653 /* oumei.bundle */,
+				2DCC7A582A662EE000565653 /* rose.bundle */,
+				2DCC7A592A662EE000565653 /* linjia.bundle */,
+				2DCC7A5A2A662EE000565653 /* yanshimao.bundle */,
+				2DCC7A5B2A662EE000565653 /* tianmei.bundle */,
+				2DCC7A5C2A662EE000565653 /* ziyun.bundle */,
+				2DCC7A5D2A662EE000565653 /* chaomo.bundle */,
+				2DCC7A5E2A662EE000565653 /* hongfeng.bundle */,
+				2DCC7A5F2A662EE000565653 /* jianling.bundle */,
+				2DCC7A602A662EE000565653 /* gangfeng.bundle */,
+				2DCC7A612A662EE000565653 /* combination_makeups.json */,
+				2DCC7A622A662EE000565653 /* chuju.bundle */,
+				2DCC7A632A662EE000565653 /* renyu.bundle */,
+				2DCC7A642A662EE000565653 /* qianzhihe.bundle */,
+				2DCC7A652A662EE000565653 /* wumei.bundle */,
+				2DCC7A662A662EE000565653 /* shaonv.bundle */,
+				2DCC7A672A662EE000565653 /* chuqiu.bundle */,
+				2DCC7A682A662EE000565653 /* nuandong.bundle */,
+				2DCC7A692A662EE000565653 /* xinggan.bundle */,
 			);
 			path = "美妆";
 			sourceTree = "<group>";
 		};
-		2DBB3F3E288E9A2F00F244FF /* 贴纸 */ = {
+		2DCC7A6C2A662EE000565653 /* 美体 */ = {
 			isa = PBXGroup;
 			children = (
-				2DBB3F3F288E9A2F00F244FF /* fashi.bundle */,
-				2DBB3F40288E9A2F00F244FF /* sdlu.bundle */,
-				2DBB3F41288E9A2F00F244FF /* xueqiu_lm_fu.bundle */,
-				2DBB3F42288E9A2F00F244FF /* DaisyPig.bundle */,
+				2DCC7A6D2A662EE000565653 /* body.json */,
+			);
+			path = "美体";
+			sourceTree = "<group>";
+		};
+		2DCC7A6E2A662EE000565653 /* 贴纸 */ = {
+			isa = PBXGroup;
+			children = (
+				2DCC7A6F2A662EE000565653 /* fashi.bundle */,
+				2DCC7A702A662EE000565653 /* CatSparks.bundle */,
+				2DCC7A712A662EE000565653 /* stickers.json */,
+				2DCC7A722A662EE000565653 /* sdlu.bundle */,
+				2DCC7A732A662EE000565653 /* sdlr.bundle */,
 			);
 			path = "贴纸";
 			sourceTree = "<group>";
@@ -318,6 +396,29 @@
 			productReference = 136CA213237E37B500312843 /* AliyunVideoClient_Entrance.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FD2BB8DF275E0FB2003605EB /* AliyunVideoClient_Entrance_Simulator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD2BB8FA275E0FB2003605EB /* Build configuration list for PBXNativeTarget "AliyunVideoClient_Entrance_Simulator" */;
+			buildPhases = (
+				EADFE384DBBF60AE076A0525 /* [CP] Check Pods Manifest.lock */,
+				FD2BB8E1275E0FB2003605EB /* Sources */,
+				FD2BB8E9275E0FB2003605EB /* Frameworks */,
+				FD2BB8EB275E0FB2003605EB /* Resources */,
+				FD2BB8F7275E0FB2003605EB /* Embed Frameworks */,
+				A1DD840461A3AF891D85B3B3 /* My run phase */,
+				B9B97966F62201F648FB2D6A /* [CP] Embed Pods Frameworks */,
+				8DE6185BAAE7061400D48CDC /* [CP] Copy Pods Resources */,
+				6129F26B27F5E770009AA8B3 /* Debug License */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AliyunVideoClient_Entrance_Simulator;
+			productName = AliyunVideoClient_Entrance;
+			productReference = FD2BB8FD275E0FB2003605EB /* AliyunVideoClient_Entrance_Simulator.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -329,6 +430,9 @@
 				TargetAttributes = {
 					136CA212237E37B500312843 = {
 						CreatedOnToolsVersion = 11.1;
+						ProvisioningStyle = Manual;
+					};
+					FD2BB8DF275E0FB2003605EB = {
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -348,6 +452,7 @@
 			projectRoot = "";
 			targets = (
 				136CA212237E37B500312843 /* AliyunVideoClient_Entrance */,
+				FD2BB8DF275E0FB2003605EB /* AliyunVideoClient_Entrance_Simulator */,
 			);
 		};
 /* End PBXProject section */
@@ -357,42 +462,67 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DBB3F4A288E9A2F00F244FF /* chaomo.bundle in Resources */,
 				D2AACFBA238289F3000A4156 /* Localizable.strings in Resources */,
-				2DBB3F43288E9A2F00F244FF /* FaceUnity.strings in Resources */,
-				2DBB3F57288E9A2F00F244FF /* fashi.bundle in Resources */,
+				2DCC7A8D2A662EE000565653 /* fashi.bundle in Resources */,
+				2DCC7A772A662EE000565653 /* FaceUnity.strings in Resources */,
 				F302A21825C2A9AC00AAFAA2 /* mixbgimg2.png in Resources */,
-				2DBB3F4B288E9A2F00F244FF /* hongfeng.bundle in Resources */,
-				2DBB3F48288E9A2F00F244FF /* tianmei.bundle in Resources */,
-				2DBB3F4F288E9A2F00F244FF /* renyu.bundle in Resources */,
-				2DBB3F50288E9A2F00F244FF /* qianzhihe.bundle in Resources */,
-				2DBB3F5A288E9A2F00F244FF /* DaisyPig.bundle in Resources */,
+				2DCC7A7D2A662EE000565653 /* ziyun.bundle in Resources */,
+				2DCC7A872A662EE000565653 /* shaonv.bundle in Resources */,
+				2DCC7A822A662EE000565653 /* combination_makeups.json in Resources */,
+				2DCC7A842A662EE000565653 /* renyu.bundle in Resources */,
+				2DCC7A7C2A662EE000565653 /* tianmei.bundle in Resources */,
+				2DCC7A862A662EE000565653 /* wumei.bundle in Resources */,
 				D2AACFBB238289F3000A4156 /* InfoPlist.strings in Resources */,
-				2DBB3F51288E9A2F00F244FF /* wumei.bundle in Resources */,
+				2DCC7A812A662EE000565653 /* gangfeng.bundle in Resources */,
+				2DCC7A742A662EE000565653 /* beauty_filter.json in Resources */,
+				2DCC7A7B2A662EE000565653 /* yanshimao.bundle in Resources */,
+				2DCC7A8E2A662EE000565653 /* CatSparks.bundle in Resources */,
+				2DCC7A802A662EE000565653 /* jianling.bundle in Resources */,
+				2DCC7A8B2A662EE000565653 /* FaceUnity.xcassets in Resources */,
+				2DCC7A832A662EE000565653 /* chuju.bundle in Resources */,
+				2DCC7A8A2A662EE000565653 /* xinggan.bundle in Resources */,
 				611C65EB27EB6E0D00264E5A /* license.crt in Resources */,
 				D2AACFBC238289F3000A4156 /* readMe_Resources.txt in Resources */,
-				2DBB3F52288E9A2F00F244FF /* shaonv.bundle in Resources */,
-				2DBB3F4D288E9A2F00F244FF /* gangfeng.bundle in Resources */,
-				2DBB3F59288E9A2F00F244FF /* xueqiu_lm_fu.bundle in Resources */,
-				2DBB3F45288E9A2F00F244FF /* Rose.bundle in Resources */,
-				2DBB3F4E288E9A2F00F244FF /* chuju.bundle in Resources */,
+				2DCC7A8C2A662EE000565653 /* body.json in Resources */,
+				2DCC7A882A662EE000565653 /* chuqiu.bundle in Resources */,
+				2DCC7A762A662EE000565653 /* beauty_skin.json in Resources */,
 				D2AACFC5238291FE000A4156 /* LaunchScreen.storyboard in Resources */,
+				2DCC7A7E2A662EE000565653 /* chaomo.bundle in Resources */,
 				FD9473FC274655B900866204 /* LutFilter.bundle in Resources */,
+				2DCC7A792A662EE000565653 /* rose.bundle in Resources */,
+				2DCC7A7A2A662EE000565653 /* linjia.bundle in Resources */,
 				FD8B468F2664C12000B13ED6 /* FlowerFont.bundle in Resources */,
+				2DCC7A752A662EE000565653 /* beauty_shape.json in Resources */,
+				2DCC7A902A662EE000565653 /* sdlu.bundle in Resources */,
 				FD69DB9D26DF84D000C5ACEB /* AnimationFrag.bundle in Resources */,
-				2DBB3F55288E9A2F00F244FF /* xinggan.bundle in Resources */,
+				2DCC7A7F2A662EE000565653 /* hongfeng.bundle in Resources */,
+				2DCC7A782A662EE000565653 /* oumei.bundle in Resources */,
 				F302A21925C2A9AC00AAFAA2 /* mixbgimg1.png in Resources */,
-				2DBB3F58288E9A2F00F244FF /* sdlu.bundle in Resources */,
-				2DBB3F56288E9A2F00F244FF /* FaceUnity.xcassets in Resources */,
-				2DBB3F4C288E9A2F00F244FF /* jianling.bundle in Resources */,
-				2DBB3F47288E9A2F00F244FF /* yanshimao.bundle in Resources */,
-				2DBB3F46288E9A2F00F244FF /* linjia.bundle in Resources */,
-				2DBB3F44288E9A2F00F244FF /* oumei.bundle in Resources */,
-				2DBB3F53288E9A2F00F244FF /* chuqiu.bundle in Resources */,
 				D2AACFA523827D7F000A4156 /* AVC_ET_ModuleItemCCell.xib in Resources */,
-				2DBB3F54288E9A2F00F244FF /* nuandong.bundle in Resources */,
+				2DCC7A892A662EE000565653 /* nuandong.bundle in Resources */,
+				2DCC7A912A662EE000565653 /* sdlr.bundle in Resources */,
+				2DCC7A8F2A662EE000565653 /* stickers.json in Resources */,
 				136CA223237E37B600312843 /* Assets.xcassets in Resources */,
-				2DBB3F49288E9A2F00F244FF /* ziyun.bundle in Resources */,
+				2DCC7A852A662EE000565653 /* qianzhihe.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD2BB8EB275E0FB2003605EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD2BB8EC275E0FB2003605EB /* Localizable.strings in Resources */,
+				FD2BB8ED275E0FB2003605EB /* mixbgimg2.png in Resources */,
+				FD2BB8EE275E0FB2003605EB /* InfoPlist.strings in Resources */,
+				611C65EC27EB6E0D00264E5A /* license.crt in Resources */,
+				FD2BB8EF275E0FB2003605EB /* readMe_Resources.txt in Resources */,
+				FD2BB8F0275E0FB2003605EB /* LaunchScreen.storyboard in Resources */,
+				FD2BB8F1275E0FB2003605EB /* LutFilter.bundle in Resources */,
+				FD2BB8F2275E0FB2003605EB /* FlowerFont.bundle in Resources */,
+				FD2BB8F3275E0FB2003605EB /* AnimationFrag.bundle in Resources */,
+				FD2BB8F4275E0FB2003605EB /* mixbgimg1.png in Resources */,
+				FD2BB8F5275E0FB2003605EB /* AVC_ET_ModuleItemCCell.xib in Resources */,
+				FD2BB8F6275E0FB2003605EB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +551,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6129F26B27F5E770009AA8B3 /* Debug License */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Debug License";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n    DEBUG_LICENSE_PATH=\"${PROJECT_DIR}/AliyunVideoClient_Entrance/Resources/license_debug.crt\"\n    LICENSE_PATH=\"${CODESIGNING_FOLDER_PATH}/license.crt\"\n    echo \"Change License for Debug: from(${DEBUG_LICENSE_PATH}) to(${LICENSE_PATH})\"\n    cp ${DEBUG_LICENSE_PATH} ${LICENSE_PATH}\nfi\n";
+		};
 		616A775327F412130065365B /* Debug License File */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -439,6 +587,80 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n    DEBUG_LICENSE_PATH=\"${PROJECT_DIR}/AliyunVideoClient_Entrance/Resources/license_debug.crt\"\n    LICENSE_PATH=\"${CODESIGNING_FOLDER_PATH}/license.crt\"\n    echo \"Change License for Debug: from(${DEBUG_LICENSE_PATH}) to(${LICENSE_PATH})\"\n    cp ${DEBUG_LICENSE_PATH} ${LICENSE_PATH}\nfi\n";
 		};
+		8DE6185BAAE7061400D48CDC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance_Simulator/Pods-AliyunVideoClient_Entrance_Simulator-resources.sh",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalAnimationEffects.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalCaption.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalFilter.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalFont.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalFont_ios8.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalMV.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/LocalPaster.json",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/tail.png",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/watermark.png",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Animation_Effects",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Caption",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Face_Sticker",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Filter",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/MV",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Sticker",
+				"${PODS_ROOT}/../AlivcCore/AlivcCore/Assets/ShortVideoResource/Template",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcCore/AlivcCore.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcCrop/AlivcCropBasic.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcDraft/AlivcDraft.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcEdit/AlivcEdit.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcPhotoPicker/AlivcPhotoPicker.bundle",
+				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcRecord_NoQueen/AlivcRecord.bundle",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/release_note.txt",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/Resources/anim_model.bundle",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/Resources/ardata_ex.bundle",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/Resources/face_beautification.bundle",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/Resources/fxaa.bundle",
+				"${PODS_ROOT}/Nama-lite/FaceUnity-SDK-iOS-lite/Resources/v3.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalAnimationEffects.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalCaption.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalFilter.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalFont.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalFont_ios8.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalMV.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LocalPaster.json",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tail.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/watermark.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Animation_Effects",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Caption",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Face_Sticker",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Filter",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MV",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Sticker",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Template",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcCore.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcCropBasic.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcDraft.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcEdit.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcPhotoPicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AliyunVideoSDKPro.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcRecord.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/release_note.txt",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/anim_model.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ardata_ex.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/face_beautification.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fxaa.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/v3.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance_Simulator/Pods-AliyunVideoClient_Entrance_Simulator-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A0CEA8038D4520630A80CC72 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -446,19 +668,61 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance-frameworks.sh",
-				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro/AliyunVideoAIO.framework",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/FURenderKit.framework",
+				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro.framework",
+				"${PODS_ROOT}/FURenderKit/FURenderKit.framework",
 				"${PODS_ROOT}/QuCore-ThirdParty/frameworks/alivcffmpeg.framework",
+				"${PODS_ROOT}/Queen/Queen/Libs/opencv2.framework",
+				"${PODS_ROOT}/Queen/Queen/Libs/bokeh_ios.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AliyunVideoAIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AliyunVideoSDKPro.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FURenderKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/alivcffmpeg.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/opencv2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/bokeh_ios.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1DD840461A3AF891D85B3B3 /* My run phase */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "My run phase";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh ${SRCROOT}/../../AlivcSDK/Demo/copy_framewords.sh";
+		};
+		B9B97966F62201F648FB2D6A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance_Simulator/Pods-AliyunVideoClient_Entrance_Simulator-frameworks.sh",
+				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro.framework",
+				"${PODS_ROOT}/QuCore-ThirdParty/frameworks/alivcffmpeg.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AliyunVideoSDKPro.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/alivcffmpeg.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance_Simulator/Pods-AliyunVideoClient_Entrance_Simulator-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E37140F3BB47C4BF93A8B3EE /* [CP] Copy Pods Resources */ = {
@@ -490,21 +754,19 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcEdit/AlivcEdit.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcPhotoPicker/AlivcPhotoPicker.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/AlivcRecord/AlivcRecord.bundle",
-				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro/AliyunVideoSDKPro.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/body_slim.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/controller_cpp.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/face_beautification.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/face_makeup.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/fuzzytoonfilter.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/fxaa.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/graphics/tongue.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_bgseg_green.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_face_processor.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_face_processor_lite.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_face_recognizer.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_hand_processor.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_human_processor.bundle",
-				"${PODS_ROOT}/FURenderKit/FURenderKit-v8.3.0/Resources/model/ai_human_processor_gpu.bundle",
+				"${PODS_ROOT}/AliyunVideoSDKPro/AliyunVideoSDKPro.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/aitype.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/body_slim.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/controller_cpp.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/face_beautification.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/face_makeup.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/fuzzytoonfilter.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/fxaa.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/graphics/tongue.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/model/ai_face_processor.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/model/ai_hand_processor.bundle",
+				"${PODS_ROOT}/FURenderKit/Resources/model/ai_human_processor.bundle",
+				"${PODS_ROOT}/Queen/Queen/Libs/queen.framework/queen-ios.Bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -531,6 +793,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcPhotoPicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AlivcRecord.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AliyunVideoSDKPro.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/aitype.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/body_slim.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/controller_cpp.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/face_beautification.bundle",
@@ -538,17 +801,36 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fuzzytoonfilter.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fxaa.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tongue.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_bgseg_green.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_face_processor.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_face_processor_lite.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_face_recognizer.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_hand_processor.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_human_processor.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ai_human_processor_gpu.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/queen-ios.Bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AliyunVideoClient_Entrance/Pods-AliyunVideoClient_Entrance-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EADFE384DBBF60AE076A0525 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AliyunVideoClient_Entrance_Simulator-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -569,14 +851,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FD2BB8E1275E0FB2003605EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD2BB8E2275E0FB2003605EB /* AppDelegate.m in Sources */,
+				FD2BB8E3275E0FB2003605EB /* AlivcAppInfoViewController.m in Sources */,
+				FD2BB8E4275E0FB2003605EB /* main.m in Sources */,
+				FD2BB8E5275E0FB2003605EB /* ELCVFlowLayout.m in Sources */,
+				FD2BB8E6275E0FB2003605EB /* AVC_ET_ModuleItemCCell.m in Sources */,
+				61AA255127C72EDF00827D4F /* AliyunVideoConfig.m in Sources */,
+				FD2BB8E7275E0FB2003605EB /* AVC_ET_ModuleDefine.m in Sources */,
+				FD2BB8E8275E0FB2003605EB /* AlivcHomeViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2DBB3F27288E9A2E00F244FF /* FaceUnity.strings */ = {
+		2DCC7A542A662EE000565653 /* FaceUnity.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2DBB3F28288E9A2E00F244FF /* zh-Hans */,
-				2DBB3F3C288E9A2F00F244FF /* en */,
+				2DCC7A552A662EE000565653 /* zh-Hans */,
+				2DCC7A6A2A662EE000565653 /* en */,
 			);
 			name = FaceUnity.strings;
 			sourceTree = "<group>";
@@ -731,10 +1028,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_OPTIMIZATION_PROFILE_FILE = "AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance-Info.plist";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 35A6KD62ZJ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -751,10 +1050,11 @@
 				INFOPLIST_FILE = "$(SRCROOT)/AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.32.0;
+				MARKETING_VERSION = 3.34.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gz.aliyunvideo.demo.solution;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = FUWildcard;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = FULiveDemo_dev;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -770,7 +1070,8 @@
 				CLANG_OPTIMIZATION_PROFILE_FILE = "AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance-Info.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 35A6KD62ZJ;
+				DEVELOPMENT_TEAM = A2YNUJF7T7;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -788,10 +1089,87 @@
 				INFOPLIST_FILE = "$(SRCROOT)/AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3.32.0;
+				MARKETING_VERSION = 3.34.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.apsaravideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = FUWildcard;
+				PROVISIONING_PROFILE_SPECIFIER = AliLive_iOS_development;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = FULiveDemo_dev;
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		FD2BB8FB275E0FB2003605EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB21C99D07AE55E6B66EA728 /* Pods-AliyunVideoClient_Entrance_Simulator.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_OPTIMIZATION_PROFILE_FILE = AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance_Simulator.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = K6329CYD7G;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 35A6KD62ZJ;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/AFNetworking\"",
+					"\"${PODS_ROOT}/AlivcConan\"",
+					"\"${PODS_ROOT}/../AlivcCore\"",
+					"\"${PODS_ROOT}/AliyunRace\"",
+					"\"${PODS_ROOT}/FMDB\"",
+					"\"${PODS_ROOT}/QuCore-ThirdParty/frameworks\"",
+					"\"${PODS_ROOT}/UMCAnalytics\"",
+					"\"${PODS_ROOT}/UMCCommon\"",
+					"\"${PODS_ROOT}/VODUpload/frameworks\"",
+				);
+				INFOPLIST_FILE = "AliyunVideoClient_Entrance_Simulator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 3.29.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gz.aliyunvideo.demo.solution;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = demo_develop;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = FULiveDemo_dev;
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		FD2BB8FC275E0FB2003605EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC0CC1C7E5FBFBA88D107743 /* Pods-AliyunVideoClient_Entrance_Simulator.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_OPTIMIZATION_PROFILE_FILE = AliyunVideoClient_Entrance/ProjectConfig/AliyunVideoClient_Entrance_Simulator.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = A2YNUJF7T7;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/AFNetworking\"",
+					"\"${PODS_ROOT}/AlivcConan\"",
+					"\"${PODS_ROOT}/../AlivcCore\"",
+					"\"${PODS_ROOT}/AliyunRace\"",
+					"\"${PODS_ROOT}/FMDB\"",
+					"\"${PODS_ROOT}/QuCore-ThirdParty/frameworks\"",
+					"\"${PODS_ROOT}/UMCAnalytics\"",
+					"\"${PODS_ROOT}/UMCCommon\"",
+					"\"${PODS_ROOT}/VODUpload/frameworks\"",
+					"\"${BUILT_PRODUCTS_DIR}\"",
+				);
+				INFOPLIST_FILE = "AliyunVideoClient_Entrance_Simulator-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 3.29.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.apsaravideo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = AliLive_iOS_development;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -814,6 +1192,15 @@
 			buildConfigurations = (
 				136CA22D237E37B600312843 /* Debug */,
 				136CA22E237E37B600312843 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD2BB8FA275E0FB2003605EB /* Build configuration list for PBXNativeTarget "AliyunVideoClient_Entrance_Simulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD2BB8FB275E0FB2003605EB /* Debug */,
+				FD2BB8FC275E0FB2003605EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
