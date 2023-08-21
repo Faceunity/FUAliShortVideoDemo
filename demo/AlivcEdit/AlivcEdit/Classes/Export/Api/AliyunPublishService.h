@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AliyunVideoSDKPro/AliyunPublishManager.h>
+#import "AliyunPublishManager.h"
 
 @interface AliyunPublishService : NSObject
 

@@ -1,9 +1,10 @@
+source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 #use_frameworks!
 install! 'cocoapods', :deterministic_uuids => false
 
 
 
-source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+
 
 
 platform :ios, '9.0'
@@ -29,6 +30,15 @@ target 'AliyunVideoClient_Entrance' do
 
  aliyun_common_pods
  pod 'AlivcRecord', :path => 'AlivcRecord/'
+
+
+end
+
+
+target 'AliyunVideoClient_Entrance_Simulator' do
+
+ aliyun_common_pods
+ pod 'AlivcRecord_NoQueen', :path => 'AlivcRecord/'
 
 
 end

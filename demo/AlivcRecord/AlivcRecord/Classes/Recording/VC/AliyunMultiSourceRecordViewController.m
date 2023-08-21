@@ -27,8 +27,8 @@
 #import "AlivcRecordDrawView.h"
 //美颜
 #if SDK_VERSION == SDK_VERSION_CUSTOM
-#import "FUDemoManager.h""
-//#import "AlivcShortVideoRaceManager.h"
+#import "FUDemoManager.h"
+#import "AlivcShortVideoRaceManager.h"
 #endif
 #import "AlivcRecordBeautyView.h"
 #import "AlivcWebViewController.h"
@@ -106,9 +106,6 @@ AliyunRecordAudioEffectViewDelegate>
 @property (nonatomic, assign) CGFloat pinBeginVideoZoomFactor;
 @property (nonatomic, assign) BOOL shouldStartPreviewWhenActive;    //跳转其他页面停止预览，返回开始预览，退后台进入前台则一直在预览。这2种情况通过此变量区别。
 @property (nonatomic, assign) BOOL shouldStartPreviewForSetup;
-
-@property(nonatomic, strong) FUDemoManager *demoManager;
-
 @end
 
 @implementation AliyunMultiSourceRecordViewController
@@ -233,49 +230,52 @@ static CGSize s_fitSizeForVideo(AVAsset *video, CGSize containerSize) {
                                               withSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     if (self.beautyView.currentBeautyType == AlivcBeautySettingViewStyle_ShortVideo_BeautyFace_Base) {
-        return CMSampleBufferGetImageBuffer(sampleBuffer);
+        return nil;
     }
     
     //queen 高级美颜
     if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
         
-//        //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
-//        //美颜参数设置(这里用的是beautyParams)
-//        CGFloat beautyBuffing = self.beautyView.beautyParams.beautyBuffing/100.0f;
-//        CGFloat beautyWhite = self.beautyView.beautyParams.beautyWhite/100.0f;
-//        CGFloat beautySharpen = self.beautyView.beautyParams.beautyRuddy/100.0f; //race中，这个是锐化
-//        //美型参数设置(这里用的是beautySkinParams)
-//        CGFloat beautyBigEye = self.beautyView.beautySkinParams.beautyBigEye/100.0f;
-//        CGFloat beautyThinFace = self.beautyView.beautySkinParams.beautySlimFace/100.0f;
-//        CGFloat longFace = self.beautyView.beautySkinParams.longFace/100.0f;
-//        CGFloat cutFace = self.beautyView.beautySkinParams.cutFace/100.0f;
-//        CGFloat lowerJaw = self.beautyView.beautySkinParams.lowerJaw/100.0f;
-//        CGFloat mouthWidth = self.beautyView.beautySkinParams.mouthWidth/100.0f;
-//        CGFloat thinNose = self.beautyView.beautySkinParams.thinNose/100.0f;
-//        CGFloat thinMandible = self.beautyView.beautySkinParams.thinMandible/100.0f;
-//        CGFloat cutCheek = self.beautyView.beautySkinParams.cutCheek/100.0f;
-//        CVPixelBufferRef buf = [[AlivcShortVideoRaceManager shareManager] customRenderWithBuffer:sampleBuffer rotate:0  skinBuffing:beautyBuffing skinWhitening:beautyWhite sharpen:beautySharpen bigEye:beautyBigEye longFace:longFace cutFace:cutFace thinFace:beautyThinFace lowerJaw:lowerJaw mouthWidth:mouthWidth thinNose:thinNose thinMandible:thinMandible cutCheek:cutCheek];
+        //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
+        //美颜参数设置(这里用的是beautyParams)
+        CGFloat beautyBuffing = self.beautyView.beautyParams.beautyBuffing/100.0f;
+        CGFloat beautyWhite = self.beautyView.beautyParams.beautyWhite/100.0f;
+        CGFloat beautySharpen = self.beautyView.beautyParams.beautyRuddy/100.0f; //race中，这个是锐化
+        //美型参数设置(这里用的是beautySkinParams)
+        CGFloat beautyBigEye = self.beautyView.beautySkinParams.beautyBigEye/100.0f;
+        CGFloat beautyThinFace = self.beautyView.beautySkinParams.beautySlimFace/100.0f;
+        CGFloat longFace = self.beautyView.beautySkinParams.longFace/100.0f;
+        CGFloat cutFace = self.beautyView.beautySkinParams.cutFace/100.0f;
+        CGFloat lowerJaw = self.beautyView.beautySkinParams.lowerJaw/100.0f;
+        CGFloat mouthWidth = self.beautyView.beautySkinParams.mouthWidth/100.0f;
+        CGFloat thinNose = self.beautyView.beautySkinParams.thinNose/100.0f;
+        CGFloat thinMandible = self.beautyView.beautySkinParams.thinMandible/100.0f;
+        CGFloat cutCheek = self.beautyView.beautySkinParams.cutCheek/100.0f;
+        CVPixelBufferRef buf = [[AlivcShortVideoRaceManager shareManager] customRenderWithBuffer:sampleBuffer rotate:0  skinBuffing:beautyBuffing skinWhitening:beautyWhite sharpen:beautySharpen bigEye:beautyBigEye longFace:longFace cutFace:cutFace thinFace:beautyThinFace lowerJaw:lowerJaw mouthWidth:mouthWidth thinNose:thinNose thinMandible:thinMandible cutCheek:cutCheek];
         
-        return CMSampleBufferGetImageBuffer(sampleBuffer);
+        return buf;
         
     } else {
-
+        
         CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        if (pixelBuffer) {
-
-            CVPixelBufferRef resultBuffer = [[FUManager shareManager] renderItemsToPixelBuffer:pixelBuffer];
-            if (resultBuffer) {
-            
-                return resultBuffer;
-                
-            }else{
-                
-                return pixelBuffer;
+        [[FUDemoManager shared] checkAITrackedResult];
+        if ([FUDemoManager shared].shouldRender) {
+            [[FUTestRecorder shareRecorder] processFrameWithLog];
+            [FUDemoManager updateBeautyBlurEffect];
+            FURenderInput *input = [[FURenderInput alloc] init];
+            input.renderConfig.imageOrientation = FUImageOrientationUP;
+            input.pixelBuffer = pixelBuffer;
+            //开启重力感应，内部会自动计算正确方向，设置fuSetDefaultRotationMode，无须外面设置
+            input.renderConfig.gravityEnable = YES;
+            FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
+            if (output) {
+                return output.pixelBuffer;
             }
+        } else {
+            return pixelBuffer;
         }
         
         return pixelBuffer;
-
 
     }
  
@@ -285,9 +285,9 @@ static CGSize s_fitSizeForVideo(AVAsset *video, CGSize containerSize) {
 - (void) onAliyunRecorderDidDestory:(AliyunRecorder *)recorder
 {
     if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
-//        [[AlivcShortVideoRaceManager shareManager] clear];
+        [[AlivcShortVideoRaceManager shareManager] clear];
     }else {
-//        [[AlivcShortVideoFaceUnityManager shareManager] destoryItems];
+        [FUDemoManager destory];
     }
 }
 
@@ -871,18 +871,6 @@ static CGSize s_fitSizeForVideo(AVAsset *video, CGSize containerSize) {
     self.torchMode = AlivcRecordTorchModeOff;
     self.cameraPosition = AVCaptureDevicePositionFront;
     
-    CGFloat safeAreaBottom = 0;
-    if (@available(iOS 11.0, *)) {
-        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
-    }
-    
-    if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeFaceUnity) {
-    
-        self.demoManager = [[FUDemoManager alloc] initWithTargetController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom];
-    }
-
-    
-    
 //    [AliyunVideoSDKInfo setLogLevel:AlivcLogDebug];
 }
 
@@ -1141,7 +1129,7 @@ static CGSize s_fitSizeForVideo(AVAsset *video, CGSize containerSize) {
         {
             [_recorder stopPreview];
 #if SDK_VERSION == SDK_VERSION_CUSTOM
-            [[FUManager shareManager] destoryItems];
+            [FUDemoManager destory];
 #endif
             [self.navigationController popViewControllerAnimated:YES];
         }

@@ -29,7 +29,7 @@
 //美颜
 #if SDK_VERSION == SDK_VERSION_CUSTOM
 #import "FUDemoManager.h"
-//#import "AlivcShortVideoRaceManager.h"
+#import "AlivcShortVideoRaceManager.h"
 #endif
 #import "AlivcWebViewController.h"
 //动图
@@ -78,8 +78,6 @@ AlivcRecordPasterViewDelegate>
 @property (nonatomic, assign) CGFloat recorderDuration; //本地记录的视频录制时长
 
 @property (nonatomic, strong) NSOperationQueue *queue;
-@property(nonatomic, strong) FUDemoManager *demoManager;
-
 @end
 
 @implementation AliyunMagicCameraViewController
@@ -181,15 +179,9 @@ AlivcRecordPasterViewDelegate>
     //提前加载好美颜view，防止在异步线程里惰性加载view
     [self beautyView];
     
-    CGFloat safeAreaBottom = 0;
-    if (@available(iOS 11.0, *)) {
-        safeAreaBottom = [UIApplication sharedApplication].delegate.window.safeAreaInsets.bottom;
-    }
-    
-    if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeFaceUnity) {
-    
-        self.demoManager = [[FUDemoManager alloc] initWithTargetController:self originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - safeAreaBottom - 180];
-    }
+    // faceunity
+    [FUDemoManager setupFUSDK];
+    [[FUDemoManager shared] addDemoViewToView:self.view originY:CGRectGetHeight(self.view.frame) - FUBottomBarHeight - FUSafaAreaBottomInsets() - 180];
     
 }
 // 监听通知
@@ -302,8 +294,9 @@ AlivcRecordPasterViewDelegate>
         //视频存储路径
         NSString *videoSavePath = [[taskPath stringByAppendingPathComponent:[AliyunPathManager randomString]] stringByAppendingPathExtension:@"mp4"];
         _recorder =[[AliyunIRecorder alloc] initWithDelegate:self videoSize:_quVideo.outputSize];
+        _recorder.clipManager.deleteVideoClipsOnExit = self.quVideo.deleteVideoClipOnExit;
+
         _recorder.preview = [[UIView alloc]initWithFrame:[self previewFrame]];
-        _recorder.preview.backgroundColor = [UIColor blackColor];
         _recorder.outputType = AliyunIRecorderVideoOutputPixelFormatType420f;//SDK自带人脸识别只支持YUV格式
         _recorder.useFaceDetect = YES;
         _recorder.faceDetectCount = 2;
@@ -313,8 +306,7 @@ AlivcRecordPasterViewDelegate>
         NSLog(@"录制编码方式：%d",_recorder.encodeMode);
         _recorder.GOP = _quVideo.gop;
         _recorder.videoQuality = (AliyunVideoQuality)_quVideo.videoQuality;
-//        _recorder.recordFps = _quVideo.fps;
-        _recorder.recordFps = 30;
+        _recorder.recordFps = _quVideo.fps;
         _recorder.outputPath = _quVideo.outputPath?_quVideo.outputPath:videoSavePath;
         _quVideo.outputPath = _recorder.outputPath;
         _recorder.taskPath = taskPath;
@@ -504,7 +496,7 @@ AlivcRecordPasterViewDelegate>
                 [self.recorder stopPreview];
             });
 #if SDK_VERSION == SDK_VERSION_CUSTOM
-            [[FUManager shareManager] destoryItems];
+//            [FUDemoManager destory];
 #endif
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -515,7 +507,6 @@ AlivcRecordPasterViewDelegate>
                 return;
             }
             [self.recorder switchCameraPosition];
-            [[FUManager shareManager] onCameraChange];
             [self updateNavigationBarTorchModeStatus];
         }
             break;
@@ -694,7 +685,7 @@ AlivcRecordPasterViewDelegate>
     return self.recorder.isRecording;
 }
 - (void)alivcRecordBottomViewBeautyButtonOnclick{
-//    [self.beautyView show];
+    [self.beautyView show];
 }
 - (void)alivcRecordBottomViewEffectButtonOnclick{
     [self.pasterView show];
@@ -818,8 +809,6 @@ AlivcRecordPasterViewDelegate>
         if (editVC) {
             // 先退到主页
 //            [self.navigationController popToRootViewControllerAnimated:YES];
-//            [[FUManager shareManager] destoryItems];
-            
             // 再添加editVC
             [self.navigationController pushViewController:editVC animated:YES];
         }else{
@@ -859,43 +848,47 @@ AlivcRecordPasterViewDelegate>
 #if SDK_VERSION == SDK_VERSION_CUSTOM
 - (void)destroyRender{
     if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
-//           [[AlivcShortVideoRaceManager shareManager] clear];
+           [[AlivcShortVideoRaceManager shareManager] clear];
     }else {
-
+//           [FUDemoManager destory];
     }
 }
 
 // 集成faceunity
 #warning 以下为faceunity高级美颜接入代码，如果未集成faceunity，可以把此回调方法注释掉，以避免产生额外的license校验请求。
 
-- (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer{
-    
+- (CVPixelBufferRef)customRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     if ([[AlivcShortVideoRoute shared] currentBeautyType] == AlivcBeautyTypeRace) {
-        return CMSampleBufferGetImageBuffer(sampleBuffer);
+        return nil;
     }
     if (self.beautyView.currentBeautyType == AlivcBeautySettingViewStyle_ShortVideo_BeautyFace_Base) {
-        return CMSampleBufferGetImageBuffer(sampleBuffer);
+        return nil;
     }
     
-    //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
-    //美颜参数设置(这里用的是beautyParams)
+    return [self faceunityRenderedPixelBufferWithRawSampleBuffer:sampleBuffer];
+}
+
+-(CVPixelBufferRef)faceunityRenderedPixelBufferWithRawSampleBuffer:(CMSampleBufferRef)sampleBuffer {
 
     CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    if (pixelBuffer) {
-
-        CVPixelBufferRef resultBuffer = [[FUManager shareManager] renderItemsToPixelBuffer:pixelBuffer];
-        if (resultBuffer) {
-        
-            return resultBuffer;
-            
-        }else{
-            
-            return pixelBuffer;
+    [[FUDemoManager shared] checkAITrackedResult];
+    if ([FUDemoManager shared].shouldRender) {
+        [[FUTestRecorder shareRecorder] processFrameWithLog];
+        [FUDemoManager updateBeautyBlurEffect];
+        FURenderInput *input = [[FURenderInput alloc] init];
+        input.renderConfig.imageOrientation = FUImageOrientationUP;
+        input.pixelBuffer = pixelBuffer;
+        //开启重力感应，内部会自动计算正确方向，设置fuSetDefaultRotationMode，无须外面设置
+        input.renderConfig.gravityEnable = YES;
+        FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
+        if (output) {
+            return output.pixelBuffer;
         }
+    } else {
+        return pixelBuffer;
     }
     
     return pixelBuffer;
-    
 }
 
 #endif
@@ -1117,6 +1110,11 @@ AlivcRecordPasterViewDelegate>
     [_recorder stopPreview];
     [_recorder destroyRecorder];
     _recorder = nil;
+    
+    if(fuIsLibraryInit()){
+        [FUDemoManager destory];
+    }
+    
 //    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

@@ -10,5 +10,5 @@
 
 @interface AliyunCustomFilter : NSObject
 - (instancetype)initWithSize:(CGSize)size;
-- (int)render:(int)srcTexture size:(CGSize)size;
+- (int)render:(int)srcTexture;
 @end

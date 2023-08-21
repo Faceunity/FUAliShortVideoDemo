@@ -11,7 +11,7 @@
 #import "AliVideoClientUser.h"
 
 @interface AlivcVodPublishService()<AliyunIVodUploadCallback>
-@property(nonatomic, strong) AliyunVodPublishManager *manager;
+@property(nonatomic, strong) AliyunVodPublishManager2 *manager;
 @property(nonatomic, copy) NSString *videoId;
 
 @end
@@ -28,9 +28,9 @@
     return _service;
 }
 
-- (AliyunVodPublishManager *)manager{
+- (AliyunVodPublishManager2 *)manager{
     if (!_manager) {
-        _manager = [AliyunVodPublishManager new];
+        _manager = [AliyunVodPublishManager2 new];
         _manager.uploadCallback = self;
     }
     return _manager;
@@ -110,7 +110,7 @@
     return result;
 }
 
--(void)publishManagerUploadTokenExpired:(AliyunVodPublishManager *)manager{
+-(void)publishManagerUploadTokenExpired:(AliyunVodPublishManager2 *)manager{
     self.uploadStatus = AlivcVodServiceUploadStatusExpired;
     __weak typeof(self)weakSelf = self;
     [AliyunSVideoApi refreshVideoUploadAuthWithToken:[AliVideoClientUser shared].token videoId:self.videoId handler:^(NSString * _Nullable uploadAddress, NSString * _Nullable uploadAuth, NSError * _Nullable error) {
@@ -121,21 +121,21 @@
     }];
 }
 
--(void)publishManagerUploadSuccess:(AliyunVodPublishManager *)manager{
+-(void)publishManagerUploadSuccess:(AliyunVodPublishManager2 *)manager{
     self.uploadStatus = AlivcVodServiceUploadStatusDefault;
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadSuccessWithUploadType:)]) {
         [self.delegate uploadSuccessWithUploadType:self.uploadType];
     }
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message{
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message{
     self.uploadStatus = AlivcVodServiceUploadStatusDefault;
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadFailedWithUploadType:withErrorCode:message:)]) {
         [self.delegate uploadFailedWithUploadType:self.uploadType withErrorCode:code message:message];
     }
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize{
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize{
     if (self.delegate && [self.delegate respondsToSelector:@selector(uploadProgressWithUploadType:withUploadedSize:totalSize:)]) {
         [self.delegate uploadProgressWithUploadType:self.uploadType withUploadedSize:uploadedSize totalSize:totalSize];
     }

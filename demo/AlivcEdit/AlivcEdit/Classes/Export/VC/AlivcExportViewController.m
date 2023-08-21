@@ -10,8 +10,8 @@
 #import "AVC_ShortVideo_Config.h"
 #import "AliyunCoverPickViewController.h"
 #import "AliyunPublishProgressView.h"
+#import "AliyunVodPublishManager2.h"
 #import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
-#import <AliyunVideoSDKPro/AliyunVodPublishManager.h>
 #import "AliyunPublishTopView.h"
 #import "AliyunUploadViewController.h"
 #import "QUProgressView.h"
@@ -22,6 +22,7 @@
 #import "ElapsedTimeMeasurer.h"
 #import "AliyunSVideoApi.h"
 #import "AliVideoClientUser.h"
+#import "AliyunEditorCustomRender.h"
 #import "MBProgressHUD+AlivcHelper.h"
 #import <VODUpload/VODUploadClient.h>
 
@@ -41,8 +42,10 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
 @property(nonatomic, assign) BOOL finished;
 @property(nonatomic, assign) BOOL failed;
 
+@property(nonatomic, strong) AliyunEditorCustomRender *customRender;
+
 @property(nonatomic, weak) MBProgressHUD *coverUploading;
-@property(nonatomic, strong) AliyunVodPublishManager *publishManager;
+@property(nonatomic, strong) AliyunVodPublishManager2 *publishManager;
 @property(nonatomic, strong) UploadStreamFileInfo *streamFileInfo;
 @property(nonatomic, copy) NSString *coverImageUrl;
 @property(nonatomic, copy) NSString *coverImageUploadAuth;
@@ -72,11 +75,19 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
     _elapsedTimeMeasurer = [ElapsedTimeMeasurer new];
 }
 
-- (AliyunVodPublishManager *)publishManager{
+- (AliyunEditorCustomRender *)customRender {
+    if (!_customRender) {
+        _customRender = [AliyunEditorCustomRender new];
+    }
+    return _customRender;
+}
+
+- (AliyunVodPublishManager2 *)publishManager{
     if (!_publishManager) {
-        _publishManager =[[AliyunVodPublishManager alloc]init];
+        _publishManager =[[AliyunVodPublishManager2 alloc]init];
         _publishManager.exportCallback = self;
         _publishManager.uploadCallback = self;
+        _publishManager.customRenderCallback = self.customRender;
     }
     return _publishManager;
 }
@@ -620,7 +631,7 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
 }
 
 // MARK: - AliyunIVodUploadCallback
-- (void)publishManagerUploadSuccess:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadSuccess:(AliyunVodPublishManager2 *)manager {
     [self runInMainThread:^(AlivcExportViewController *strongSelf) {
         if (strongSelf.publishManager.uploadState == AliyunVodUploadImage) {
             [strongSelf.coverUploading replaceSuccessMessage:@"上传封面成功"];
@@ -633,7 +644,7 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
     }];
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message {
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadFailedWithCode:(NSString *)code message:(NSString *)message {
     [self runInMainThread:^(AlivcExportViewController *strongSelf) {
         if (strongSelf.publishManager.uploadState == AliyunVodUploadImage) {
             [strongSelf.coverUploading replaceWarningMessage:@"上传封面失败"];
@@ -646,9 +657,9 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
     }];
 }
 
-- (void)publishManager:(AliyunVodPublishManager *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize {}
+- (void)publishManager:(AliyunVodPublishManager2 *)manager uploadProgressWithUploadedSize:(long long)uploadedSize totalSize:(long long)totalSize {}
 
-- (void)publishManagerUploadTokenExpired:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadTokenExpired:(AliyunVodPublishManager2 *)manager {
     [self runInMainThread:^(AlivcExportViewController *strongSelf) {
         if (manager.uploadState == AliyunVodUploadImage) {
             [strongSelf.coverUploading replaceWarningMessage:@"封面授权过期，上传封面失败"];
@@ -664,11 +675,11 @@ AliyunPublishTopViewDelegate, AliyunIExporterCallback, AliyunIVodUploadCallback,
     }];
 }
 
-- (void)publishManagerUploadRetry:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadRetry:(AliyunVodPublishManager2 *)manager {
     NSLog(@"上传重试");
 }
 
-- (void)publishManagerUploadRetryResume:(AliyunVodPublishManager *)manager {
+- (void)publishManagerUploadRetryResume:(AliyunVodPublishManager2 *)manager {
     NSLog(@"上传继续重试");
 }
 

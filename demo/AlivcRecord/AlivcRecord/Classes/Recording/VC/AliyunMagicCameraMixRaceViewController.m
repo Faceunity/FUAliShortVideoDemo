@@ -7,7 +7,7 @@
 //
 
 #import "AliyunMagicCameraMixRaceViewController.h"
-//#import "AlivcShortVideoRaceManager.h"
+#import "AlivcShortVideoRaceManager.h"
 #import "AVC_ShortVideo_Config.h"
 
 @interface AliyunMagicCameraMixRaceViewController ()
@@ -41,25 +41,25 @@
         return CMSampleBufferGetImageBuffer(sampleBuffer);
     }
     
-//    //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
-//    //美颜参数设置(这里用的是beautyParams)
-//    CGFloat beautyBuffing = self.beautyView.beautyParams.beautyBuffing/100.0f;
-//    CGFloat beautyWhite = self.beautyView.beautyParams.beautyWhite/100.0f;
-//    CGFloat beautySharpen = self.beautyView.beautyParams.beautyRuddy/100.0f; //race中，这个是锐化
-//    //美型参数设置(这里用的是beautySkinParams)
-//    CGFloat beautyBigEye = self.beautyView.beautySkinParams.beautyBigEye/100.0f;
-//    CGFloat beautyThinFace = self.beautyView.beautySkinParams.beautySlimFace/100.0f;
-//    CGFloat longFace = self.beautyView.beautySkinParams.longFace/100.0f;
-//    CGFloat cutFace = self.beautyView.beautySkinParams.cutFace/100.0f;
-//    CGFloat lowerJaw = self.beautyView.beautySkinParams.lowerJaw/100.0f;
-//    CGFloat mouthWidth = self.beautyView.beautySkinParams.mouthWidth/100.0f;
-//    CGFloat thinNose = self.beautyView.beautySkinParams.thinNose/100.0f;
-//    CGFloat thinMandible = self.beautyView.beautySkinParams.thinMandible/100.0f;
-//    CGFloat cutCheek = self.beautyView.beautySkinParams.cutCheek/100.0f;
-//    CVPixelBufferRef rander = [[AlivcShortVideoRaceManager shareManager] customRenderWithBuffer:sampleBuffer rotate:self.quVideo.videoRotate skinBuffing:beautyBuffing skinWhitening:beautyWhite sharpen:beautySharpen bigEye:beautyBigEye longFace:longFace cutFace:cutFace thinFace:beautyThinFace lowerJaw:lowerJaw mouthWidth:mouthWidth thinNose:thinNose thinMandible:thinMandible cutCheek:cutCheek];
-//    return rander;
-    return CMSampleBufferGetImageBuffer(sampleBuffer);
+    //注意这里美颜美型的参数是分开的beautyParams和beautySkinParams
+    //美颜参数设置(这里用的是beautyParams)
+    CGFloat beautyBuffing = self.beautyView.beautyParams.beautyBuffing/100.0f;
+    CGFloat beautyWhite = self.beautyView.beautyParams.beautyWhite/100.0f;
+    CGFloat beautySharpen = self.beautyView.beautyParams.beautyRuddy/100.0f; //race中，这个是锐化
+    //美型参数设置(这里用的是beautySkinParams)
+    CGFloat beautyBigEye = self.beautyView.beautySkinParams.beautyBigEye/100.0f;
+    CGFloat beautyThinFace = self.beautyView.beautySkinParams.beautySlimFace/100.0f;
+    CGFloat longFace = self.beautyView.beautySkinParams.longFace/100.0f;
+    CGFloat cutFace = self.beautyView.beautySkinParams.cutFace/100.0f;
+    CGFloat lowerJaw = self.beautyView.beautySkinParams.lowerJaw/100.0f;
+    CGFloat mouthWidth = self.beautyView.beautySkinParams.mouthWidth/100.0f;
+    CGFloat thinNose = self.beautyView.beautySkinParams.thinNose/100.0f;
+    CGFloat thinMandible = self.beautyView.beautySkinParams.thinMandible/100.0f;
+    CGFloat cutCheek = self.beautyView.beautySkinParams.cutCheek/100.0f;
+    CVPixelBufferRef rander = [[AlivcShortVideoRaceManager shareManager] customRenderWithBuffer:sampleBuffer rotate:self.quVideo.videoRotate skinBuffing:beautyBuffing skinWhitening:beautyWhite sharpen:beautySharpen bigEye:beautyBigEye longFace:longFace cutFace:cutFace thinFace:beautyThinFace lowerJaw:lowerJaw mouthWidth:mouthWidth thinNose:thinNose thinMandible:thinMandible cutCheek:cutCheek];
+    return rander;
 }
+
 #endif
 
 
